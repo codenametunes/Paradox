@@ -1,0 +1,1646 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Projects\\ParadoxC\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Player\\camera.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Player\\camera.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Player\\player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Player\\player.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Player\\player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Player\\player.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Fluid\\fluid.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Fluid\\fluid.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Fluid\\fluid.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Fluid\\fluid.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Physics\\physics.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Physics\\physics.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Physics\\physics.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Physics\\physics.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\main.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Mesher\\mesher.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Mesher\\mesher.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\hand.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\hand.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\UI\\menus.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\UI\\menus.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\UI\\menus.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\UI\\menus.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\UI\\ui.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\UI\\ui.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\UI\\text.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\UI\\text.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Mobs\\mob_steve.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Mobs\\mob_steve.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\CMakeLists.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CMakeLists.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Mobs\\mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Mobs\\mob.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\shader.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\shader.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\.vs\\CMakeWorkspaceSettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.vs\\CMakeWorkspaceSettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\ui\\blast_furnace.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\ui\\blast_furnace.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\ui\\furnace.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\ui\\furnace.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\ui\\crafting_table.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\ui\\crafting_table.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\ui\\generic_54.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\ui\\generic_54.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\ui\\minecraft.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\ui\\minecraft.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\ui\\tab_items.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\ui\\tab_items.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\shaders\\chunk.frag||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\shaders\\chunk.frag||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\shaders\\cube.frag||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\shaders\\cube.frag||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Fog\\fog.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Fog\\fog.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Fog\\fog.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Fog\\fog.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Sky\\sky.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Sky\\sky.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Sky\\sky.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Sky\\sky.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkManager.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Chunk Generation\\chunkManager.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkGenerator.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Chunk Generation\\chunkGenerator.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkGenerator.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Chunk Generation\\chunkGenerator.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\audio.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\audio.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Player\\camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Player\\camera.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Structures\\structure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Structures\\structure.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Chunk Generation\\chunkManager.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Mesher\\mesher.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Mesher\\mesher.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Chunk Generation\\biomes.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Chunk Generation\\biomes.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Lighting\\lighting.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Lighting\\lighting.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\src\\Lighting\\lighting.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\Lighting\\lighting.c||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\.vs\\launch.vs.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.vs\\launch.vs.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\Glass.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\Glass.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\Reticle.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\Reticle.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\StoneBlock.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\StoneBlock.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\Dirt.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\Dirt.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\boat.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\boat.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\largechest.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\largechest.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakePackageConfigHelpers.cmake||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\xporb.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\xporb.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\sign.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\sign.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\minecart.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\minecart.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\door.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\door.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest_right.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\chest_right.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\chest.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest_left.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\block_entity\\chest_left.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\sheep.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\skeleton.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\skeleton.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\enderman.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\enderman.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\cow.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\cow.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\diamond.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\armor\\diamond.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\creeper_armor.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\armor\\creeper_armor.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\chainmail.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\armor\\chainmail.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\Bricks.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\Bricks.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\Bedrock.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\Bedrock.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waning_gibbous.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\waning_gibbous.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\third_quarter.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\third_quarter.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\new_moon.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\new_moon.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\full_moon.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\full_moon.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\first_quarter.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\first_quarter.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\clouds.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\clouds.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\OakLogTop.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\OakLogTop.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\Leaves.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\Leaves.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waxing_gibbous.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\waxing_gibbous.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waxing_crescent.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\waxing_crescent.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waning_crescent.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\waning_crescent.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\sun.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\sun.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\snow.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\snow.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\sky\\rain.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\sky\\rain.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\minecart.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\minecart.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\spider.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\spider.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\iron.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\armor\\iron.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\gold.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\armor\\gold.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\boat.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\boat.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\chest.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest_left.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\chest_left.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest_right.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\chest_right.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chicken.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\chicken.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\creeper.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\creeper.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\enderman_eyes.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\enderman_eyes.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\pig.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\pig.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep_wool.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\sheep_wool.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep_wool_undercoat.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\sheep_wool_undercoat.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\spider_eyes.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\spider_eyes.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\steve.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\steve.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\zombie.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\zombie.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\mob\\mob_steve.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\mob\\mob_steve.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\assets\\textures\\Steve.png||{58961B49-13E0-48C0-9258-13CBC4D40279}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\textures\\Steve.png||{58961B49-13E0-48C0-9258-13CBC4D40279}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\CMakePresets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:CMakePresets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Projects\\ParadoxC\\ParadoxC.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:ParadoxC.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|CMake Overview Pages||{B1CAA5B0-FEB1-4350-8AB9-F895876842F2}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 14,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "fluid.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Fluid\\fluid.h",
+              "RelativeDocumentMoniker": "src\\Fluid\\fluid.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Fluid\\fluid.h",
+              "RelativeToolTip": "src\\Fluid\\fluid.h",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAADgAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-31T18:36:44.02Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "fluid.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Fluid\\fluid.c",
+              "RelativeDocumentMoniker": "src\\Fluid\\fluid.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Fluid\\fluid.c",
+              "RelativeToolTip": "src\\Fluid\\fluid.c",
+              "ViewState": "AgIAAP0CAAAAAAAAAAAAAAsDAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-31T18:36:35.456Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "structure.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Structures\\structure.h",
+              "RelativeDocumentMoniker": "src\\Structures\\structure.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Structures\\structure.h",
+              "RelativeToolTip": "src\\Structures\\structure.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T21:36:39.674Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "menus.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\UI\\menus.c",
+              "RelativeDocumentMoniker": "src\\UI\\menus.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\UI\\menus.c",
+              "RelativeToolTip": "src\\UI\\menus.c",
+              "ViewState": "AgIAADkDAAAAAAAAAAAAAEcDAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-31T00:07:03.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "CMakeWorkspaceSettings.json",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\.vs\\CMakeWorkspaceSettings.json",
+              "RelativeDocumentMoniker": ".vs\\CMakeWorkspaceSettings.json",
+              "ToolTip": "C:\\Projects\\ParadoxC\\.vs\\CMakeWorkspaceSettings.json",
+              "RelativeToolTip": ".vs\\CMakeWorkspaceSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-31T00:16:10.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "chunkGenerator.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkGenerator.c",
+              "RelativeDocumentMoniker": "src\\Chunk Generation\\chunkGenerator.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkGenerator.c",
+              "RelativeToolTip": "src\\Chunk Generation\\chunkGenerator.c",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAwwDICAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T21:42:45.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "sky.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Sky\\sky.h",
+              "RelativeDocumentMoniker": "src\\Sky\\sky.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Sky\\sky.h",
+              "RelativeToolTip": "src\\Sky\\sky.h",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAAA4AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T18:14:21.12Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CMakeLists.txt",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\CMakeLists.txt",
+              "RelativeDocumentMoniker": "CMakeLists.txt",
+              "ToolTip": "C:\\Projects\\ParadoxC\\CMakeLists.txt",
+              "RelativeToolTip": "CMakeLists.txt",
+              "ViewState": "AgIAAHcAAAAAAAAAAAAwwIYAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-10-29T23:43:05.862Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "menus.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\UI\\menus.h",
+              "RelativeDocumentMoniker": "src\\UI\\menus.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\UI\\menus.h",
+              "RelativeToolTip": "src\\UI\\menus.h",
+              "ViewState": "AgIAAC0AAAAAAAAAAAAAADsAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-31T00:07:15.357Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "physics.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Physics\\physics.h",
+              "RelativeDocumentMoniker": "src\\Physics\\physics.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Physics\\physics.h",
+              "RelativeToolTip": "src\\Physics\\physics.h",
+              "ViewState": "AgIAACMAAAAAAAAAAAAqwCwAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-31T10:48:15.124Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "text.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\UI\\text.c",
+              "RelativeDocumentMoniker": "src\\UI\\text.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\UI\\text.c",
+              "RelativeToolTip": "src\\UI\\text.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-29T23:57:46.034Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "player.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Player\\player.c",
+              "RelativeDocumentMoniker": "src\\Player\\player.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Player\\player.c",
+              "RelativeToolTip": "src\\Player\\player.c",
+              "ViewState": "AgIAALkCAAAAAAAAAAAAAMcCAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T17:38:04.581Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "player.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Player\\player.h",
+              "RelativeDocumentMoniker": "src\\Player\\player.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Player\\player.h",
+              "RelativeToolTip": "src\\Player\\player.h",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAAAGgAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T17:38:14.785Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "main.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\main.c",
+              "RelativeDocumentMoniker": "src\\main.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\main.c",
+              "RelativeToolTip": "src\\main.c",
+              "ViewState": "AgIAACYHAAAAAAAAAAAqwC8HAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-29T23:49:04.425Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "main.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\main.h",
+              "RelativeDocumentMoniker": "src\\main.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\main.h",
+              "RelativeToolTip": "src\\main.h",
+              "ViewState": "AgIAAHcBAAAAAAAAAAAAAIUBAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T00:00:16.164Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "physics.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Physics\\physics.c",
+              "RelativeDocumentMoniker": "src\\Physics\\physics.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Physics\\physics.c",
+              "RelativeToolTip": "src\\Physics\\physics.c",
+              "ViewState": "AgIAAMYBAAAAAAAAAAAAANQBAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-31T10:48:09.018Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "mesher.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Mesher\\mesher.c",
+              "RelativeDocumentMoniker": "src\\Mesher\\mesher.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Mesher\\mesher.c",
+              "RelativeToolTip": "src\\Mesher\\mesher.c",
+              "ViewState": "AgIAAGIBAAAAAAAAAAAAAHABAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-29T23:42:14.521Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "camera.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Player\\camera.c",
+              "RelativeDocumentMoniker": "src\\Player\\camera.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Player\\camera.c",
+              "RelativeToolTip": "src\\Player\\camera.c",
+              "ViewState": "AgIAAL8AAAAAAAAAAAAAAM0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T17:38:24.929Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "mob_steve.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Mobs\\mob_steve.c",
+              "RelativeDocumentMoniker": "src\\Mobs\\mob_steve.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Mobs\\mob_steve.c",
+              "RelativeToolTip": "src\\Mobs\\mob_steve.c",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAABIAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T00:12:10.354Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "blast_furnace.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\blast_furnace.png",
+              "RelativeDocumentMoniker": "assets\\textures\\ui\\blast_furnace.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\blast_furnace.png",
+              "RelativeToolTip": "assets\\textures\\ui\\blast_furnace.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:31.129Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ui.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\UI\\ui.c",
+              "RelativeDocumentMoniker": "src\\UI\\ui.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\UI\\ui.c",
+              "RelativeToolTip": "src\\UI\\ui.c",
+              "ViewState": "AgIAABQDAAAAAAAAAAAAACIDAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-29T23:55:44.655Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "hand.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\hand.c",
+              "RelativeDocumentMoniker": "src\\hand.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\hand.c",
+              "RelativeToolTip": "src\\hand.c",
+              "ViewState": "AgIAAGsDAAAAAAAAAAAqwHQDAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-29T23:47:46.517Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "mob.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Mobs\\mob.h",
+              "RelativeDocumentMoniker": "src\\Mobs\\mob.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Mobs\\mob.h",
+              "RelativeToolTip": "src\\Mobs\\mob.h",
+              "ViewState": "AgIAAGoAAAAAAAAAAAAqwHMAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T17:47:51.098Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "shader.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\shader.c",
+              "RelativeDocumentMoniker": "src\\shader.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\shader.c",
+              "RelativeToolTip": "src\\shader.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T21:40:54.654Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "audio.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\audio.c",
+              "RelativeDocumentMoniker": "src\\audio.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\audio.c",
+              "RelativeToolTip": "src\\audio.c",
+              "ViewState": "AgIAAP8BAAAAAAAAAADwvxACAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T17:55:43.061Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "sky.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Sky\\sky.c",
+              "RelativeDocumentMoniker": "src\\Sky\\sky.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Sky\\sky.c",
+              "RelativeToolTip": "src\\Sky\\sky.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T18:14:11.162Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "tab_items.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\tab_items.png",
+              "RelativeDocumentMoniker": "assets\\textures\\ui\\tab_items.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\tab_items.png",
+              "RelativeToolTip": "assets\\textures\\ui\\tab_items.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:50.192Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "fog.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Fog\\fog.c",
+              "RelativeDocumentMoniker": "src\\Fog\\fog.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Fog\\fog.c",
+              "RelativeToolTip": "src\\Fog\\fog.c",
+              "ViewState": "AgIAABAAAAAAAAAAAAAiwCkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T23:50:18.687Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "largechest.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\largechest.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\largechest.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\largechest.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\largechest.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:11.948Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "generic_54.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\generic_54.png",
+              "RelativeDocumentMoniker": "assets\\textures\\ui\\generic_54.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\generic_54.png",
+              "RelativeToolTip": "assets\\textures\\ui\\generic_54.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:40.692Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "crafting_table.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\crafting_table.png",
+              "RelativeDocumentMoniker": "assets\\textures\\ui\\crafting_table.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\crafting_table.png",
+              "RelativeToolTip": "assets\\textures\\ui\\crafting_table.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:34.212Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "furnace.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\furnace.png",
+              "RelativeDocumentMoniker": "assets\\textures\\ui\\furnace.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\furnace.png",
+              "RelativeToolTip": "assets\\textures\\ui\\furnace.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:37.653Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "minecraft.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\minecraft.png",
+              "RelativeDocumentMoniker": "assets\\textures\\ui\\minecraft.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\ui\\minecraft.png",
+              "RelativeToolTip": "assets\\textures\\ui\\minecraft.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:43.738Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "camera.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Player\\camera.h",
+              "RelativeDocumentMoniker": "src\\Player\\camera.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Player\\camera.h",
+              "RelativeToolTip": "src\\Player\\camera.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACYAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T17:38:33.405Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "chunkGenerator.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkGenerator.h",
+              "RelativeDocumentMoniker": "src\\Chunk Generation\\chunkGenerator.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkGenerator.h",
+              "RelativeToolTip": "src\\Chunk Generation\\chunkGenerator.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAIwA4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T21:42:46.43Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "chunk.frag",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\shaders\\chunk.frag",
+              "RelativeDocumentMoniker": "assets\\shaders\\chunk.frag",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\shaders\\chunk.frag",
+              "RelativeToolTip": "assets\\shaders\\chunk.frag",
+              "ViewState": "AgIAAGwAAAAAAAAAAAAQwHAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-30T23:51:52.992Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "fog.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Fog\\fog.h",
+              "RelativeDocumentMoniker": "src\\Fog\\fog.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Fog\\fog.h",
+              "RelativeToolTip": "src\\Fog\\fog.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T23:50:27.158Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "cube.frag",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\shaders\\cube.frag",
+              "RelativeDocumentMoniker": "assets\\shaders\\cube.frag",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\shaders\\cube.frag",
+              "RelativeToolTip": "assets\\shaders\\cube.frag",
+              "ViewState": "AgIAABEAAAAAAAAAAAAwwBsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-30T23:51:54.271Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "chunkManager.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkManager.c",
+              "RelativeDocumentMoniker": "src\\Chunk Generation\\chunkManager.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkManager.c",
+              "RelativeToolTip": "src\\Chunk Generation\\chunkManager.c",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAApAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T23:39:40.629Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "mesher.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Mesher\\mesher.h",
+              "RelativeDocumentMoniker": "src\\Mesher\\mesher.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Mesher\\mesher.h",
+              "RelativeToolTip": "src\\Mesher\\mesher.h",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAwwB4AAAATAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-29T23:49:05.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "chunkManager.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkManager.h",
+              "RelativeDocumentMoniker": "src\\Chunk Generation\\chunkManager.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\chunkManager.h",
+              "RelativeToolTip": "src\\Chunk Generation\\chunkManager.h",
+              "ViewState": "AgIAABoAAAAAAAAAAADwvysAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T23:39:51.638Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "biomes.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\biomes.h",
+              "RelativeDocumentMoniker": "src\\Chunk Generation\\biomes.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Chunk Generation\\biomes.h",
+              "RelativeToolTip": "src\\Chunk Generation\\biomes.h",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T21:47:18.626Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "lighting.h",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Lighting\\lighting.h",
+              "RelativeDocumentMoniker": "src\\Lighting\\lighting.h",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Lighting\\lighting.h",
+              "RelativeToolTip": "src\\Lighting\\lighting.h",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAACkAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
+              "WhenOpened": "2026-10-30T17:49:42.527Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "Dirt.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\Dirt.png",
+              "RelativeDocumentMoniker": "assets\\textures\\Dirt.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\Dirt.png",
+              "RelativeToolTip": "assets\\textures\\Dirt.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:57:32.015Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 65,
+              "Title": "Bricks.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\Bricks.png",
+              "RelativeDocumentMoniker": "assets\\textures\\Bricks.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\Bricks.png",
+              "RelativeToolTip": "assets\\textures\\Bricks.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:16:42.654Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "lighting.c",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\src\\Lighting\\lighting.c",
+              "RelativeDocumentMoniker": "src\\Lighting\\lighting.c",
+              "ToolTip": "C:\\Projects\\ParadoxC\\src\\Lighting\\lighting.c",
+              "RelativeToolTip": "src\\Lighting\\lighting.c",
+              "ViewState": "AgIAAK0CAAAAAAAAAAAYwL0CAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000423|",
+              "WhenOpened": "2026-10-30T00:21:52.646Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "launch.vs.json",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\.vs\\launch.vs.json",
+              "RelativeDocumentMoniker": ".vs\\launch.vs.json",
+              "ToolTip": "C:\\Projects\\ParadoxC\\.vs\\launch.vs.json",
+              "RelativeToolTip": ".vs\\launch.vs.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-30T18:16:51.873Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "boat.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\boat.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\boat.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\boat.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\boat.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:01.212Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 57,
+              "Title": "chest_left.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest_left.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\chest_left.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest_left.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\chest_left.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:02.63Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "Reticle.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\Reticle.png",
+              "RelativeDocumentMoniker": "assets\\textures\\Reticle.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\Reticle.png",
+              "RelativeToolTip": "assets\\textures\\Reticle.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:57:34.585Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "Glass.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\Glass.png",
+              "RelativeDocumentMoniker": "assets\\textures\\Glass.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\Glass.png",
+              "RelativeToolTip": "assets\\textures\\Glass.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:57:35.766Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "StoneBlock.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\StoneBlock.png",
+              "RelativeDocumentMoniker": "assets\\textures\\StoneBlock.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\StoneBlock.png",
+              "RelativeToolTip": "assets\\textures\\StoneBlock.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-29T23:47:38.208Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 56,
+              "Title": "chest.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\chest.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\chest.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:04.289Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 55,
+              "Title": "chest_right.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest_right.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\chest_right.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\chest_right.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\chest_right.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:06.058Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 54,
+              "Title": "door.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\door.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\door.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\door.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\door.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:07.265Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 53,
+              "Title": "minecart.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\minecart.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\minecart.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\minecart.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\minecart.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:13.696Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "CMakePackageConfigHelpers.cmake",
+              "DocumentMoniker": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakePackageConfigHelpers.cmake",
+              "RelativeDocumentMoniker": "..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakePackageConfigHelpers.cmake",
+              "ToolTip": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakePackageConfigHelpers.cmake",
+              "RelativeToolTip": "..\\..\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.31\\Modules\\CMakePackageConfigHelpers.cmake",
+              "ViewState": "AgIAAO8BAAAAAAAAAAAvwPYBAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-30T17:42:40.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "sign.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\sign.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\sign.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\sign.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\sign.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:14.825Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "xporb.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\xporb.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\block_entity\\xporb.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\block_entity\\xporb.png",
+              "RelativeToolTip": "assets\\textures\\mob\\block_entity\\xporb.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T17:17:16.189Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 67,
+              "Title": "waning_gibbous.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waning_gibbous.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\waning_gibbous.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waning_gibbous.png",
+              "RelativeToolTip": "assets\\textures\\sky\\waning_gibbous.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:19.519Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 64,
+              "Title": "chainmail.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\chainmail.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\armor\\chainmail.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\chainmail.png",
+              "RelativeToolTip": "assets\\textures\\mob\\armor\\chainmail.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:07.694Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 63,
+              "Title": "creeper_armor.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\creeper_armor.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\armor\\creeper_armor.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\creeper_armor.png",
+              "RelativeToolTip": "assets\\textures\\mob\\armor\\creeper_armor.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:12.476Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 62,
+              "Title": "diamond.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\diamond.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\armor\\diamond.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\diamond.png",
+              "RelativeToolTip": "assets\\textures\\mob\\armor\\diamond.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:15.778Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 61,
+              "Title": "cow.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\cow.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\cow.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\cow.png",
+              "RelativeToolTip": "assets\\textures\\mob\\cow.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:45.529Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 60,
+              "Title": "enderman.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\enderman.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\enderman.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\enderman.png",
+              "RelativeToolTip": "assets\\textures\\mob\\enderman.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:39.164Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 59,
+              "Title": "skeleton.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\skeleton.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\skeleton.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\skeleton.png",
+              "RelativeToolTip": "assets\\textures\\mob\\skeleton.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:08.991Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 58,
+              "Title": "sheep.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\sheep.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep.png",
+              "RelativeToolTip": "assets\\textures\\mob\\sheep.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:22.438Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 68,
+              "Title": "third_quarter.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\third_quarter.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\third_quarter.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\third_quarter.png",
+              "RelativeToolTip": "assets\\textures\\sky\\third_quarter.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:16.805Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 69,
+              "Title": "new_moon.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\new_moon.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\new_moon.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\new_moon.png",
+              "RelativeToolTip": "assets\\textures\\sky\\new_moon.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:07.742Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 70,
+              "Title": "full_moon.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\full_moon.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\full_moon.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\full_moon.png",
+              "RelativeToolTip": "assets\\textures\\sky\\full_moon.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:06.359Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 71,
+              "Title": "first_quarter.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\first_quarter.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\first_quarter.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\first_quarter.png",
+              "RelativeToolTip": "assets\\textures\\sky\\first_quarter.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:02.45Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 72,
+              "Title": "clouds.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\clouds.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\clouds.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\clouds.png",
+              "RelativeToolTip": "assets\\textures\\sky\\clouds.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:58.672Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 80,
+              "Title": "rain.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\rain.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\rain.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\rain.png",
+              "RelativeToolTip": "assets\\textures\\sky\\rain.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:09.127Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 79,
+              "Title": "snow.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\snow.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\snow.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\snow.png",
+              "RelativeToolTip": "assets\\textures\\sky\\snow.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:11.561Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 78,
+              "Title": "sun.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\sun.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\sun.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\sun.png",
+              "RelativeToolTip": "assets\\textures\\sky\\sun.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:15.113Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 66,
+              "Title": "Bedrock.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\Bedrock.png",
+              "RelativeDocumentMoniker": "assets\\textures\\Bedrock.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\Bedrock.png",
+              "RelativeToolTip": "assets\\textures\\Bedrock.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:27.121Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 77,
+              "Title": "waning_crescent.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waning_crescent.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\waning_crescent.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waning_crescent.png",
+              "RelativeToolTip": "assets\\textures\\sky\\waning_crescent.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:18.262Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 76,
+              "Title": "waxing_crescent.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waxing_crescent.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\waxing_crescent.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waxing_crescent.png",
+              "RelativeToolTip": "assets\\textures\\sky\\waxing_crescent.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:20.736Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 73,
+              "Title": "OakLogTop.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\OakLogTop.png",
+              "RelativeDocumentMoniker": "assets\\textures\\OakLogTop.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\OakLogTop.png",
+              "RelativeToolTip": "assets\\textures\\OakLogTop.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:24.756Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 75,
+              "Title": "waxing_gibbous.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waxing_gibbous.png",
+              "RelativeDocumentMoniker": "assets\\textures\\sky\\waxing_gibbous.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\sky\\waxing_gibbous.png",
+              "RelativeToolTip": "assets\\textures\\sky\\waxing_gibbous.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:21.977Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 74,
+              "Title": "Leaves.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\Leaves.png",
+              "RelativeDocumentMoniker": "assets\\textures\\Leaves.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\Leaves.png",
+              "RelativeToolTip": "assets\\textures\\Leaves.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:21:23.568Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 83,
+              "Title": "iron.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\iron.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\armor\\iron.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\iron.png",
+              "RelativeToolTip": "assets\\textures\\mob\\armor\\iron.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:22.731Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 84,
+              "Title": "gold.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\gold.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\armor\\gold.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\armor\\gold.png",
+              "RelativeToolTip": "assets\\textures\\mob\\armor\\gold.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:18.84Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 85,
+              "Title": "boat.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\boat.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\boat.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\boat.png",
+              "RelativeToolTip": "assets\\textures\\mob\\boat.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:20:02.554Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 86,
+              "Title": "chest.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\chest.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest.png",
+              "RelativeToolTip": "assets\\textures\\mob\\chest.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:59.38Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 87,
+              "Title": "chest_left.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest_left.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\chest_left.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest_left.png",
+              "RelativeToolTip": "assets\\textures\\mob\\chest_left.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:56.28Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 88,
+              "Title": "chest_right.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest_right.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\chest_right.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chest_right.png",
+              "RelativeToolTip": "assets\\textures\\mob\\chest_right.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:53.149Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 89,
+              "Title": "chicken.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chicken.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\chicken.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\chicken.png",
+              "RelativeToolTip": "assets\\textures\\mob\\chicken.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:49.273Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 90,
+              "Title": "creeper.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\creeper.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\creeper.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\creeper.png",
+              "RelativeToolTip": "assets\\textures\\mob\\creeper.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:43.355Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 91,
+              "Title": "enderman_eyes.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\enderman_eyes.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\enderman_eyes.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\enderman_eyes.png",
+              "RelativeToolTip": "assets\\textures\\mob\\enderman_eyes.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:33.809Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 81,
+              "Title": "minecart.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\minecart.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\minecart.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\minecart.png",
+              "RelativeToolTip": "assets\\textures\\mob\\minecart.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:29.795Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 82,
+              "Title": "spider.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\spider.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\spider.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\spider.png",
+              "RelativeToolTip": "assets\\textures\\mob\\spider.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:04.798Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 92,
+              "Title": "pig.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\pig.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\pig.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\pig.png",
+              "RelativeToolTip": "assets\\textures\\mob\\pig.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:25.4Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 93,
+              "Title": "sheep_wool.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep_wool.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\sheep_wool.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep_wool.png",
+              "RelativeToolTip": "assets\\textures\\mob\\sheep_wool.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:18.8Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 94,
+              "Title": "sheep_wool_undercoat.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep_wool_undercoat.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\sheep_wool_undercoat.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\sheep_wool_undercoat.png",
+              "RelativeToolTip": "assets\\textures\\mob\\sheep_wool_undercoat.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:19:13.708Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 95,
+              "Title": "spider_eyes.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\spider_eyes.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\spider_eyes.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\spider_eyes.png",
+              "RelativeToolTip": "assets\\textures\\mob\\spider_eyes.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:18:59.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 96,
+              "Title": "steve.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\steve.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\steve.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\steve.png",
+              "RelativeToolTip": "assets\\textures\\mob\\steve.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:18:56.462Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 97,
+              "Title": "zombie.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\zombie.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\zombie.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\zombie.png",
+              "RelativeToolTip": "assets\\textures\\mob\\zombie.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:18:52.546Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 98,
+              "Title": "mob_steve.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\mob_steve.png",
+              "RelativeDocumentMoniker": "assets\\textures\\mob\\mob_steve.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\mob\\mob_steve.png",
+              "RelativeToolTip": "assets\\textures\\mob\\mob_steve.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-30T00:11:39.936Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 100,
+              "Title": "CMakePresets.json",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\CMakePresets.json",
+              "RelativeDocumentMoniker": "CMakePresets.json",
+              "ToolTip": "C:\\Projects\\ParadoxC\\CMakePresets.json",
+              "RelativeToolTip": "CMakePresets.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-10-29T23:55:57.499Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 99,
+              "Title": "Steve.png",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\assets\\textures\\Steve.png",
+              "RelativeDocumentMoniker": "assets\\textures\\Steve.png",
+              "ToolTip": "C:\\Projects\\ParadoxC\\assets\\textures\\Steve.png",
+              "RelativeToolTip": "assets\\textures\\Steve.png",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001533|",
+              "WhenOpened": "2026-10-29T23:47:39.955Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 101,
+              "Title": "ParadoxC.cpp",
+              "DocumentMoniker": "C:\\Projects\\ParadoxC\\ParadoxC.cpp",
+              "RelativeDocumentMoniker": "ParadoxC.cpp",
+              "ToolTip": "C:\\Projects\\ParadoxC\\ParadoxC.cpp",
+              "RelativeToolTip": "ParadoxC.cpp",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
+              "WhenOpened": "2026-10-29T23:41:27.538Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 102,
+              "Title": "CMake Overview Pages",
+              "DocumentMoniker": "CMake Overview Pages",
+              "ToolTip": "CMake Overview Pages",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-10-29T23:41:05.6Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

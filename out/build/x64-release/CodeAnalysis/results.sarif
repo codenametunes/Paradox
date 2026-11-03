@@ -1,0 +1,1776 @@
+{
+  "version": "2.1.0",
+  "$schema": "https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json",
+  "runs": [
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "MSVC Code Analysis",
+          "version": "14.44.35228.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/chunk generation/chunkgenerator.c"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "82097b14671afd0c586774d33fd33ccf4f4083675a472bf4ca6e2cf99f7cb54b"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/main.h"
+          },
+          "hashes": {
+            "sha-256": "0094c32c24a9abb0fc476763de10b96a8135ac74647cf06c7005b4df5d4ff6c1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/glad/gl.h"
+          },
+          "hashes": {
+            "sha-256": "6f5f65ec2187851d121f5a9983e4a007b55b4e8deb1ffb69ccaf26b723e467d6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/khr/khrplatform.h"
+          },
+          "hashes": {
+            "sha-256": "7b1e01aaa7ad8f6fc34b5c7bdf79ebf5189bb09e2c4d2e79fc5d350623d11e83"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/glfw-src/include/glfw/glfw3.h"
+          },
+          "hashes": {
+            "sha-256": "0fd04b330d92fc4bd6630c20d1006cef36d25b16ec9f911ec4041918482307bb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/chunk generation/chunkgenerator.h"
+          },
+          "hashes": {
+            "sha-256": "b89db46344f081b8b6ed1f21d8d7da729d4140b915f6fbcfb790a540a74b333e"
+          }
+        }
+      ]
+    },
+    {
+      "results": [
+        {
+          "ruleId": "C6385",
+          "message": {
+            "text": "Reading invalid data from 'available':  the readable size is '_Old_2`128' bytes, but 'z' bytes may be read."
+          },
+          "analysisTarget": {
+            "uri": "file:///c:/projects/paradoxc/src/thid party/stb_vorbis.c"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                },
+                "region": {
+                  "startLine": 1118,
+                  "startColumn": 7,
+                  "endLine": 1118,
+                  "endColumn": 23
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "compute_codewords",
+                  "decoratedName": "compute_codewords",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1088,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1088,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1088,
+                            "startColumn": 12
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1089,
+                            "startColumn": 11
+                          }
+                        },
+                        "message": {
+                          "text": "'available' is an array of 32 elements (128 bytes)"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ],
+                      "importance": "essential"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1091,
+                            "startColumn": 4
+                          }
+                        },
+                        "message": {
+                          "text": "'available' is an Output from 'memset' (declared at <no file>:0)"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1093,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1093,
+                            "startColumn": 16
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this loop, (assume 'k<n')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1093,
+                            "startColumn": 37
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this branch, (assume 'len[k]<255')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1094,
+                            "startColumn": 10
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'k==n' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1097,
+                            "startColumn": 4
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1099,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1099,
+                            "startColumn": 16
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this loop, (assume 'i<=len[k]' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1105,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1105,
+                            "startColumn": 18
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this loop, (assume 'i<n')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1106,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1107,
+                            "startColumn": 11
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1107,
+                            "startColumn": 23
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1108,
+                            "startColumn": 13
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'z==255' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1116,
+                            "startColumn": 20
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this loop, (assume 'z>0&&!available[z]' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1117,
+                            "startColumn": 13
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'z==0' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1118,
+                            "startColumn": 11
+                          }
+                        },
+                        "message": {
+                          "text": "Invalid read from 'available[-1]', (readable range is 0 to 31)"
+                        }
+                      },
+                      "kinds": [
+                        "usage"
+                      ],
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6386",
+          "message": {
+            "text": "Buffer overrun while writing to 'available':  the writable size is '128' bytes, but 'z' bytes might be written."
+          },
+          "analysisTarget": {
+            "uri": "file:///c:/projects/paradoxc/src/thid party/stb_vorbis.c"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                },
+                "region": {
+                  "startLine": 1119,
+                  "startColumn": 7,
+                  "endLine": 1119,
+                  "endColumn": 22
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "compute_codewords",
+                  "decoratedName": "compute_codewords",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1088,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1088,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1088,
+                            "startColumn": 12
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1089,
+                            "startColumn": 11
+                          }
+                        },
+                        "message": {
+                          "text": "'available' is an array of 32 elements (128 bytes)"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ],
+                      "importance": "essential"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1091,
+                            "startColumn": 4
+                          }
+                        },
+                        "message": {
+                          "text": "'available' is an Output from 'memset' (declared at <no file>:0)"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1093,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1093,
+                            "startColumn": 16
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this loop, (assume 'k<n')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1093,
+                            "startColumn": 37
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this branch, (assume 'len[k]<255')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1094,
+                            "startColumn": 10
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'k==n' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1097,
+                            "startColumn": 4
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1099,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1099,
+                            "startColumn": 16
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this loop, (assume 'i<=len[k]' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1105,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1105,
+                            "startColumn": 18
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this loop, (assume 'i<n')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1106,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1107,
+                            "startColumn": 11
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1107,
+                            "startColumn": 23
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1108,
+                            "startColumn": 13
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'z==255' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1116,
+                            "startColumn": 20
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this loop, (assume 'z>0&&!available[z]' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1117,
+                            "startColumn": 13
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'z==0' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1118,
+                            "startColumn": 11
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1119,
+                            "startColumn": 20
+                          }
+                        },
+                        "message": {
+                          "text": "Invalid write to 'available[-1]', (writable range is 0 to 31)"
+                        }
+                      },
+                      "kinds": [
+                        "usage"
+                      ],
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6385",
+          "message": {
+            "text": "Reading invalid data from 'f->segments':  the readable size is '255' bytes, but 'f->next_seg++' bytes may be read."
+          },
+          "analysisTarget": {
+            "uri": "file:///c:/projects/paradoxc/src/thid party/stb_vorbis.c"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                },
+                "region": {
+                  "startLine": 1548,
+                  "startColumn": 4,
+                  "endLine": 1548,
+                  "endColumn": 33
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "next_segment",
+                  "decoratedName": "next_segment",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1541,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1542,
+                            "startColumn": 9
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'f->last_seg' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1543,
+                            "startColumn": 20
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this branch, (assume 'f->next_seg==-1')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1544,
+                            "startColumn": 25
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1545,
+                            "startColumn": 11
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume '!start_page(f)' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1546,
+                            "startColumn": 11
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume '!((f->page_flag&1))' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 1548,
+                            "startColumn": 8
+                          }
+                        },
+                        "message": {
+                          "text": "Invalid read from 'f->segments[-1]', (readable range is 0 to 254)"
+                        }
+                      },
+                      "kinds": [
+                        "usage"
+                      ],
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6255",
+          "message": {
+            "text": "`_alloca` indicates failure by raising a stack overflow exception.  Consider using _malloca instead."
+          },
+          "analysisTarget": {
+            "uri": "file:///c:/projects/paradoxc/src/thid party/stb_vorbis.c"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                },
+                "region": {
+                  "startLine": 2118,
+                  "startColumn": 42
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "decode_residue",
+                  "decoratedName": "decode_residue",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6255",
+          "message": {
+            "text": "`_alloca` indicates failure by raising a stack overflow exception.  Consider using _malloca instead."
+          },
+          "analysisTarget": {
+            "uri": "file:///c:/projects/paradoxc/src/thid party/stb_vorbis.c"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                },
+                "region": {
+                  "startLine": 2635,
+                  "startColumn": 28
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "inverse_mdct",
+                  "decoratedName": "inverse_mdct",
+                  "kind": "function"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ruleId": "C6001",
+          "message": {
+            "text": "Using uninitialized memory 'zero_channel'."
+          },
+          "analysisTarget": {
+            "uri": "file:///c:/projects/paradoxc/src/thid party/stb_vorbis.c"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                },
+                "region": {
+                  "startLine": 3298,
+                  "startColumn": 12
+                }
+              },
+              "logicalLocations": [
+                {
+                  "fullyQualifiedName": "vorbis_decode_packet_rest",
+                  "decoratedName": "vorbis_decode_packet_rest",
+                  "kind": "function"
+                }
+              ]
+            }
+          ],
+          "codeFlows": [
+            {
+              "threadFlows": [
+                {
+                  "locations": [
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3182,
+                            "startColumn": 13
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3183,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3183,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3183,
+                            "startColumn": 12
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3183,
+                            "startColumn": 14
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3183,
+                            "startColumn": 16
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3184,
+                            "startColumn": 8
+                          }
+                        },
+                        "message": {
+                          "text": "'zero_channel' is not initialized"
+                        }
+                      },
+                      "kinds": [
+                        "declaration"
+                      ],
+                      "importance": "essential"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3185,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3189,
+                            "startColumn": 4
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3190,
+                            "startColumn": 6
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3191,
+                            "startColumn": 8
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3194,
+                            "startColumn": 7
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3198,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3198,
+                            "startColumn": 16
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this loop, (assume 'i<f->channels' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3292,
+                            "startColumn": 16
+                          }
+                        },
+                        "message": {
+                          "text": "Skip this branch, (assume 'f->alloc.alloc_buffer' is false)"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3296,
+                            "startColumn": 4
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3297,
+                            "startColumn": 10
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3297,
+                            "startColumn": 16
+                          }
+                        },
+                        "message": {
+                          "text": "Enter this loop, (assume 'i<map->coupling_steps')"
+                        }
+                      },
+                      "kinds": [
+                        "branch"
+                      ]
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3298,
+                            "startColumn": 49
+                          }
+                        }
+                      },
+                      "importance": "unimportant"
+                    },
+                    {
+                      "location": {
+                        "physicalLocation": {
+                          "artifactLocation": {
+                            "uri": "file:///C:/Projects/ParadoxC/src/Thid Party/stb_vorbis.c"
+                          },
+                          "region": {
+                            "startLine": 3298,
+                            "startColumn": 12
+                          }
+                        },
+                        "message": {
+                          "text": "'zero_channel' is used, but may not have been initialized"
+                        }
+                      },
+                      "kinds": [
+                        "usage"
+                      ],
+                      "importance": "essential"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "MSVC Code Analysis",
+          "version": "14.44.35228.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/thid party/stb_vorbis.c"
+          },
+          "roles": [
+            "analysisTarget",
+            "resultFile"
+          ],
+          "hashes": {
+            "sha-256": "4c7cb2ff1f7011e9d67950446b7eb9ca044f2e464d76bfbb0b84dd2e23e65636"
+          }
+        }
+      ]
+    },
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "MSVC Code Analysis",
+          "version": "14.44.35228.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/shader.c"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "6b679a50f279e04c1217a07b99f25b159ed8acebd136e9d8ee7d320c59b23497"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/main.h"
+          },
+          "hashes": {
+            "sha-256": "0094c32c24a9abb0fc476763de10b96a8135ac74647cf06c7005b4df5d4ff6c1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/glad/gl.h"
+          },
+          "hashes": {
+            "sha-256": "6f5f65ec2187851d121f5a9983e4a007b55b4e8deb1ffb69ccaf26b723e467d6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/khr/khrplatform.h"
+          },
+          "hashes": {
+            "sha-256": "7b1e01aaa7ad8f6fc34b5c7bdf79ebf5189bb09e2c4d2e79fc5d350623d11e83"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/glfw-src/include/glfw/glfw3.h"
+          },
+          "hashes": {
+            "sha-256": "0fd04b330d92fc4bd6630c20d1006cef36d25b16ec9f911ec4041918482307bb"
+          }
+        }
+      ]
+    },
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "MSVC Code Analysis",
+          "version": "14.44.35228.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/text.c"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "0115888e50aa8c6491156facfb7b13dd00716692ac2ed0ec319f197566559d58"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/main.h"
+          },
+          "hashes": {
+            "sha-256": "0094c32c24a9abb0fc476763de10b96a8135ac74647cf06c7005b4df5d4ff6c1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/glad/gl.h"
+          },
+          "hashes": {
+            "sha-256": "6f5f65ec2187851d121f5a9983e4a007b55b4e8deb1ffb69ccaf26b723e467d6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/khr/khrplatform.h"
+          },
+          "hashes": {
+            "sha-256": "7b1e01aaa7ad8f6fc34b5c7bdf79ebf5189bb09e2c4d2e79fc5d350623d11e83"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/glfw-src/include/glfw/glfw3.h"
+          },
+          "hashes": {
+            "sha-256": "0fd04b330d92fc4bd6630c20d1006cef36d25b16ec9f911ec4041918482307bb"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/ft2build.h"
+          },
+          "hashes": {
+            "sha-256": "1d1760ea6a00a05ad0f8e825a5cba9825466fd1f864707cfac76cb4b57579de7"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/config/ftheader.h"
+          },
+          "hashes": {
+            "sha-256": "3efd94b282ed139bb430cd92215fc471eac98e1dd30cfaba08412385649f52e3"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/freetype.h"
+          },
+          "hashes": {
+            "sha-256": "4a184feb875793a7ace74b6c685ab561d96ffcf4a8f4bb0c7587a0a7f915bd53"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-build/include/freetype/config/ftconfig.h"
+          },
+          "hashes": {
+            "sha-256": "f3c2f1d7a3321edf770584838a18d97e2129d1a4ed95bbb1777949b7165e2310"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-build/include/freetype/config/ftoption.h"
+          },
+          "hashes": {
+            "sha-256": "bec19e825412e87d5e8c34babcde911e517778a2f0581edbabf48c0ba1e10870"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/config/ftstdlib.h"
+          },
+          "hashes": {
+            "sha-256": "fc29f7c491959d81431cf742bf4cc44ac8244880af42a12f302b87df02c2ab75"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/config/integer-types.h"
+          },
+          "hashes": {
+            "sha-256": "7599e076216cf4213ac7dbf4372a6d8a01a2073399573004b1703dc1d2c4952d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/config/public-macros.h"
+          },
+          "hashes": {
+            "sha-256": "987e8ebc633f222bf07b8531efbf7bffc097e5db9272b4b5f60a1a2cfd4e29b8"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/config/mac-support.h"
+          },
+          "hashes": {
+            "sha-256": "a2b33bd43c1fe77dd7c358b076cf50f7ad41fa0d7b48d698e3baef131c71f0c4"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/fttypes.h"
+          },
+          "hashes": {
+            "sha-256": "5341c315ae76e6d0047cd04416c7a39d5352dfb118a7ac3c5635c8964f4eaf31"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/ftsystem.h"
+          },
+          "hashes": {
+            "sha-256": "60e147b41f05e2590463fa6cfac98bf1f3f4a186eec6d68f9dc16f6aa8ab9e10"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/ftimage.h"
+          },
+          "hashes": {
+            "sha-256": "d489af13bc24d832467abeece86138b5c057eff0d9957d7284ccaa8786522b6e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/fterrors.h"
+          },
+          "hashes": {
+            "sha-256": "531719a2b5c59f64c0af8f72cd35a62f48a8580127507c6500356660255fed5e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/ftmoderr.h"
+          },
+          "hashes": {
+            "sha-256": "8c94da098a841940525092e150e548aaa73bfb82c10dd3f65a6b0950716e5b3e"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/freetype-src/include/freetype/fterrdef.h"
+          },
+          "hashes": {
+            "sha-256": "d26dffdd159eac4559bf5efe802872a9cc3b7dc9fa9b34cd9f3acd597fc6055c"
+          }
+        }
+      ]
+    },
+    {
+      "results": [],
+      "tool": {
+        "driver": {
+          "name": "PREfast",
+          "fullName": "MSVC Code Analysis",
+          "version": "14.44.35228.0",
+          "informationUri": "https://aka.ms/cpp/ca"
+        }
+      },
+      "invocations": [
+        {
+          "executionSuccessful": true
+        }
+      ],
+      "artifacts": [
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/window.c"
+          },
+          "roles": [
+            "analysisTarget"
+          ],
+          "hashes": {
+            "sha-256": "1a4c38b904541dd0e91062adedf7794d41bf1777d0250f50d5fa14c8cde2fa6d"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/src/main.h"
+          },
+          "hashes": {
+            "sha-256": "0094c32c24a9abb0fc476763de10b96a8135ac74647cf06c7005b4df5d4ff6c1"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/glad/gl.h"
+          },
+          "hashes": {
+            "sha-256": "6f5f65ec2187851d121f5a9983e4a007b55b4e8deb1ffb69ccaf26b723e467d6"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/third_party/glad/include/khr/khrplatform.h"
+          },
+          "hashes": {
+            "sha-256": "7b1e01aaa7ad8f6fc34b5c7bdf79ebf5189bb09e2c4d2e79fc5d350623d11e83"
+          }
+        },
+        {
+          "location": {
+            "uri": "file:///c:/projects/paradoxc/out/build/x64-release/_deps/glfw-src/include/glfw/glfw3.h"
+          },
+          "hashes": {
+            "sha-256": "0fd04b330d92fc4bd6630c20d1006cef36d25b16ec9f911ec4041918482307bb"
+          }
+        }
+      ]
+    }
+  ]
+}

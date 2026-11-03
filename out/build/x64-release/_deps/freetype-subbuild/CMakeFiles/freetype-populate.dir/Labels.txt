@@ -1,0 +1,14 @@
+# Target labels
+ freetype-populate
+# Source files and their labels
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/CMakeFiles/freetype-populate
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/CMakeFiles/freetype-populate.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/CMakeFiles/freetype-populate-complete.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-build.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-configure.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-download.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-install.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-mkdir.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-patch.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-test.rule
+C:/Projects/ParadoxC/out/build/x64-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-update.rule
