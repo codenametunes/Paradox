@@ -8,30 +8,30 @@ It doesn't have everything Minecraft has, but it has enough to feel like Minecra
 
 ## Features
 
-Procedurally generated voxel terrain
-Chunk-based world rendering
-Block placement and destruction
-Multiple block types
-Lighting system
-Fluid blocks
-Inventory and hotbar
-First-person and third-person perspectives
-Two game modes
-Day/night cycle and sky rendering
+- Procedurally generated voxel terrain
+- Chunk-based world rendering
+- Block placement and destruction
+- Multiple block types
+- Lighting system
+- Fluid blocks
+- Inventory and hotbar
+- First-person and third-person perspectives
+- Two game modes
+- Day/night cycle and sky rendering
 
 ## Controls
 
-WASD - Movement
-Mouse - Look around
-Space - Jump
-Left Mouse Button - Break block
-Right Mouse Button - Place block
-F4 - Toggle wireframe view
-F5 - Change camera perspective
-F10 - Change game mode
-F11 - Toggle fullscreen
-E - Open inventory
-ESC - Pause menu
+- WASD - Movement
+- Mouse - Look around
+- Space - Jump
+- Left Mouse Button - Break block
+- Right Mouse Button - Place block
+- F4 - Toggle wireframe view
+- F5 - Change camera perspective
+- F10 - Change game mode
+- F11 - Toggle fullscreen
+- E - Open inventory
+- ESC - Pause menu
 
 *Movement and interaction controls follow the familiar Minecraft layout.*
 
@@ -41,36 +41,36 @@ Paradox is written in C, but not every system was developed entirely from scratc
 
 A considerable amount of the game's underlying behavior references Minecraft's **deobfuscated Java source code**, particularly:
 
-Physics and collision behavior
-Player movement and movement mechanics
-Entity and world scaling
-Various calculations and miscellaneous gameplay mechanics
+- Physics and collision behavior
+- Player movement and movement mechanics
+- Entity and world scaling
+- Various calculations and miscellaneous gameplay mechanics
 
 These references help reproduce Minecraft's familiar behavior while implementing the actual game systems in C.
 
 ## Known Issues
 
-Character skin rendering is currently broken.
-Fluid textures are not mapped correctly.
+- Character skin rendering is currently broken.
+- Fluid textures are not mapped correctly.
 
 These issues are known and may be addressed in future updates.
 
 ## Planned Features
 
-Biome generation
-Structures and world generation
-Improved water generation
-Passive mobs
-Improved character skin rendering
-Correct fluid texture mapping
+- Biome generation
+- Structures and world generation
+- Improved water generation
+- Passive mobs
+- Improved character skin rendering
+- Correct fluid texture mapping
 
 ## Built With
 
-C
-OpenGL
-GLFW
-GLAD
-CMake
+- C
+- OpenGL
+- GLFW
+- GLAD
+- CMake
 
 ## License
 
