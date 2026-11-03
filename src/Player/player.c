@@ -1,17 +1,16 @@
 #include "main.h"
 #include "mob.h"
-#include "chunkGenerator.h"   // FLAT_LEVEL
+#include "chunkGenerator.h"
 #include "player.h"
 
 int world_block(int x, int y, int z);
-float fluid_height(int x, int y, int z);     // fluid.c: surface height of the fluid in a cell, -1 = none
+float fluid_height(int x, int y, int z);
 extern int snd_walk[BLOCK_TYPES][BLOCK_SOUND_VARIANTS];
 extern int snd_walk_n[BLOCK_TYPES];
 
 Player player;
 GameMode game_mode = MODE_SURVIVAL;
 
-// water and lava are not solid: you sink into them instead of standing on them
 static int is_fluid_id(int b) { return b == BLOCK_WATER || b == BLOCK_LAVA; }
 static int is_solid_id(int b) { return b != BLOCK_AIR && !is_fluid_id(b); }
 
@@ -46,7 +45,7 @@ static int box_collides_shifted(const AABB* b, double dx, double dy, double dz)
 
 static AABB player_box(const Player* p)
 {
-    double h = PLAYER_HEIGHT;   // 1.0: same box while sneaking
+    double h = PLAYER_HEIGHT;
     AABB b;
 
     b.lo[0] = p->x - PLAYER_WIDTH * 0.5;  b.hi[0] = p->x + PLAYER_WIDTH * 0.5;
@@ -117,8 +116,6 @@ double clip_axis(const AABB* b, int axis, double d)
     return d;
 }
 
-// Does the box touch fluid `id`? Like Minecraft the box is shrunk (0.4 off the bottom, a hair on the
-// sides) and a cell only counts up to its surface height, so wading in a shallow puddle doesn't count.
 static int box_in_fluid(const AABB* b, int id)
 {
     const double lo_y = b->lo[1] + 0.4, hi_y = b->hi[1];
@@ -138,7 +135,6 @@ static int box_in_fluid(const AABB* b, int id)
 static void player_move(Player* p, double dx, double dy, double dz)
 {
     AABB b = player_box(p);
-
 
     if (p->sneaking && p->on_ground) {
         const double step = 0.05;
@@ -227,9 +223,7 @@ void player_reset(Player* p)
     p->air = PLAYER_MAX_AIR;
 }
 
-// SURVIVAL
-
-#define GAME_DIFFICULTY 2    // 2 = Normal: starvation stops at half a heart
+#define GAME_DIFFICULTY 2
 
 void player_add_exhaustion(float amount)
 {
@@ -241,7 +235,7 @@ void player_hurt(Player* p, float amount)
     if (game_mode != MODE_SURVIVAL || p->dead || amount <= 0.0f)
         return;
 
-    if (p->hurt_resist > 10) {            // maxHurtResistantTime / 2
+    if (p->hurt_resist > 10) {
         if (amount <= p->last_damage)
             return;
 
@@ -262,7 +256,6 @@ void player_hurt(Player* p, float amount)
     }
 }
 
-// FoodStats.onUpdate + hurt resistance countdown (start of the tick)
 static void survival_food_tick(Player* p)
 {
     if (p->hurt_resist > 0)
@@ -302,7 +295,6 @@ static void survival_food_tick(Player* p)
     }
 }
 
-// Entity.updateFallState + sprint exhaustion (after the move)
 static void survival_move_tick(Player* p)
 {
     double dy = p->y - p->py;
@@ -332,8 +324,6 @@ static void survival_move_tick(Player* p)
     }
 }
 
-// one 20 Hz game tick
-
 void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
 {
     p->px = p->x;
@@ -349,24 +339,22 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
     int key_jump = glfwGetKey(win, GLFW_KEY_SPACE) == GLFW_PRESS;
     int key_sneak = glfwGetKey(win, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS;
 
-    if (p->dead)   // no control while dead
+    if (p->dead)
         key_w = key_s = key_a = key_d = key_jump = key_sneak = 0;
 
     double yaw_r = (double)yaw_deg * 3.14159265358979323846 / 180.0;
 
-    double fx = cos(yaw_r);   // forward
+    double fx = cos(yaw_r);
     double fz = sin(yaw_r);
-    double rx = -fz;          // right
+    double rx = -fz;
     double rz = fx;
-
-    // double tap space toggles flying, touching the ground stops it
 
     if (key_jump && !p->jump_prev) {
         if (p->fly_timer == 0) {
             p->fly_timer = 7;
         }
         else {
-            if (game_mode == MODE_CREATIVE)     // survival can't fly
+            if (game_mode == MODE_CREATIVE)
                 p->flying = !p->flying;
             p->fly_timer = 0;
         }
@@ -380,12 +368,6 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
     if (p->flying && p->on_ground)
         p->flying = 0;
 
-    // sneaking (Release 1.0): just the shift key, also while flying (there it
-    // sinks you too). The hitbox does not change, so there is no ceiling check.
-    // The camera dips through ySize: EntityPlayerSP sets it to 0.2 while
-    // sneaking, Entity.moveEntity then multiplies it by 0.4 every tick, so it
-    // settles at 0.08 while crouched and eases back out when you let go.
-
     p->sneaking = key_sneak;
 
     if (p->sneaking && p->y_size < 0.2)
@@ -393,15 +375,12 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
 
     p->y_size *= 0.4;
 
-    // timers
-
     if (p->sprint_timer > 0) p->sprint_timer--;
     if (p->jump_ticks > 0)   p->jump_ticks--;
     if (p->fly_timer > 0)    p->fly_timer--;
 
     survival_food_tick(p);
 
-    // fluids (Release 1.0): in water / lava gravity, drag and jumping change and landing in them is safe
     {
         AABB fb = player_box(p);
         p->in_water = !p->flying && box_in_fluid(&fb, BLOCK_WATER);
@@ -414,8 +393,6 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
     }
     const int in_liquid = p->in_water || p->in_lava;
 
-    // input (sneaking slows it down to 30%)
-
     double in_fwd = (double)(key_w - key_s);
     double in_side = (double)(key_d - key_a);
 
@@ -424,11 +401,8 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
         in_side *= 0.3;
     }
 
-    // sprinting (Release 1.0): double tap W on the ground. There is no sprint
-    // key (the Ctrl binding only arrived in 1.7.2).
-
     int fwd_ok = in_fwd >= 0.8;
-    int food_ok = p->food > 6 || game_mode == MODE_CREATIVE;   // no sprinting when hungry
+    int food_ok = p->food > 6 || game_mode == MODE_CREATIVE;
 
     if (p->on_ground && !p->fwd_prev && fwd_ok && !p->sprinting && food_ok) {
         if (p->sprint_timer == 0) {
@@ -445,24 +419,18 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
 
     p->fwd_prev = fwd_ok;
 
-    // flying: space goes up, shift goes down (fly speed 0.05 * 3)
-
     if (p->flying) {
         if (key_sneak) p->vy -= 0.05 * 3.0;
         if (key_jump)  p->vy += 0.05 * 3.0;
     }
 
-    // tiny velocity cutoff (0.005 up to 1.8, 0.003 from 1.9 on)
-
     if (fabs(p->vx) < 0.005) p->vx = 0.0;
     if (fabs(p->vy) < 0.005) p->vy = 0.0;
     if (fabs(p->vz) < 0.005) p->vz = 0.0;
 
-    // jumping
-
     if (key_jump) {
         if (in_liquid) {
-            p->vy += 0.04;          // holding space pushes you up through the fluid
+            p->vy += 0.04;
         }
         else if (p->on_ground && p->jump_ticks == 0) {
             p->vy = 0.42;
@@ -482,14 +450,10 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
         p->jump_ticks = 0;
     }
 
-    // movement input is scaled by 0.98 every tick
-
     in_fwd *= 0.98;
     in_side *= 0.98;
 
-    double vy_before = p->vy;   // flying keeps this, see below
-
-    // friction of the block below (every block here is 0.6)
+    double vy_before = p->vy;
 
     const double slipperiness = 0.6;
 
@@ -504,11 +468,9 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
     else if (p->on_ground)
         accel = move_speed * (0.16277136 / (f4 * f4 * f4));
     else if (p->flying)
-        accel = 0.05;   // sprinting only speeds up flying from 1.8 (14w34d) on
+        accel = 0.05;
     else
         accel = p->sprinting ? 0.026 : 0.02;
-
-    // accelerate (diagonal input is normalized so it isn't faster)
 
     double mag = in_side * in_side + in_fwd * in_fwd;
 
@@ -527,8 +489,6 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
         p->vz += in_fwd * fz + in_side * rz;
     }
 
-    // move, then gravity and friction
-
     const double y_before = p->y;
 
     player_move(p, p->vx, p->vy, p->vz);
@@ -536,14 +496,12 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
     survival_move_tick(p);
 
     if (in_liquid) {
-        // water drags everything by 0.8, lava by 0.5, with a little sinking on top
         const double drag = p->in_water ? 0.8 : 0.5;
         p->vx *= drag;
         p->vy *= drag;
         p->vz *= drag;
         p->vy -= 0.02;
 
-        // against a wall with free air just above the ledge: hop out
         if (p->collided_h) {
             AABB t = player_box(p);
             const double oy = p->vy + 0.6 - (p->y - y_before);
@@ -562,13 +520,8 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
         p->vz *= f4;
     }
 
-    // flying has no gravity, vertical speed just fades out by 0.6 per tick
-
     if (p->flying)
         p->vy = vy_before * 0.6;
-
-    // field of view: 70 * (speed / walk speed + 1) / 2, bigger while flying,
-    // eased towards the target by half every tick
 
     double fov_target = p->flying ? 1.1 : 1.0;
 
@@ -579,12 +532,8 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
     if (p->fov_mod > 1.5) p->fov_mod = 1.5;
     if (p->fov_mod < 0.1) p->fov_mod = 0.1;
 
-    // camera height: standing eye height minus the ySize dip (interpolated
-    // between ticks through eye_prev / eye_h, like the entity position)
-
     p->eye_h = EYE_HEIGHT - p->y_size;
 
-    // eyes inside a fluid: drowning (300 ticks of air, then 2 damage per second) and lava burns
     {
         const double ey = p->y + p->eye_h - 0.11111111;
         const int ex = (int)floor(p->x), ez = (int)floor(p->z), eyi = (int)floor(ey);
@@ -619,8 +568,6 @@ void player_tick(Player* p, GLFWwindow* win, float yaw_deg)
     if (p->y > SKY_LIMIT - 2.0) { p->y = SKY_LIMIT - 2.0; if (p->vy > 0.0) p->vy = 0.0; }
 }
 
-// camera position between the last two ticks (alpha 0..1)
-
 void player_eye_pos(const Player* p, double alpha, float* out)
 {
     out[0] = (float)(p->px + (p->x - p->px) * alpha);
@@ -634,8 +581,6 @@ double player_fov_modifier(const Player* p, double alpha)
     return p->fov_prev + (p->fov_mod - p->fov_prev) * alpha;
 }
 
-// blocks can't be placed inside the player's hitbox
-
 int block_hits_player(int bx, int by, int bz)
 {
     AABB pb = player_box(&player);
@@ -643,11 +588,9 @@ int block_hits_player(int bx, int by, int bz)
     return block_overlaps(&pb, bx, by, bz);
 }
 
-// FOOTSTEPS
-
 static double step_distance = 0.0;
 static double next_step = 1.0;
-static int    sfx_quiet = 0;      // ticks to hold back footsteps after a break / place
+static int    sfx_quiet = 0;
 
 void player_quiet_steps(int ticks) { sfx_quiet = ticks; }
 

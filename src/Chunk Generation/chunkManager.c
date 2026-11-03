@@ -2,20 +2,10 @@
 #include "chunkManager.h"
 #include "mesher.h"
 #include "Lighting/lighting.h"
-#include "Player/player.h"   // world_block prototype lives with the other modules
-#include "Sky/sky.h"         // SKY_LIMIT
+#include "Player/player.h"
+#include "Sky/sky.h"
 
-// WORLD / CHUNKS
-//
-// The world is a ring cache of WORLD_CHUNKS x WORLD_CHUNKS chunks around the player.
-// Each chunk is CHUNK_SIZE x CHUNK_HEIGHT x CHUNK_SIZE blocks.
-// Block coordinates are world coordinates: block (x,y,z) occupies
-// the unit cube [x,x+1] x [y,y+1] x [z,z+1].
-//
-// A chunk keeps one mesh per texture (see mesher.c), so each face can use its
-// own texture (for example, grass top versus dirt sides).
-
-#define MESH_BUDGET            0.004   // seconds of meshing per frame (at least 1 chunk always)
+#define MESH_BUDGET            0.004  // 4ms, lower it if it stutters
 #define CHUNK_LOADS_PER_FRAME  2
 
 #define BLOCK_INDEX(x,y,z) (((y) * CHUNK_SIZE + (z)) * CHUNK_SIZE + (x))
@@ -25,13 +15,13 @@ typedef struct {
     int loaded;
     int max_y;
     uint32_t solid_count;
-    uint8_t blocks[CHUNK_SIZE * CHUNK_SIZE * CHUNK_HEIGHT];
+    uint8_t blocks[CHUNK_SIZE * CHUNK_SIZE * CHUNK_HEIGHT];  // 128KB per chunk, ouch
     ChunkMesh mesh;
     LightChunk light;
     int dirty;
 } Chunk;
 
-static Chunk world[WORLD_CHUNKS][WORLD_CHUNKS]; // indexed by chunk coordinate modulo WORLD_CHUNKS
+static Chunk world[WORLD_CHUNKS][WORLD_CHUNKS];  // huge, but it's static so no stack crash
 
 static int slot_coord(int32_t c)
 {
@@ -58,9 +48,6 @@ static Chunk* find_chunk(int32_t cx, int32_t cz)
     return ch->loaded && ch->cx == cx && ch->cz == cz ? ch : NULL;
 }
 
-// anything outside the world counts as air, so the outer
-// faces of the world stay visible
-
 int world_get_block(int32_t x, int32_t y, int32_t z)
 {
     if (!world_in_bounds(x, y, z)) return BLOCK_AIR;
@@ -79,7 +66,6 @@ int world_get_block(int32_t x, int32_t y, int32_t z)
 
 int world_block(int x, int y, int z) { return world_get_block(x, y, z); }
 
-// lighting.c reaches the world through these
 static LightChunk* lh_chunk(int cx, int cz) { Chunk* c = find_chunk(cx, cz); return c ? &c->light : NULL; }
 static LightBlocks lh_blocks(int cx, int cz) { Chunk* c = find_chunk(cx, cz); return c ? (LightBlocks)c->blocks : NULL; }
 static int         lh_max_y(int cx, int cz) { Chunk* c = find_chunk(cx, cz); return c ? c->max_y : 0; }
@@ -93,9 +79,6 @@ static void mark_dirty(int32_t x, int32_t y, int32_t z)
     Chunk* ch = find_chunk(floor_div_chunk(x), floor_div_chunk(z));
     if (ch) ch->dirty = 1;
 }
-
-// changing a block also dirties the 6 neighbours, because
-// a neighbour in another chunk may need to add/remove a face
 
 void world_set_block(int32_t x, int32_t y, int32_t z, int type)
 {
@@ -125,7 +108,7 @@ void world_set_block(int32_t x, int32_t y, int32_t z, int type)
         ch->max_y = y;
     else if (type == BLOCK_AIR && y == ch->max_y)
     {
-        while (ch->max_y > 0)
+        while (ch->max_y > 0)  // walk down until we find a layer with something in it
         {
             int found = 0;
 
@@ -154,11 +137,9 @@ void world_set_block(int32_t x, int32_t y, int32_t z, int type)
     mark_dirty(x, y, z - 1);
 }
 
-// LOAD / UNLOAD
-
 static void generate_chunk(Chunk* ch)
 {
-    chunk_generate((unsigned char (*)[CHUNK_SIZE][CHUNK_SIZE])ch->blocks,
+    chunk_generate((unsigned char (*)[CHUNK_SIZE][CHUNK_SIZE])ch->blocks,  // ???? scary cast, only ok while the layout matches
         ch->cx, ch->cz, &ch->max_y, &ch->solid_count);
     ch->dirty = 1;
 }
@@ -182,7 +163,6 @@ static void ensure_chunk(int32_t cx, int32_t cz)
     lighting_chunk_create(&ch->light);
     lighting_chunk_generate(cx, cz);
 
-    // neighbours may now need to add/remove border faces
     Chunk* n;
     n = find_chunk(cx - 1, cz); if (n) n->dirty = 1;
     n = find_chunk(cx + 1, cz); if (n) n->dirty = 1;
@@ -214,7 +194,7 @@ void world_load_around(double x, double z)
     for (int load = 0; load < CHUNK_LOADS_PER_FRAME; load++)
     {
         int found = 0;
-        int best_dist = INT_MAX;
+        int best_dist = INT_MAX;  // start with 'infinitely far'
         int32_t best_x = 0;
         int32_t best_z = 0;
 
@@ -247,8 +227,6 @@ void world_load_around(double x, double z)
     }
 }
 
-// MESHING
-
 static void gather_mesh_input(const Chunk* ch, MeshInput* in)
 {
     for (int dz = -1; dz <= 1; dz++)
@@ -265,7 +243,7 @@ void world_rebuild_meshes(double x, double z)
     int32_t pcz = floor_div_chunk((int32_t)floor(z));
     double start = glfwGetTime();
 
-    for (;;) {
+    for (;;) {  // runs until the break, ???? hope it breaks
         Chunk* best = NULL;
         long long best_dist = 0;
         for (int cx = 0; cx < WORLD_CHUNKS; cx++)
@@ -273,7 +251,7 @@ void world_rebuild_meshes(double x, double z)
                 Chunk* ch = &world[cx][cz];
                 if (!ch->loaded || !ch->dirty) continue;
 
-                if (ch->solid_count == 0)
+                if (ch->solid_count == 0)  // empty chunk, nothing to mesh
                 {
                     ch->mesh.quad_count = 0;
                     memset(ch->mesh.first, 0, sizeof(ch->mesh.first));
@@ -291,11 +269,9 @@ void world_rebuild_meshes(double x, double z)
         mesh_build(&best->mesh, &in);
         best->dirty = 0;
 
-        if (glfwGetTime() - start > MESH_BUDGET) break;
+        if (glfwGetTime() - start > MESH_BUDGET) break;  // out of time, the rest waits for next frame
     }
 }
-
-// DRAWING
 
 long world_draw(const float* vp, const float* cam_pos, GLuint chunk_prog,
     const GLuint* tex_ids, int tex_count)
@@ -327,12 +303,6 @@ long world_draw(const float* vp, const float* cam_pos, GLuint chunk_prog,
     return tri_count;
 }
 
-// BLOCK RAYCAST (voxel DDA)
-// Walks through the grid cell by cell along the view ray and
-// returns the first solid block within max_dist.
-// prev receives the empty cell just before the hit, which is
-// where a new block gets placed.
-
 int world_raycast(const float* o, const float* d, float max_dist, int* hit, int* prev)
 {
     int ix = (int)floorf(o[0]);
@@ -358,7 +328,7 @@ int world_raycast(const float* o, const float* d, float max_dist, int* hit, int*
         }
         else {
             step[i] = 0;
-            t_delta[i] = 1e30f;
+            t_delta[i] = 1e30f;  // basically infinity
             t_max[i] = 1e30f;
         }
     }
@@ -367,7 +337,7 @@ int world_raycast(const float* o, const float* d, float max_dist, int* hit, int*
     prev[1] = cell[1];
     prev[2] = cell[2];
 
-    for (;;) {
+    for (;;) {  // runs until the break, ???? hope it breaks
         if (world_get_block(cell[0], cell[1], cell[2]) != BLOCK_AIR) {
             hit[0] = cell[0];
             hit[1] = cell[1];
@@ -391,15 +361,13 @@ int world_raycast(const float* o, const float* d, float max_dist, int* hit, int*
     }
 }
 
-// SPAWN
-
 int world_spawn_height(int bx, int bz)
 {
-    int y = chunk_generator_surface_height(bx, bz) + 16;   // start a bit above the 2D surface
+    int y = chunk_generator_surface_height(bx, bz) + 16;
 
-    if (y > CHUNK_HEIGHT - 3) y = CHUNK_HEIGHT - 3;
+    if (y > CHUNK_HEIGHT - 3) y = CHUNK_HEIGHT - 3;  // don't spawn above the top
 
-    for (; y > 1; y--) {
+    for (; y > 1; y--) {  // ???? if nothing fits we end at y=1 (inside the ground probably)
         if (world_get_block(bx, y, bz) != BLOCK_AIR &&
             world_get_block(bx, y + 1, bz) == BLOCK_AIR &&
             world_get_block(bx, y + 2, bz) == BLOCK_AIR)

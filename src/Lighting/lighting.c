@@ -1,28 +1,15 @@
 #include "lighting.h"
 
-/*
- * See lighting.h for the overview.
- *
- * Light storage:  data[(y * CHUNK_SIZE + z) * CHUNK_SIZE + x]  = sky | block << 4
- * Coordinates in this file are WORLD block coordinates unless named lx / lz.
- */
-
 #define CS       CHUNK_SIZE
 #define CH       CHUNK_HEIGHT
-#define PW       (CHUNK_SIZE + 2)          /* padded width of the GPU copy */
+#define PW       (CHUNK_SIZE + 2)
 #define OPAQUE   15
 
 enum { SKY = 0, BLK = 1 };
 
 static const LightHost* host;
 
-/* ------------------------------------------------------------------ */
-/* block properties                                                    */
-/* ------------------------------------------------------------------ */
-
-/* how much light a block eats on top of the usual 1 per step. 15 = fully solid */
 static unsigned char opacity_tab[256];
-/* block light a block gives off. Add torches / glowstone / lava here. */
 static unsigned char emit_tab[256];
 
 static void init_block_tables(void)
@@ -32,14 +19,9 @@ static void init_block_tables(void)
 
     opacity_tab[BLOCK_AIR] = 0;
     opacity_tab[BLOCK_GLASS] = 0;
-    opacity_tab[BLOCK_LEAVES] = 1;      /* vanilla: leaves cost one extra level */
+    opacity_tab[BLOCK_LEAVES] = 1;
 
-    /* example for later:  emit_tab[BLOCK_TORCH] = 14;  (and opacity_tab[BLOCK_TORCH] = 0) */
 }
-
-/* ------------------------------------------------------------------ */
-/* small helpers                                                       */
-/* ------------------------------------------------------------------ */
 
 static int chunk_of(int v)
 {
@@ -50,11 +32,11 @@ static int chunk_of(int v)
 
 static const int DIR[6][3] = {
     { 1, 0, 0 }, { -1, 0, 0 }, { 0, 0, 1 }, { 0, 0, -1 },
-    { 0, -1, 0 },   /* 4 = down */
-    { 0,  1, 0 },   /* 5 = up   */
+    { 0, -1, 0 },
+    { 0,  1, 0 },
 };
 
-static int block_at(int x, int y, int z)       /* -1 = chunk not loaded / outside */
+static int block_at(int x, int y, int z)
 {
     if (y < 0 || y >= CH) return BLOCK_AIR;
     int cx = chunk_of(x), cz = chunk_of(z);
@@ -62,10 +44,6 @@ static int block_at(int x, int y, int z)       /* -1 = chunk not loaded / outsid
     if (!b) return -1;
     return b[y][z - cz * CS][x - cx * CS];
 }
-
-/* ------------------------------------------------------------------ */
-/* light storage                                                       */
-/* ------------------------------------------------------------------ */
 
 static int lc_read(const LightChunk* lc, int ch, int y, int lz, int lx)
 {
@@ -81,7 +59,7 @@ static void lc_grow(LightChunk* lc, int y)
     if (nh <= lc->h) return;
     unsigned char* nd = (unsigned char*)realloc(lc->data, (size_t)nh * CS * CS);
     if (!nd) return;
-    memset(nd + (size_t)lc->h * CS * CS, 0x0F, (size_t)(nh - lc->h) * CS * CS);   /* open sky */
+    memset(nd + (size_t)lc->h * CS * CS, 0x0F, (size_t)(nh - lc->h) * CS * CS);
     lc->data = nd;
     lc->h = nh;
 }
@@ -97,7 +75,6 @@ static void lc_write(LightChunk* lc, int ch, int y, int lz, int lx, int val)
     *p = ch == SKY ? (unsigned char)((*p & 0xF0) | val) : (unsigned char)((*p & 0x0F) | (val << 4));
 }
 
-/* this chunk and every neighbour whose padded GPU copy contains the cell */
 static void mark_cell_dirty(int cx, int cz, int lx, int lz)
 {
     for (int dz = -1; dz <= 1; dz++)
@@ -111,7 +88,6 @@ static void mark_cell_dirty(int cx, int cz, int lx, int lz)
         }
 }
 
-/* -1 = chunk not loaded */
 static int light_get(int ch, int x, int y, int z)
 {
     if (y < 0) return 0;
@@ -133,10 +109,6 @@ static void light_set(int ch, int x, int y, int z, int val)
     mark_cell_dirty(cx, cz, lx, lz);
 }
 
-/* ------------------------------------------------------------------ */
-/* flood fill                                                          */
-/* ------------------------------------------------------------------ */
-
 typedef struct { int x, y, z, lv; } Node;
 typedef struct { Node* a; size_t n, cap; } Queue;
 
@@ -156,12 +128,10 @@ static void q_push(Queue* q, int x, int y, int z, int lv)
 
 static int step_cost(int op) { return op > 1 ? op : 1; }
 
-/* light of a cell when it receives `from` from a neighbour in direction d (d = direction of the
-   neighbour as seen from the SOURCE, i.e. 4 = the light moves down) */
 static int spread(int ch, int d, int from, int op)
 {
     if (ch == SKY && d == 4 && from == LIGHT_MAX)
-        return LIGHT_MAX - op;                  /* sky light falls without fading */
+        return LIGHT_MAX - op;
     return from - step_cost(op);
 }
 
@@ -192,8 +162,6 @@ static void propagate(int ch, Queue* q)
     q->n = 0;
 }
 
-/* The cell (x,y,z) had light `old` that is now gone. Clear everything that was lit by it,
-   and put the border of that region (lit by something else) into `add` for re-propagation. */
 static void remove_light(int ch, int x, int y, int z, int old, Queue* add)
 {
     q_rem.n = 0;
@@ -218,7 +186,7 @@ static void remove_light(int ch, int x, int y, int z, int old, Queue* add)
                 light_set(ch, nx, ny, nz, 0);
                 q_push(&q_rem, nx, ny, nz, nl);
 
-                if (ch == BLK && emit_tab[b]) {          /* a lamp inside the wiped area */
+                if (ch == BLK && emit_tab[b]) {
                     light_set(BLK, nx, ny, nz, emit_tab[b]);
                     q_push(add, nx, ny, nz, emit_tab[b]);
                 }
@@ -231,10 +199,6 @@ static void remove_light(int ch, int x, int y, int z, int old, Queue* add)
     q_rem.n = 0;
 }
 
-/* ------------------------------------------------------------------ */
-/* block changes                                                       */
-/* ------------------------------------------------------------------ */
-
 void lighting_block_changed(int x, int y, int z, int old_type, int new_type)
 {
     (void)old_type;
@@ -243,7 +207,6 @@ void lighting_block_changed(int x, int y, int z, int old_type, int new_type)
     const int cx = chunk_of(x), cz = chunk_of(z);
     if (!host->chunk(cx, cz)) return;
 
-    /* the GPU copy also stores "is opaque", so it needs a refresh even if no light changed */
     mark_cell_dirty(cx, cz, x - cx * CS, z - cz * CS);
 
     const int op = opacity_tab[new_type & 255];
@@ -251,14 +214,12 @@ void lighting_block_changed(int x, int y, int z, int old_type, int new_type)
     for (int ch = 0; ch < 2; ch++) {
         q_add.n = 0;
 
-        /* 1. whatever light was in this cell is gone, take its descendants with it */
         const int old = light_get(ch, x, y, z);
         if (old > 0) {
             light_set(ch, x, y, z, 0);
             remove_light(ch, x, y, z, old, &q_add);
         }
 
-        /* 2. what does the new block hold? */
         int val = 0;
         if (ch == BLK && emit_tab[new_type & 255]) val = emit_tab[new_type & 255];
 
@@ -267,8 +228,6 @@ void lighting_block_changed(int x, int y, int z, int old_type, int new_type)
                 const int nx = x + DIR[d][0], ny = y + DIR[d][1], nz = z + DIR[d][2];
                 const int nb = light_get(ch, nx, ny, nz);
                 if (nb <= 0) continue;
-                /* the neighbour at direction d sends light towards us, so for the "falling"
-                   rule the neighbour must be ABOVE us, which is d == 5 */
                 int cand;
                 if (ch == SKY && d == 5 && nb == LIGHT_MAX) cand = LIGHT_MAX - op;
                 else                                        cand = nb - step_cost(op);
@@ -281,21 +240,15 @@ void lighting_block_changed(int x, int y, int z, int old_type, int new_type)
             q_push(&q_add, x, y, z, val);
         }
 
-        /* 3. spread */
         propagate(ch, &q_add);
     }
 }
 
-/* ------------------------------------------------------------------ */
-/* chunk generation                                                    */
-/* ------------------------------------------------------------------ */
-
-/* could the cell at (x,y,z) (chunk local) improve any neighbour? Cheap pre-filter for seeding. */
 static int seed_needed(const LightChunk* lc, LightBlocks B, int ch, int x, int y, int z, int lv)
 {
     for (int d = 0; d < 6; d++) {
         const int nx = x + DIR[d][0], ny = y + DIR[d][1], nz = z + DIR[d][2];
-        if (nx < 0 || nx >= CS || nz < 0 || nz >= CS) return 1;     /* neighbouring chunk decides */
+        if (nx < 0 || nx >= CS || nz < 0 || nz >= CS) return 1;
         if (ny < 0 || ny >= CH) continue;
         const int op = opacity_tab[B[ny][nz][nx]];
         if (op >= OPAQUE) continue;
@@ -311,7 +264,6 @@ void lighting_chunk_generate(int cx, int cz)
     LightBlocks B = host->blocks(cx, cz);
     if (!lc || !B) return;
 
-    /* tallest thing in the 3x3 neighbourhood: everything above is plain open sky */
     int ymax = host->max_y(cx, cz);
     for (int dz = -1; dz <= 1; dz++)
         for (int dx = -1; dx <= 1; dx++) {
@@ -332,7 +284,6 @@ void lighting_chunk_generate(int cx, int cz)
 
     const int wx0 = cx * CS, wz0 = cz * CS;
 
-    /* 1. straight sky columns + emitters */
     q_add.n = 0;
     static Queue q_blk;
     q_blk.n = 0;
@@ -355,7 +306,6 @@ void lighting_chunk_generate(int cx, int cz)
             }
         }
 
-    /* 2. seeds: every lit cell that can still brighten a neighbour */
     for (int y = 0; y <= top && y < h; y++)
         for (int z = 0; z < CS; z++)
             for (int x = 0; x < CS; x++) {
@@ -367,7 +317,6 @@ void lighting_chunk_generate(int cx, int cz)
                     q_push(&q_blk, wx0 + x, y, wz0 + z, blk);
             }
 
-    /* 3. light already living in loaded neighbours flows into us */
     for (int side = 0; side < 4; side++) {
         const int ox = side == 0 ? 1 : side == 1 ? -1 : 0;
         const int oz = side == 2 ? 1 : side == 3 ? -1 : 0;
@@ -392,19 +341,12 @@ void lighting_chunk_generate(int cx, int cz)
     propagate(SKY, &q_add);
     propagate(BLK, &q_blk);
 
-    /* our border is part of the neighbours' padded GPU copies */
     for (int dz = -1; dz <= 1; dz++)
         for (int dx = -1; dx <= 1; dx++) {
             LightChunk* n = host->chunk(cx + dx, cz + dz);
             if (n) n->dirty = 1;
         }
 }
-
-/* ------------------------------------------------------------------ */
-/* GPU copy of a chunk's light                                         */
-/* ------------------------------------------------------------------ */
-
-/* GPU cell layout (GL_R16UI):  bits 0-3 sky, 4-7 block, bit 8 = opaque (for smooth lighting) */
 
 static unsigned short* up_buf;
 static size_t          up_cap;
@@ -431,7 +373,7 @@ void lighting_chunk_destroy(LightChunk* lc)
 
 static void upload_chunk(LightChunk* lc, int cx, int cz, int max_y)
 {
-    int H = max_y + 3;                       /* faces live up to max_y + 1, smooth lighting looks 1 more */
+    int H = max_y + 3;
     if (H > CH) H = CH;
     if (H < 1) H = 1;
 
@@ -467,7 +409,7 @@ static void upload_chunk(LightChunk* lc, int cx, int cz, int max_y)
                 const LightChunk* c = L[rz][rx];
                 LightBlocks b = Bk[rz][rx];
 
-                if (!c || !b) {                    /* not loaded: treat as open daylight */
+                if (!c || !b) {
                     row[px] = LIGHT_MAX;
                     continue;
                 }
@@ -488,20 +430,12 @@ static void upload_chunk(LightChunk* lc, int cx, int cz, int max_y)
     lc->dirty = 0;
 }
 
-/* ------------------------------------------------------------------ */
-/* helpers (time of day, sun, moon and clouds live in sky.c)           */
-/* ------------------------------------------------------------------ */
-
 #define MIN_LIGHT 0.045f
 
 static float clampf(float v, float lo, float hi) { return v < lo ? lo : (v > hi ? hi : v); }
 static float mixf(float a, float b, float t) { return a + (b - a) * t; }
 
-/* ------------------------------------------------------------------ */
-/* player light (L)                                                    */
-/* ------------------------------------------------------------------ */
-
-#define DYN 16     /* volume edge; must be >= 2 * LIGHT_PLAYER_RADIUS + 1 */
+#define DYN 16
 
 static int           player_on;
 static GLuint        dyn_tex;
@@ -520,7 +454,7 @@ static void dyn_rebuild(double px, double py, double pz)
     static unsigned short queue[DYN * DYN * DYN];
 
     const int R = LIGHT_PLAYER_RADIUS;
-    const int cx = (int)floor(px), cy = (int)floor(py + 1.0), cz = (int)floor(pz);   /* chest height */
+    const int cx = (int)floor(px), cy = (int)floor(py + 1.0), cz = (int)floor(pz);
     const int mid = DYN / 2;
 
     dyn_org[0] = cx - mid; dyn_org[1] = cy - mid; dyn_org[2] = cz - mid;
@@ -542,7 +476,6 @@ static void dyn_rebuild(double px, double py, double pz)
         const int x = idx % DYN, y = (idx / DYN) % DYN, z = idx / (DYN * DYN);
         const int d = dist[idx];
 
-        /* full brightness in the middle, fading out to nothing just past the radius */
         dyn_data[idx] = (unsigned char)(255.0f * (1.0f - (float)d / (float)(R + 1)) + 0.5f);
 
         if (d >= R) continue;
@@ -581,10 +514,6 @@ float lighting_player_brightness_at(double x, double y, double z)
     return dyn_data[i] / 255.0f;
 }
 
-/* ------------------------------------------------------------------ */
-/* init / frame                                                        */
-/* ------------------------------------------------------------------ */
-
 static GLint u_light_h, u_darken, u_tint, u_minl, u_dyn_org, u_dyn_on;
 
 void lighting_init(GLuint program, const LightHost* h)
@@ -605,7 +534,7 @@ void lighting_init(GLuint program, const LightHost* h)
     glGenTextures(1, &dyn_tex);
     glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_3D, dyn_tex);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // 1 byte rows aren't 4 aligned, text comes out skewed without this
     glTexImage3D(GL_TEXTURE_3D, 0, GL_R8, DYN, DYN, DYN, 0, GL_RED, GL_UNSIGNED_BYTE, dyn_data);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -629,7 +558,7 @@ void lighting_shutdown(void)
 
 void lighting_update(double dt, double px, double py, double pz)
 {
-    (void)dt;   /* time of day is advanced by sky_update() */
+    (void)dt;
 
     if (player_on && host) {
         dyn_rebuild(px, py, pz);
@@ -640,7 +569,7 @@ void lighting_update(double dt, double px, double py, double pz)
 
             glActiveTexture(GL_TEXTURE3);
             glBindTexture(GL_TEXTURE_3D, dyn_tex);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // 1 byte rows aren't 4 aligned, text comes out skewed without this
             glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, DYN, DYN, DYN, GL_RED, GL_UNSIGNED_BYTE, dyn_data);
             glActiveTexture(GL_TEXTURE0);
         }
@@ -649,7 +578,6 @@ void lighting_update(double dt, double px, double py, double pz)
 
 void lighting_begin(void)
 {
-    /* moonlight is bluish, daylight is white */
     const float day = sky_get_brightness();
     glUniform1f(u_darken, sky_get_darken());
     glUniform3f(u_tint, mixf(0.55f, 1.0f, day), mixf(0.62f, 1.0f, day), 1.0f);
@@ -673,10 +601,6 @@ void lighting_bind_chunk(LightChunk* lc, int cx, int cz, int max_y)
     glActiveTexture(GL_TEXTURE0);
 }
 
-/* ------------------------------------------------------------------ */
-/* queries                                                             */
-/* ------------------------------------------------------------------ */
-
 void lighting_get_light(int x, int y, int z, int* sky, int* block)
 {
     int s = host ? light_get(SKY, x, y, z) : LIGHT_MAX;
@@ -688,7 +612,7 @@ void lighting_get_light(int x, int y, int z, int* sky, int* block)
 static float curve(float l)
 {
     float v = clampf(l, 0.0f, 15.0f) / 15.0f;
-    return v / (4.0f - 3.0f * v);               /* vanilla brightness curve */
+    return v / (4.0f - 3.0f * v);
 }
 
 float lighting_brightness_at(double x, double y, double z)

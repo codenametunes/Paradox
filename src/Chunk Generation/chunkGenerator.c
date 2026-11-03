@@ -1,10 +1,7 @@
 #include "main.h"
 #include "chunkGenerator.h"
-/* needs BLOCK_SNOW; leave 0 until it exists */
 #define ENABLE_SNOW   0
 
-/* ---------- tunables ---------- */
-/* 2D base terrain */
 #define CONTINENT_SCALE   0.0035f
 #define HILL_SCALE        0.012f
 #define DETAIL_SCALE      0.06f
@@ -15,37 +12,30 @@
 #define MOUNTAIN_HEIGHT   75.0f
 #define WARP_AMOUNT       45.0f
 #define PLATEAU_STEP      6.0f
-#define MOUNTAIN_COVERAGE 0.40f   /* lower = more mountains */
+#define MOUNTAIN_COVERAGE 0.40f
 
-/* 3D density shaping */
-#define TERRAIN_BAND      28.0f   /* bigger = softer surface, easier overhangs */
-#define NOISE3_SCALE      0.028f  /* size of overhangs / cliffs / floating chunks */
-#define OVERHANG_PLAINS   0.18f   /* 3D warping strength on flat land */
-#define OVERHANG_MOUNTAIN 1.15f   /* 3D warping strength in mountains (wild) */
-#define OVERHANG_REACH    48.0f   /* max height above 2D surface that 3D stuff can appear */
+#define TERRAIN_BAND      28.0f
+#define NOISE3_SCALE      0.028f
+#define OVERHANG_PLAINS   0.18f
+#define OVERHANG_MOUNTAIN 1.15f
+#define OVERHANG_REACH    48.0f
 
-/* caves */
 #define TUNNEL_STRENGTH   2.5f
-#define TUNNEL_WIDTH      0.11f   /* bigger = fatter tunnels */
-#define CAVERN_THRESHOLD  0.30f   /* lower = more big chambers */
+#define TUNNEL_WIDTH      0.11f
+#define CAVERN_THRESHOLD  0.30f
 
-/* arches / tunnels through mountains */
 #define ARCH_STRENGTH     3.0f
 #define ARCH_WIDTH        0.16f
 
-/* floating islands */
 #define ISLAND_SCALE      0.006f
-#define ISLAND_THRESHOLD  0.8f   /* higher = rarer */
-#define ISLAND_DEPTH      40.0f   /* how far the underside hangs down */
+#define ISLAND_THRESHOLD  0.8f
+#define ISLAND_DEPTH      40.0f
 #define ISLAND_HEIGHT_ABOVE_FLAT 120
 
-/* surface materials */
-#define STONE_ALTITUDE    52      /* above FLAT_LEVEL+this: bare rock */
+#define STONE_ALTITUDE    52
 #define SNOW_ALTITUDE     72
-#define OPEN_AIR_GRASS    16      /* grass on cave floors with this much air above */
+#define OPEN_AIR_GRASS    16
 
-/* density is sampled on a coarse grid and interpolated.
-   CHUNK_SIZE must be divisible by CELL_XZ, CHUNK_HEIGHT by CELL_Y. */
 #define CELL_XZ 4
 #define CELL_Y  4
 
@@ -103,8 +93,6 @@ void chunk_generator_set_seed(uint32_t seed)
     permutation_ready = 1;
 }
 
-/* ---------- math helpers ---------- */
-
 static float fade(float t)
 {
     return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
@@ -125,8 +113,6 @@ static float smoothstep(float e0, float e1, float x)
     float t = clampf((x - e0) / (e1 - e0), 0.0f, 1.0f);
     return t * t * (3.0f - 2.0f * t);
 }
-
-/* ---------- 2D noise ---------- */
 
 static float grad2(int hash, float x, float y)
 {
@@ -195,8 +181,6 @@ static float ridged(float x, float y, int octaves)
     return total / norm;
 }
 
-/* ---------- 3D noise (Improved Perlin) ---------- */
-
 static float grad3(int h, float x, float y, float z)
 {
     h &= 15;
@@ -205,7 +189,6 @@ static float grad3(int h, float x, float y, float z)
     return ((h & 1) ? -u : u) + ((h & 2) ? -v : v);
 }
 
-/* roughly [-1, 1], typically within +-0.7 */
 static float perlin3(float x, float y, float z)
 {
     float fx = floorf(x), fy = floorf(y), fz = floorf(z);
@@ -235,7 +218,6 @@ static float perlin3(float x, float y, float z)
         w);
 }
 
-/* 3D fBm; gain compensates for perlin3 rarely reaching +-1 */
 static float fbm3(float x, float y, float z, int octaves)
 {
     float total = 0.0f, amp = 1.0f, freq = 1.0f, norm = 0.0f;
@@ -251,12 +233,10 @@ static float fbm3(float x, float y, float z, int octaves)
     return clampf(total / norm * 1.4f, -1.0f, 1.0f);
 }
 
-/* ---------- 2D column description ---------- */
-
 typedef struct {
-    float h;        /* base surface height (absolute) */
-    float mask;     /* 0..1 how mountainous this column is */
-    float island;   /* 0..1 floating island presence */
+    float h;
+    float mask;
+    float island;
 } Column;
 
 static float base_curve(float c)
@@ -333,15 +313,12 @@ static Column terrain_column(int wx, int wz)
     return col;
 }
 
-/* 2D surface height estimate of a world column (before caves / overhangs) */
 int chunk_generator_surface_height(int wx, int wz)
 {
     if (!permutation_ready)
         chunk_generator_set_seed(1337u);
     return (int)floorf(terrain_column(wx, wz).h);
 }
-
-/* ---------- 3D density: > 0 is solid ---------- */
 
 static float sample_density(int wx, int y, int wz, const Column* col)
 {
@@ -353,17 +330,15 @@ static float sample_density(int wx, int y, int wz, const Column* col)
     float py = (float)y;
 
     float mask = col->mask;
-    float rel = col->h - py;   /* >0 below the 2D surface */
+    float rel = col->h - py;
     float d = -1.0f;
 
     if (rel > -OVERHANG_REACH) {
-        /* surface pushed around by 3D noise: overhangs, cliffs, floating chunks */
         float amp = lerp(OVERHANG_PLAINS, OVERHANG_MOUNTAIN, mask);
         float n = fbm3(px * NOISE3_SCALE, py * NOISE3_SCALE * 0.8f, pz * NOISE3_SCALE, 3);
 
         d = clampf(rel / TERRAIN_BAND, -1.5f, 1.5f) + n * amp;
 
-        /* caves: spaghetti tunnels (two noise fields both near zero) + big chambers */
         float cf = smoothstep(4.0f, 10.0f, py) * smoothstep(-3.0f, 10.0f, rel);
         if (cf > 0.0f) {
             float a = perlin3(px * 0.020f + 100.0f, py * 0.030f, pz * 0.020f);
@@ -377,7 +352,6 @@ static float sample_density(int wx, int y, int wz, const Column* col)
             d -= carve * cf;
         }
 
-        /* big arches and tunnels punched through mountains */
         if (mask > 0.15f) {
             float alt = smoothstep(10.0f, 35.0f, py - (float)FLAT_LEVEL);
             if (alt > 0.0f) {
@@ -389,7 +363,6 @@ static float sample_density(int wx, int y, int wz, const Column* col)
         }
     }
 
-    /* floating islands: flat-ish craggy top, hanging cone underside */
     float s = col->island;
     if (s > 0.0f &&
         py > (float)ISLAND_Y - ISLAND_DEPTH - 14.0f &&
@@ -406,8 +379,6 @@ static float sample_density(int wx, int y, int wz, const Column* col)
 
     return d;
 }
-
-/* ---------- chunk generation ---------- */
 
 static int air_sides(unsigned char (*b)[CHUNK_SIZE][CHUNK_SIZE], int x, int y, int z)
 {
@@ -431,7 +402,6 @@ void chunk_generate(unsigned char (*blocks)[CHUNK_SIZE][CHUNK_SIZE],
     const int wx0 = cx * CHUNK_SIZE;
     const int wz0 = cz * CHUNK_SIZE;
 
-    /* --- 1. sample density on a world-aligned coarse grid (seamless across chunks) --- */
     Column cols[GRID_XZ][GRID_XZ];
     float  grid[GRID_Y][GRID_XZ][GRID_XZ];
 
@@ -445,7 +415,6 @@ void chunk_generate(unsigned char (*blocks)[CHUNK_SIZE][CHUNK_SIZE],
                 grid[gy][gz][gx] = sample_density(wx0 + gx * CELL_XZ, gy * CELL_Y,
                     wz0 + gz * CELL_XZ, &cols[gz][gx]);
 
-    /* --- 2. trilinear interpolate into solid/air --- */
     int max_y = 0;
     uint32_t solid = 0;
 
@@ -464,7 +433,7 @@ void chunk_generate(unsigned char (*blocks)[CHUNK_SIZE][CHUNK_SIZE],
                     fmaxf(fmaxf(d010, d110), fmaxf(d011, d111)));
 
                 if (hi <= 0.0f)
-                    continue;               /* whole cell is air */
+                    continue;
 
                 int all_solid = lo > 0.0f;
 
@@ -501,7 +470,6 @@ void chunk_generate(unsigned char (*blocks)[CHUNK_SIZE][CHUNK_SIZE],
         }
     }
 
-    /* --- 3. surface pass: walk each column top-down --- */
     for (int z = 0; z < CHUNK_SIZE; z++) {
         for (int x = 0; x < CHUNK_SIZE; x++) {
 
@@ -514,7 +482,7 @@ void chunk_generate(unsigned char (*blocks)[CHUNK_SIZE][CHUNK_SIZE],
             if (dirt_depth < 1)
                 dirt_depth = 1;
 
-            int sky = 1;   /* nothing solid seen yet above us */
+            int sky = 1;
             int air_run = 0;
             int dirt_left = 0;
 
@@ -527,7 +495,6 @@ void chunk_generate(unsigned char (*blocks)[CHUNK_SIZE][CHUNK_SIZE],
                 }
 
                 if (air_run > 0 || y == CHUNK_HEIGHT - 1) {
-                    /* top face of a solid run */
                     int open = sky || air_run >= OPEN_AIR_GRASS;
                     int steep = (y > 1) && air_sides(blocks, x, y - 1, z) > 0;
                     int high = y > FLAT_LEVEL + STONE_ALTITUDE;
@@ -548,7 +515,6 @@ void chunk_generate(unsigned char (*blocks)[CHUNK_SIZE][CHUNK_SIZE],
                 }
                 else if (dirt_left > 0) {
                     dirt_left--;
-                    /* keep cliff faces and overhang sides as stone */
                     if (air_sides(blocks, x, y, z) == 0)
                         blocks[y][z][x] = BLOCK_DIRT;
                 }

@@ -1,35 +1,13 @@
 #include "main.h"
 #include "Third Party/stb_image.h"
 #include "Mobs/mob.h"
-// the implementation is compiled in main.c, only the declarations are needed here
 
-// First person hand, ported from Minecraft Java (ItemInHandRenderer):
-//
-//   equip      height moves 0.4 per tick towards 1 (selected item shown)
-//              or 0 (another item is still in the hand). when it is below
-//              0.1 the shown item is swapped -> "down and back up"
-//   swing      6 ticks, plays on break / place
-//   placing    height snaps to 0 (the dip when you place a block in creative)
-//   sway       the hand lags behind when you turn (bob angles ease 0.5/tick)
-//   bobbing    walkDist * 0.6, same bob matrix as GameRenderer.bobView
-//   projection fixed 70 degrees, near 0.05, depth cleared (no sprint fov)
-//   arm        player model right arm: 4x12x4, texture offset (40,16),
-//              pivot (-5,2,0) px, small idle z rotation of 0.1 rad
-//   block      block.json first person: rotation 45 deg Y, scale 0.4
-//   lighting   the two entity diffuse lights, fixed in the WORLD, so the
-//              shading changes a bit when you look around, like the game
-
-// 1 = Minecraft's "View Bobbing" option on (default)
 #define VIEW_BOBBING 1
 
-// 1 = also pitch the view/hand while airborne (jumping, falling, flying up/down),
-// the "tilt" from older Minecraft versions. Modern vanilla only fades the walk bob out
 #define AIR_TILT 1
 
 #define SWING_TICKS  6
 #define HAND_FOV     70.0f
-
-// shaders
 
 static const char* hand_vert =
 "#version 330 core\n"
@@ -45,7 +23,6 @@ static const char* hand_vert =
 "    vn = nmat * normal;\n"
 "    gl_Position = mvp * vec4(pos, 1.0);\n"
 "}\n";
-
 
 static const char* hand_frag =
 "#version 330 core\n"
@@ -67,7 +44,6 @@ static const char* hand_frag =
 "    color = vec4(c.rgb * light, c.a);\n"
 "}\n";
 
-
 static GLuint prog = 0;
 
 static GLuint skin_tex = 0;
@@ -81,12 +57,7 @@ static GLint loc_world_light = -1;
 
 static int    sword_verts = 0;
 
-// textures of the item that is actually in the hand. the caller passes the textures of the
-// SELECTED item, which change the instant you scroll, while the old item is still sliding down.
-// so we keep our own copy and only refresh it while shown == want
 static GLuint shown_tex[6] = { 0, 0, 0, 0, 0, 0 };
-
-// 4x4 matrices, column major, every op multiplies on the right (like a pose stack)
 
 static void m_identity(float* m)
 {
@@ -124,7 +95,6 @@ static void m_scale(float* m, float s)
         m[i] *= s;
 }
 
-// axis: 0 = x, 1 = y, 2 = z, angle in degrees
 static void m_rotate(float* m, int axis, float deg)
 {
     float r[16];
@@ -154,33 +124,26 @@ static void m_perspective(float* m, float fovy, float aspect, float n, float f)
     m[14] = (2.0f * f * n) / (n - f);
 }
 
-// state
-
-static int   want = HAND_EMPTY;     // selected item
-static int   shown = HAND_EMPTY;    // item currently in the hand
-static float height = 0.0f;         // equip progress, 0 = lowered, 1 = raised
+static int   want = HAND_EMPTY;
+static int   shown = HAND_EMPTY;
+static float height = 0.0f;
 static float height_o = 0.0f;
 
-// the swing runs on real frame time (not on the 20 Hz tick), so it starts the
-// moment you click and is perfectly smooth. swing_pos is in ticks, 0 .. 6
 static int   swinging = 0;
 static int   swing_queued = 0;
 static float swing_pos = 0.0f;
 
 static double walk_dist = 0.0, walk_dist_o = 0.0;
 static float  bob = 0.0f, bob_o = 0.0f;
-static float  tilt = 0.0f, tilt_o = 0.0f;   // vertical movement tilt, degrees
+static float  tilt = 0.0f, tilt_o = 0.0f;
 
-static float x_bob = 0.0f, x_bob_o = 0.0f;   // minecraft xRot = -pitch
+static float x_bob = 0.0f, x_bob_o = 0.0f;
 static float y_bob = 0.0f, y_bob_o = 0.0f;
 static int   bob_ready = 0;
 
 void hand_select(int item) { want = item; }
 int  hand_item(void) { return want; }
 
-// Minecraft only restarts a swing once it is past the half way point. It does
-// not jump back: the rest of the swing plays out quickly (one tick) and the
-// next one starts right after, which is what makes holding the button loop.
 void hand_swing(void)
 {
     if (!swinging) {
@@ -206,7 +169,7 @@ void hand_frame(double dt)
         swing_pos -= SWING_TICKS;
 
         if (swing_queued) {
-            swing_queued = 0;       // next swing starts right away
+            swing_queued = 0;
             swing_pos /= speed;
         }
         else {
@@ -219,12 +182,9 @@ void hand_frame(double dt)
 void hand_use(void)
 {
     hand_swing();
-    height = 0.0f;      // ItemInHandRenderer.itemUsed
+    height = 0.0f;
 }
 
-// ItemInHandRenderer.resetEquippedProgress: a right click that places nothing
-// (obstructed by the player, no block in reach) only drops the item and raises
-// it again. No swing: swingItem() is only called when a block really was placed.
 void hand_reject(void)
 {
     height = 0.0f;
@@ -233,12 +193,8 @@ void hand_reject(void)
 void hand_tick(double moved_x, double moved_z, double vel_x, double vel_y, double vel_z,
     int on_ground, float yaw_deg, float pitch_deg)
 {
-    // equip animation
     height_o = height;
 
-    // only swap the item once the hand was already fully lowered at the end of
-    // the previous tick. height_o is 0 now, so the interpolated frames of this
-    // tick start from 0 = completely off screen and the swap is never visible.
     if (shown != want && height_o <= 0.0f)
         shown = want;
 
@@ -250,7 +206,6 @@ void hand_tick(double moved_x, double moved_z, double vel_x, double vel_y, doubl
 
     height += step;
 
-    // walking: distance * 0.6, bob eases towards the horizontal speed (max 0.1)
     walk_dist_o = walk_dist;
     walk_dist += sqrt(moved_x * moved_x + moved_z * moved_z) * 0.6;
 
@@ -267,7 +222,6 @@ void hand_tick(double moved_x, double moved_z, double vel_x, double vel_y, doubl
 
     bob += (bob_target - bob) * 0.4f;
 
-    // in the air the view tilts with the vertical speed: atan(-vy * 0.2) * 15
     tilt_o = tilt;
 
     float tilt_target = 0.0f;
@@ -277,7 +231,6 @@ void hand_tick(double moved_x, double moved_z, double vel_x, double vel_y, doubl
 
     tilt += (tilt_target - tilt) * 0.8f;
 
-    // turning lag
     if (!bob_ready) {
         x_bob = -pitch_deg;
         y_bob = yaw_deg;
@@ -290,8 +243,6 @@ void hand_tick(double moved_x, double moved_z, double vel_x, double vel_y, doubl
     x_bob += (-pitch_deg - x_bob) * 0.5f;
     y_bob += (yaw_deg - y_bob) * 0.5f;
 }
-
-// GameRenderer.bobView (also applied to the world, so the whole view bobs)
 
 void hand_bob_matrix(double alpha, float* out)
 {
@@ -316,8 +267,6 @@ void hand_bob_matrix(double alpha, float* out)
 #endif
 }
 
-// 36 vertices (x y z, u v, nx ny nz)
-
 static void emit(float** o, float x, float y, float z, float u, float v, const float* n)
 {
     float* p = *o;
@@ -330,9 +279,6 @@ static void emit(float** o, float x, float y, float z, float u, float v, const f
 }
 
 static const int tri_idx[6] = { 0, 1, 2, 0, 2, 3 };
-
-// held block: a unit cube centered on the origin. Same face order and
-// texture orientation as the world meshes: +Z, -Z, -X, +X, +Y, -Y
 
 static const int cube_corners[8][3] = {
     {0,0,0}, {1,0,0}, {1,1,0}, {0,1,0}, {0,0,1}, {1,0,1}, {1,1,1}, {0,1,1}
@@ -363,22 +309,15 @@ static void build_cube(float* out)
     }
 }
 
-// right arm of the player model (classic 4 px arm), model space like the
-// game: y points DOWN, the shoulder is at y = -2 and the hand at y = 10.
-// corner order: 0..3 = z0 side, 4..7 = z1 side
-//   0 (x0,y0,z0)  1 (x1,y0,z0)  2 (x1,y1,z0)  3 (x0,y1,z0)
-//   4 (x0,y0,z1)  5 (x1,y0,z1)  6 (x1,y1,z1)  7 (x0,y1,z1)
-
 static const int arm_face[6][4] = {
-    {5,1,2,6},  // +x
-    {0,4,7,3},  // -x
-    {5,4,0,1},  // min y (shoulder end)
-    {2,3,7,6},  // max y (hand end)
-    {1,0,3,2},  // -z (front)
-    {4,5,6,7}   // +z (back)
+    {5,1,2,6},
+    {0,4,7,3},
+    {5,4,0,1},
+    {2,3,7,6},
+    {1,0,3,2},
+    {4,5,6,7}
 };
 
-// skin pixels for texture offset (40,16), w=4 h=12 d=4
 static const float arm_uv[6][4][2] = {
     {{52,20}, {48,20}, {48,32}, {52,32}},
     {{44,20}, {40,20}, {40,32}, {44,32}},
@@ -470,7 +409,7 @@ static GLuint make_program(const char* vs, const char* fs)
     glGetProgramiv(p, GL_LINK_STATUS, &ok);
 
     if (!ok) {
-        char log[1024];
+        char log[1024];  // hope the log fits
         glGetProgramInfoLog(p, sizeof log, NULL, log);
         fprintf(stderr, "Hand shader linking failed:\n%s\n", log);
         glDeleteProgram(p);
@@ -479,13 +418,6 @@ static GLuint make_program(const char* vs, const char* fs)
 
     return p;
 }
-
-// Flat item mesh (what the game does for "generated" item models): the sprite
-// is a thin slab one pixel thick. Front and back are one quad each (the
-// shader discards transparent texels), and a side quad is added wherever an
-// opaque pixel touches a transparent one, which gives the item its depth.
-// The texture is the one main.c loads FLIPPED (v = 1 is the top row), so
-// v = 1 - y / h here. Model space: x, y in -0.5 .. 0.5, z in +-1/32 (1/16 thick).
 
 static void emit_quad(float** o, const float p[4][3], const float uv[4][2], const float* n)
 {
@@ -510,7 +442,6 @@ int hand_load_sword(const char* path)
 
 #define OPAQUE(px, py) ((px) >= 0 && (px) < w && (py) >= 0 && (py) < h && data[((py) * w + (px)) * 4 + 3] >= 26)
 
-    // front + back + up to 4 sides per pixel
     size_t max_quads = 2 + (size_t)w * h * 4;
     float* mesh = (float*)malloc(max_quads * 6 * 8 * sizeof(float));
 
@@ -520,9 +451,8 @@ int hand_load_sword(const char* path)
     }
 
     float* o = mesh;
-    const float T = 1.0f / 32.0f;   // half thickness
+    const float T = 1.0f / 32.0f;
 
-    // front (+z) and back (-z), whole sprite
     {
         const float p[4][3] = { {-0.5f,-0.5f, T}, {0.5f,-0.5f, T}, {0.5f,0.5f, T}, {-0.5f,0.5f, T} };
         const float uv[4][2] = { {0,0}, {1,0}, {1,1}, {0,1} };
@@ -543,27 +473,26 @@ int hand_load_sword(const char* path)
             float x0 = (float)px / w - 0.5f, x1 = (float)(px + 1) / w - 0.5f;
             float y1 = 0.5f - (float)py / h, y0 = 0.5f - (float)(py + 1) / h;
 
-            // every vertex of a side quad samples the middle of its pixel
             float u = ((float)px + 0.5f) / w;
             float v = 1.0f - ((float)py + 0.5f) / h;
             const float uv[4][2] = { {u,v}, {u,v}, {u,v}, {u,v} };
 
-            if (!OPAQUE(px - 1, py)) {   // -x
+            if (!OPAQUE(px - 1, py)) {
                 const float p[4][3] = { {x0,y0,-T}, {x0,y0,T}, {x0,y1,T}, {x0,y1,-T} };
                 const float n[3] = { -1, 0, 0 };
                 emit_quad(&o, p, uv, n);
             }
-            if (!OPAQUE(px + 1, py)) {   // +x
+            if (!OPAQUE(px + 1, py)) {
                 const float p[4][3] = { {x1,y0,T}, {x1,y0,-T}, {x1,y1,-T}, {x1,y1,T} };
                 const float n[3] = { 1, 0, 0 };
                 emit_quad(&o, p, uv, n);
             }
-            if (!OPAQUE(px, py - 1)) {   // +y (top edge)
+            if (!OPAQUE(px, py - 1)) {
                 const float p[4][3] = { {x0,y1,T}, {x1,y1,T}, {x1,y1,-T}, {x0,y1,-T} };
                 const float n[3] = { 0, 1, 0 };
                 emit_quad(&o, p, uv, n);
             }
-            if (!OPAQUE(px, py + 1)) {   // -y (bottom edge)
+            if (!OPAQUE(px, py + 1)) {
                 const float p[4][3] = { {x0,y0,-T}, {x1,y0,-T}, {x1,y0,T}, {x0,y0,T} };
                 const float n[3] = { 0, -1, 0 };
                 emit_quad(&o, p, uv, n);
@@ -621,7 +550,6 @@ int hand_init(const char* skin_path)
     loc_l0 = glGetUniformLocation(prog, "l0");
     loc_l1 = glGetUniformLocation(prog, "l1");
     loc_world_light = glGetUniformLocation(prog, "world_light");
-    // skin: loaded NOT flipped, so the uvs are plain pixel / size
     int w, h, channels;
 
     stbi_set_flip_vertically_on_load(0);
@@ -651,7 +579,6 @@ int hand_init(const char* skin_path)
     if (data)
         stbi_image_free(data);
 
-    // meshes
     float mesh[36 * 8];
 
     build_arm(mesh);
@@ -679,8 +606,6 @@ void hand_shutdown(void)
     sword_verts = 0;
 }
 
-// rotates a world direction into view space (rotation part of m only)
-
 static void rotate_dir(const float* m, const float* d, float* out)
 {
     float len = sqrtf(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
@@ -700,8 +625,6 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
 
     float a = (float)alpha;
 
-    // block_tex belongs to the selected item. only trust it once that item is the one in
-    // the hand, otherwise keep drawing the old item with its own textures
     if (shown == want)
         memcpy(shown_tex, block_tex, sizeof shown_tex);
 
@@ -716,11 +639,9 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
     float pose[16];
     memcpy(pose, bobm, sizeof pose);
 
-    // the hand lags behind when turning
     m_rotate(pose, 0, (-pitch_deg - (x_bob_o + (x_bob - x_bob_o) * a)) * 0.1f);
     m_rotate(pose, 1, (yaw_deg - (y_bob_o + (y_bob - y_bob_o) * a)) * 0.1f);
 
-    // equip + swing progress
     float equip = 1.0f - (height_o + (height - height_o) * a);
 
     float sw = swinging ? swing_pos / (float)SWING_TICKS : 0.0f;
@@ -728,7 +649,6 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
     float sq = sqrtf(sw);
 
     if (shown == HAND_EMPTY) {
-        // ItemInHandRenderer.renderPlayerArm
         float f2 = -0.3f * sinf(sq * PI);
         float f3 = 0.4f * sinf(sq * PI * 2.0f);
         float f4 = -0.4f * sinf(sw * PI);
@@ -748,18 +668,14 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
         m_rotate(pose, 1, -135.0f);
         m_translate(pose, 5.6f, 0.0f, 0.0f);
 
-        // ModelPart: pivot (-5, 2, 0) px, idle zRot of 0.1 rad
         m_translate(pose, -5.0f / 16.0f, 2.0f / 16.0f, 0.0f);
         m_rotate(pose, 2, 0.1f * 180.0f / PI);
     }
     else {
-        // ItemInHandRenderer.renderArmWithItem (right hand)
         m_translate(pose, -0.4f * sinf(sq * PI), 0.2f * sinf(sq * PI * 2.0f), 0.2f * sinf(sw * PI));
 
-        // applyItemArmTransform
         m_translate(pose, 0.56f, -0.52f + equip * -0.6f, -0.72f);
 
-        // applyItemArmAttackTransform
         float f = sinf(sw * sw * PI);
         float f1 = sinf(sq * PI);
 
@@ -769,15 +685,12 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
         m_rotate(pose, 1, -45.0f);
 
         if (shown == ITEM_DIAMOND_SWORD) {
-            // item/handheld, firstperson_righthand: translation [1.13, 3.2, 1.13],
-            // rotation [0, -90, 25], scale 0.68 (the mesh is already centered)
             m_translate(pose, 1.13f / 16.0f, 3.2f / 16.0f, 1.13f / 16.0f);
             m_rotate(pose, 1, -90.0f);
             m_rotate(pose, 2, 25.0f);
             m_scale(pose, 0.68f);
         }
         else {
-            // block display transform: rotation [0,45,0], scale 0.4
             m_rotate(pose, 1, 45.0f);
             m_scale(pose, 0.4f);
         }
@@ -792,7 +705,6 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
         pose[8], pose[9], pose[10]
     };
 
-    // the two diffuse lights are fixed in the world, rotate them by the camera
     float world_view[16];
     m_mul(world_view, bobm, view);
 
@@ -803,12 +715,8 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
     rotate_dir(world_view, light0, l0);
     rotate_dir(world_view, light1, l1);
 
-    // the hand is drawn on top of the world with its own depth
     glClear(GL_DEPTH_BUFFER_BIT);
 
-    // back face culling: every mesh (arm, cube, sword) is wound counter clockwise seen from
-    // outside, and the pose is rotations / uniform scale only (no mirroring), so faces turned
-    // away from the camera are never drawn. remember the world's settings and restore them
     GLboolean cull_was_on = glIsEnabled(GL_CULL_FACE);
     GLint cull_mode, front_face;
     glGetIntegerv(GL_CULL_FACE_MODE, &cull_mode);
@@ -833,7 +741,6 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
         glDrawArrays(GL_TRIANGLES, 0, 36);
     }
     else if (shown == ITEM_DIAMOND_SWORD) {
-        // block_tex[0] holds the sword sprite
         if (sword_vao && sword_verts > 0) {
             glBindTexture(GL_TEXTURE_2D, block_tex[0]);
             glBindVertexArray(sword_vao);
@@ -859,13 +766,10 @@ void hand_draw(double alpha, float yaw_deg, float pitch_deg, const float* view,
     else
         glDisable(GL_CULL_FACE);
 }
-// swing progress 0..1 for other models (the mob uses it for the arm swing)
 float hand_attack_time(void)
 {
     return swinging ? swing_pos / (float)SWING_TICKS : 0.0f;
 }
-
-// ---- third person support (used by mob_steve.c) ----
 
 unsigned int hand_cube_vao(void) { return cube_vao; }
 
@@ -877,8 +781,6 @@ unsigned int hand_sword_vao(int* verts)
 
 void hand_fill_held(MobState* m, const unsigned int* block_tex)
 {
-    // third person: no equip animation, the model holds the SELECTED item right away
-    // (shown / shown_tex only lag behind for the first person hand)
     m->held = (want != HAND_EMPTY);
     m->held_item = want;
     memcpy(m->held_tex, block_tex ? block_tex : shown_tex, sizeof shown_tex);

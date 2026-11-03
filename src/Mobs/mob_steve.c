@@ -3,8 +3,6 @@
 #include "mob.h"
 #include "Lighting/lighting.h"
 
-// brightness 0..1 for anything that is drawn in the world (mobs, poof smoke):
-// the same curve as the chunk shader, and the L light counts as well
 static float mob_light_at(double x, double y, double z)
 {
     float l = lighting_brightness_at(x, y, z);
@@ -16,9 +14,9 @@ static float mob_light_at(double x, double y, double z)
 #define SKIN_PATH "assets/textures/mob/char.png"
 
 typedef struct {
-    float px, py, pz;          // default pivot (px)
-    float bx, by, bz, w, h, d; // box
-    float u, v;                // texture offset
+    float px, py, pz;
+    float bx, by, bz, w, h, d;
+    float u, v;
     GLuint vao, vbo;
 } Part;
 
@@ -63,7 +61,6 @@ static const char* fs =
 " float l=directional*clamp(world_light,0.0,1.0);\n"
 " color=vec4(mix(c.rgb*l,vec3(1.0,0.0,0.0),hurt*0.3),c.a);\n"
 "}\n";
-// matrices (column major, ops multiply on the right like a pose stack)
 
 static void ident(float* m) { memset(m, 0, 64); m[0] = m[5] = m[10] = m[15] = 1; }
 static void mul(float* o, const float* a, const float* b) {
@@ -88,8 +85,6 @@ static void rot(float* m, int axis, float a) {
     mul(m, m, r);
 }
 
-// box mesh with Minecraft's cube UV layout
-
 static const int FACE[6][4] = { {5,1,2,6},{0,4,7,3},{5,4,0,1},{2,3,7,6},{1,0,3,2},{4,5,6,7} };
 static const float NRM[6][3] = { {1,0,0},{-1,0,0},{0,-1,0},{0,1,0},{0,0,-1},{0,0,1} };
 static const int IDX[6] = { 0,1,2,0,2,3 };
@@ -102,7 +97,7 @@ static void build(const Part* p, float* o)
     float u0 = p->u, u1 = u0 + p->d, u2 = u1 + p->w, u3 = u2 + p->d, u4 = u3 + p->w;
     float v0 = p->v, v1 = v0 + p->d, v2 = v1 + p->h;
     float t[6][4] = { {u2,u3,v1,v2},{u0,u1,v1,v2},{u1,u2,v0,v1},
-                   {u2,u3,v0,v1},{u1,u2,v1,v2},{u3,u4,v1,v2} }; // uL,uR,vT,vB
+                   {u2,u3,v0,v1},{u1,u2,v1,v2},{u3,u4,v1,v2} };
     for (int f = 0;f < 6;f++) for (int k = 0;k < 6;k++) {
         int ci = IDX[k]; const float* q = c[FACE[f][ci]];
         *o++ = q[0] / 16; *o++ = q[1] / 16; *o++ = q[2] / 16;
@@ -114,7 +109,6 @@ static void build(const Part* p, float* o)
 
 static GLint l_hurt;
 static int snd_hurt = -1, snd_death = -1;
-// defined in main.c: per block type, a set of walk sound variants
 extern int snd_walk[BLOCK_TYPES][BLOCK_SOUND_VARIANTS];
 extern int snd_walk_n[BLOCK_TYPES];
 static void poof_init(void);
@@ -147,7 +141,7 @@ static int steve_init(void)
     snd_death = audio_load("assets/sounds/steve_hurt.ogg", 1.0f);
 
     int w = 0, h = 0, ch = 0;
-    stbi_set_flip_vertically_on_load(0);          // uvs are plain pixel / 64
+    stbi_set_flip_vertically_on_load(0);
     unsigned char* d = asset_image(SKIN_PATH, &w, &h, &ch);
     static const unsigned char fb[4] = { 198,146,107,255 };
     if (!d) { fprintf(stderr, "skin '%s': %s\n", SKIN_PATH, stbi_failure_reason()); w = h = 1; }
@@ -177,9 +171,6 @@ static int steve_init(void)
     return 1;
 }
 
-// ItemInHandLayer: block or item in the right hand. arm_pose = the right arm's matrix
-// (pivot translation + rotation, the same stack the game has in translateToHand).
-// Reuses the item meshes of the first person hand (hand.c); uses the shader that is bound.
 static void draw_held(const MobState* m, const float* arm_pose, const float* vp)
 {
     const float D = PI / 180.0f;
@@ -197,13 +188,11 @@ static void draw_held(const MobState* m, const float* arm_pose, const float* vp)
     trans(hm, 1.0f / 16.0f, 2.0f / 16.0f, -10.0f / 16.0f);
 
     if (sword) {
-        // item/handheld, thirdperson_righthand: rot [0,-90,55] trans [0,4,0.5] scale 0.85
         trans(hm, 0.0f, 4.0f / 16.0f, 0.5f / 16.0f);
         rot(hm, 1, -90.0f * D); rot(hm, 2, 55.0f * D);
         scl(hm, 0.85f, 0.85f, 0.85f);
     }
     else {
-        // block, thirdperson_righthand: rot [75,45,0] trans [0,2.5,0] scale 0.375
         trans(hm, 0.0f, 2.5f / 16.0f, 0.0f);
         rot(hm, 0, 75.0f * D); rot(hm, 1, 45.0f * D);
         scl(hm, 0.375f, 0.375f, 0.375f);
@@ -225,7 +214,7 @@ static void draw_held(const MobState* m, const float* arm_pose, const float* vp)
             glDrawArrays(GL_TRIANGLES, f * 6, 6);
         }
     }
-    glBindTexture(GL_TEXTURE_2D, skin);     // back to the skin for the remaining parts
+    glBindTexture(GL_TEXTURE_2D, skin);
 }
 
 static void steve_draw(const MobState* m, const float* vp)
@@ -237,10 +226,8 @@ static void steve_draw(const MobState* m, const float* vp)
 
     float head_x = -m->pitch * PI / 180.0f;
     rx[HEAD] = head_x;
-    // head turns on its own relative to the body (netHeadYaw)
     ry[HEAD] = m->head_turn * PI / 180.0f;
 
-    // walk cycle (HumanoidModel.setupAnim)
     float ls = m->limb_swing, la = m->limb_amount;
     rx[RARM] = cosf(ls * 0.6662f + PI) * 2.0f * la * 0.5f;
     rx[LARM] = cosf(ls * 0.6662f) * 2.0f * la * 0.5f;
@@ -250,7 +237,6 @@ static void steve_draw(const MobState* m, const float* vp)
     ry[LLEG] = -0.005f; rz[LLEG] = -0.005f;
     pz[RLEG] = pz[LLEG] = 0.1f;
 
-    // holding an item: the right arm is raised a bit (HumanoidModel.poseRightArm, ITEM pose)
     if (m->held) rx[RARM] = rx[RARM] * 0.5f - PI / 10.0f;
 
     float t = m->attack;
@@ -268,7 +254,7 @@ static void steve_draw(const MobState* m, const float* vp)
         rz[RARM] += sinf(t * PI) * -0.4f;
     }
 
-    if (m->crouch) {                           // crouching pose
+    if (m->crouch) {
         rx[BODY] = 0.5f; rx[RARM] += 0.4f; rx[LARM] += 0.4f;
         pz[RLEG] = pz[LLEG] = 4.0f;
         py[RLEG] = py[LLEG] = 12.2f;
@@ -282,7 +268,7 @@ static void steve_draw(const MobState* m, const float* vp)
     float base[16]; ident(base);
     trans(base, (float)m->x, (float)m->y - (m->crouch ? 0.125f : 0.0f), (float)m->z);
     rot(base, 1, (270.0f - m->yaw) * PI / 180.0f);
-    if (m->death > 0.0f) {                       // rotateCorpse: falls over in 20 ticks
+    if (m->death > 0.0f) {
         float f = (m->death - 1.0f) / 20.0f * 1.6f; if (f < 0.0f) f = 0.0f;
         f = sqrtf(f); if (f > 1.0f) f = 1.0f;
         rot(base, 2, f * 90.0f * PI / 180.0f);
@@ -330,8 +316,6 @@ static void steve_shutdown(void)
 
 const MobType MOB_STEVE = { "steve", steve_init, steve_draw, steve_shutdown };
 
-// NPC STEVES: wander, jump, can be hit, push each other
-
 #define MAX_NPCS 32
 
 typedef struct {
@@ -342,7 +326,7 @@ typedef struct {
     float health, last_dmg;
     int hurt_time, invuln, death_time;
     WalkAnim walk;
-    double step_dist, next_step;      // footstep counter
+    double step_dist, next_step;
 } Npc;
 
 static Npc npcs[MAX_NPCS];
@@ -386,12 +370,11 @@ void npc_spawn(double x, double y, double z, float yaw)
     }
 }
 
-// EntityLivingBase.attackEntityFrom + knockBack (1.8)
 static void npc_hurt(Npc* n, float dmg, double ax, double az)
 {
     if (n->health <= 0.0f) return;
     int fresh = 1;
-    if (n->invuln > 10) {                         // still invulnerable: only extra damage counts
+    if (n->invuln > 10) {
         if (dmg <= n->last_dmg) return;
         n->health -= dmg - n->last_dmg; n->last_dmg = dmg; fresh = 0;
     }
@@ -429,28 +412,25 @@ static int ray_box(const float* o, const float* d, const double* lo, const doubl
     *tout = t0; return 1;
 }
 
-// index of the mob under the crosshair (not hidden by a block), -1 = none
 static int npc_pick(const float* o, const float* d, float reach)
 {
     int best = -1; float bt = reach;
     for (int i = 0;i < MAX_NPCS;i++) {
         Npc* n = &npcs[i]; if (!n->alive || n->health <= 0.0f) continue;
-        double lo[3] = { n->p[0] - 0.4,n->p[1] - 0.1,n->p[2] - 0.4 };   // hitbox + 0.1 border
+        double lo[3] = { n->p[0] - 0.4,n->p[1] - 0.1,n->p[2] - 0.4 };
         double hi[3] = { n->p[0] + 0.4,n->p[1] + 1.9,n->p[2] + 0.4 };
         float t;
         if (ray_box(o, d, lo, hi, &t) && t <= bt) { bt = t; best = i; }
     }
     if (best < 0) return -1;
-    for (float s = 0.0f;s < bt;s += 0.05f)                           // blocks in front hide the mob
+    for (float s = 0.0f;s < bt;s += 0.05f)
         if (world_block((int)floorf(o[0] + d[0] * s), (int)floorf(o[1] + d[1] * s), (int)floorf(o[2] + d[2] * s)) != BLOCK_AIR)
             return -1;
     return best;
 }
 
-// 1 = a mob is under the crosshair (use it to stop blocks behind it from breaking)
 int npc_aimed(const float* o, const float* d, float reach) { return npc_pick(o, d, reach) >= 0; }
 
-// 1 = hit a mob (the click is used up), 0 = nothing hit / a block is in the way
 int npc_attack(const float* o, const float* d, float reach, double ax, double az, float dmg)
 {
     int best = npc_pick(o, d, reach);
@@ -459,7 +439,6 @@ int npc_attack(const float* o, const float* d, float reach, double ax, double az
     return 1;
 }
 
-// Entity.applyEntityCollision, applied from both sides (so twice per tick)
 static void push(const double* pa, double* va, const double* pb, double* vb)
 {
     double d0 = pb[0] - pa[0], d1 = pb[2] - pa[2];
@@ -471,7 +450,6 @@ static void push(const double* pa, double* va, const double* pb, double* vb)
     va[0] -= d0; va[2] -= d1; vb[0] += d0; vb[2] += d1;
 }
 
-// boxes are 0.6 x 1.8 x 0.6, grown by 0.2 on x and z
 static int overlaps(const double* a, const double* b)
 {
     return fabs(a[0] - b[0]) < 0.8 && fabs(a[2] - b[2]) < 0.8 && fabs(a[1] - b[1]) < 1.8;
@@ -484,9 +462,8 @@ void npc_push_player(double* pos, double* vel)
         push(pos, vel, n->p, n->v); push(pos, vel, n->p, n->v);
     }
 }
-static double lis[3];     // where the player is, set in npc_tick
+static double lis[3];
 
-// plays the walk sound of the block under the npc, only if it's near the player
 static void npc_step_sound(const Npc* n)
 {
     int t = world_block((int)floor(n->p[0]), (int)floor(n->p[1] - 0.2), (int)floor(n->p[2]));
@@ -541,7 +518,7 @@ static void npc_update(Npc* n)
         }
     }
     if (n->p[1] < -10.0) n->alive = 0;
-    if (dead && ++n->death_time >= 20) { poof_spawn(n->p); n->alive = 0; }   // removed after 20 ticks + smoke
+    if (dead && ++n->death_time >= 20) { poof_spawn(n->p); n->alive = 0; }
 }
 
 void npc_tick(double lx, double ly, double lz)
@@ -578,8 +555,6 @@ void npc_draw(double alpha, const float* vp)
     }
     poof_draw(alpha, vp);
 }
-// DEATH POOF (smoke): Minecraft's 20 "explode" particles when a mob is removed
-// uses frames of assets/textures/particles.png (64x8, eight 8x8 sprites)
 
 #define PARTICLES_PATH "assets/textures/particles.png"
 #define MAX_POOF 256
@@ -594,7 +569,7 @@ static Poof poofs[MAX_POOF];
 static int poof_cursor = 0;
 static GLuint poof_prog, poof_vao, poof_vbo, poof_tex;
 static GLint l_poof_vp, l_poof_tex;
-static float poof_buf[MAX_POOF * 6 * 6];      // x y z u v grey
+static float poof_buf[MAX_POOF * 6 * 6];
 
 static const char* poof_vs =
 "#version 330 core\n"
@@ -679,7 +654,7 @@ static void poof_spawn(const double* pos)
     for (int i = 0;i < 20;i++) {
         Poof* q = &poofs[poof_cursor]; poof_cursor = (poof_cursor + 1) % MAX_POOF;
         memset(q, 0, sizeof * q);
-        q->p[0] = pos[0] + poof_rnd() * 1.2 - 0.6;      // mob is 0.6 wide, 1.8 tall
+        q->p[0] = pos[0] + poof_rnd() * 1.2 - 0.6;
         q->p[1] = pos[1] + poof_rnd() * 1.8;
         q->p[2] = pos[2] + poof_rnd() * 1.2 - 0.6;
         memcpy(q->po, q->p, sizeof q->p);
@@ -710,7 +685,7 @@ static void poof_tick(void)
 
         q->v[1] += 0.004;
         q->on_ground = 0;
-        static const int order[3] = { 1, 0, 2 };            // y, x, z like Minecraft
+        static const int order[3] = { 1, 0, 2 };
         for (int k = 0;k < 3;k++) {
             int a = order[k];
             double t[3] = { q->p[0], q->p[1], q->p[2] };
@@ -735,7 +710,7 @@ static void poof_norm(float* v)
 static void poof_draw(double alpha, const float* vp)
 {
     if (!poof_prog) return;
-    float r[3] = { vp[0], vp[4], vp[8] }, u[3] = { vp[1], vp[5], vp[9] };   // camera right / up
+    float r[3] = { vp[0], vp[4], vp[8] }, u[3] = { vp[1], vp[5], vp[9] };
     poof_norm(r); poof_norm(u);
 
     static const int idx[6] = { 0,1,2,0,2,3 };
@@ -750,9 +725,9 @@ static void poof_draw(double alpha, const float* vp)
         float cz = (float)(q->po[2] + (q->p[2] - q->po[2]) * alpha);
         float s = 0.1f * q->scale;
 
-        float lit = q->grey * mob_light_at(cx, cy, cz);   // smoke is lit by where it is
+        float lit = q->grey * mob_light_at(cx, cy, cz);
 
-        int frame = 7 - q->age * 8 / q->life;             // 7 -> 0 over the lifetime
+        int frame = 7 - q->age * 8 / q->life;
         if (frame < 0) frame = 0; else if (frame > 7) frame = 7;
         float u0 = frame / 8.0f, u1 = (frame + 1) / 8.0f;
 
@@ -784,11 +759,10 @@ static void poof_draw(double alpha, const float* vp)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glEnable(GL_CULL_FACE);
 }
-// ENTITY DEBUG (F6): hitboxes, vectors and a text label above every NPC
 
 static GLuint dbg_prog = 0, dbg_vao = 0, dbg_vbo = 0;
 static GLint  l_dbg_vp = -1;
-static float  dbg_buf[4096 * 6];          // x y z r g b per vertex
+static float  dbg_buf[4096 * 6];
 static int    dbg_n = 0;
 static UiText dbg_label[MAX_NPCS];
 
@@ -869,8 +843,6 @@ void npc_debug_draw(const float* vp, int fb_w, int fb_h, float alpha)
 
     double pos[MAX_NPCS][3];
 
-    // 1) lines: white = collision box, yellow = hit-test box (npc_attack),
-    //    red = eye height, blue = facing, green = velocity (x10)
     for (int i = 0;i < MAX_NPCS;i++) {
         Npc* n = &npcs[i]; if (!n->alive) continue;
         for (int a = 0;a < 3;a++) pos[i][a] = n->po[a] + (n->p[a] - n->po[a]) * alpha;
@@ -902,8 +874,6 @@ void npc_debug_draw(const float* vp, int fb_w, int fb_h, float alpha)
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    // 2) labels: project a point above the head to the screen, then draw
-    //    the text there (canvas coordinates, same as the rest of the UI)
     float scale = (float)fb_h / 480.0f;
     float origin_x = ((float)fb_w - 64 * scale) * 0.5f;
 
@@ -919,7 +889,7 @@ void npc_debug_draw(const float* vp, int fb_w, int fb_h, float alpha)
         float cx = vp[0] * px + vp[4] * py + vp[8] * pz + vp[12];
         float cy = vp[1] * px + vp[5] * py + vp[9] * pz + vp[13];
         float cw = vp[3] * px + vp[7] * py + vp[11] * pz + vp[15];
-        if (cw <= 0.1f) continue;                       // behind the camera
+        if (cw <= 0.1f) continue;
 
         float sx = ((cx / cw) * 0.5f + 0.5f) * (float)fb_w;
         float sy = (1.0f - ((cy / cw) * 0.5f + 0.5f)) * (float)fb_h;

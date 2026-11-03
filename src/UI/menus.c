@@ -1,33 +1,17 @@
 #include "main.h"
 #include "menus.h"
-#include "stb_image.h"   // no #define STB_IMAGE_IMPLEMENTATION here
+#include "stb_image.h"
 
-// MENUS
-//
-//   Esc  (in game)      -> pause menu: game freezes, cursor unlocks, screen darkens
-//                          two buttons from gui.png: "Back to Game" / "Quit Game"
-//   Esc  (pause menu)   -> resume          Q (pause menu) -> quit
-//   E    (in game)      -> creative inventory (allitems.png). The game keeps
-//                          RUNNING behind it, only the input is taken over.
-//   E / Esc (inventory) -> close it
-//
-// menus_paused()  = 1 only in the pause menu  -> main.c freezes the world
-// menus_open()    = 1 in any menu             -> main.c ignores mouse/keys for the player
-
-// how much the world is darkened behind a menu (0 = not at all, 1 = black)
 #define MENU_DIM_ALPHA   0.55f
 
 #define GUI_TEX_PATH     "assets/textures/ui/gui.png"
 
-// gui.png (pixels from the top left)
 #define BTN_W            200
 #define BTN_H            20
 #define BTN_Y_DISABLED   46
 #define BTN_Y_NORMAL     66
 #define BTN_Y_HOVER      86
 
-// allitems.png: 176x208 panel, 8 columns x 9 rows of slots, scrollbar on the
-// right and the 9 slot hotbar row at the bottom
 #define INV_PANEL_W      176
 #define INV_PANEL_H      208
 #define INV_COLS         8
@@ -39,7 +23,6 @@
 #define INV_PITCH        18
 #define INV_SLOT         16
 
-// scrollbar: track inside the panel, thumb sprite lives under the panel in the sheet
 #define SCROLL_X         156
 #define SCROLL_Y         18
 #define SCROLL_W         12
@@ -48,9 +31,6 @@
 #define THUMB_SY         209
 #define THUMB_W          12
 #define THUMB_H          15
-
-// shader
-// vertices are in framebuffer pixels (0,0 = top left)
 
 static const char* menu_vert =
 "#version 330 core\n"
@@ -81,10 +61,10 @@ static MenuState   state = MENU_NONE;
 static GLuint prog = 0, vao = 0, vbo = 0;
 static GLint  screen_loc = -1, tex_loc = -1, tint_loc = -1;
 
-static GLuint white_tex = 0;                 // 1x1 white, used for the dark overlay
-static GLuint inv_tex = 0;                   // allitems.png
+static GLuint white_tex = 0;
+static GLuint inv_tex = 0;
 static int    inv_w = 0, inv_h = 0;
-static GLuint gui_tex = 0;                   // gui.png (buttons)
+static GLuint gui_tex = 0;
 static int    gui_w = 0, gui_h = 0;
 
 static int fb_w = 1280, fb_h = 720;
@@ -96,19 +76,17 @@ static UiText death_title;
 static UiText btn_respawn_text;
 static int    respawn_flag = 0;
 static int    inventory_enabled = 1;
-static UiText tip_text;                      // item name next to the cursor
-static UiText inv_title;                     // "Item selection" on the panel
+static UiText tip_text;
+static UiText inv_title;
 
-static int* hotbar = NULL;                   // the game's real hotbar
+static int* hotbar = NULL;
 static int            hotbar_n = 0;
 static MenuItemInfoFn item_info = NULL;
-static int            carried = 0;           // item on the cursor (0 = nothing)
+static int            carried = 0;
 static int            hotbar_changed = 0;
 
-static float scroll_pos = 0.0f;              // 0..1 (top..bottom of the item list)
-static int   dragging = 0;                   // holding the scrollbar thumb
-
-// setup helpers
+static float scroll_pos = 0.0f;
+static int   dragging = 0;
 
 static GLuint compile_program(const char* vs, const char* fs)
 {
@@ -124,7 +102,7 @@ static GLuint compile_program(const char* vs, const char* fs)
         GLint ok;
         glGetShaderiv(sh[i], GL_COMPILE_STATUS, &ok);
         if (!ok) {
-            char log[1024];
+            char log[1024];  // hope the log fits
             glGetShaderInfoLog(sh[i], sizeof log, NULL, log);
             fprintf(stderr, "Menu shader compilation failed:\n%s\n", log);
             glDeleteShader(sh[i]);
@@ -143,7 +121,7 @@ static GLuint compile_program(const char* vs, const char* fs)
     GLint ok;
     glGetProgramiv(p, GL_LINK_STATUS, &ok);
     if (!ok) {
-        char log[1024];
+        char log[1024];  // hope the log fits
         glGetProgramInfoLog(p, sizeof log, NULL, log);
         fprintf(stderr, "Menu shader linking failed:\n%s\n", log);
         glDeleteProgram(p);
@@ -160,7 +138,7 @@ static GLuint make_texture(int w, int h, const unsigned char* rgba)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);   // keep pixel art sharp
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, rgba);
@@ -169,10 +147,9 @@ static GLuint make_texture(int w, int h, const unsigned char* rgba)
     return tex;
 }
 
-// loads a whole sheet; returns 0 (and prints why) when the file is missing
 static GLuint load_sheet(const char* path, int* out_w, int* out_h)
 {
-    stbi_set_flip_vertically_on_load(1);   // same convention as ui.c: v = 1 is the top
+    stbi_set_flip_vertically_on_load(1);
 
     int w, h, channels;
     unsigned char* data = asset_image(path, &w, &h, &channels);
@@ -260,8 +237,6 @@ void menus_resize(int w, int h)
     fb_h = h > 0 ? h : 1;
 }
 
-// state
-
 MenuState menus_state(void) { return state; }
 int       menus_open(void) { return state != MENU_NONE; }
 int       menus_paused(void) { return state == MENU_PAUSE; }
@@ -288,7 +263,6 @@ static void set_state(MenuState s)
         return;
 
     if (s != MENU_NONE && !was_open) {
-        // free the cursor and put it in the middle of the window
         int w, h;
         glfwGetWindowSize(win, &w, &h);
         glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -317,7 +291,7 @@ void menus_key(int key, int action)
         else if (key == GLFW_KEY_E && inventory_enabled)  set_state(MENU_INVENTORY);
         break;
 
-    case MENU_DEATH:       // only the buttons leave this screen
+    case MENU_DEATH:
         break;
 
     case MENU_PAUSE:
@@ -331,8 +305,6 @@ void menus_key(int key, int action)
         break;
     }
 }
-
-// creative inventory: layout and picking
 
 void menus_set_hotbar(int* slots, int count, MenuItemInfoFn fn)
 {
@@ -348,13 +320,11 @@ int menus_hotbar_dirty(void)
     return d;
 }
 
-// how many item ids the grid offers (every block, then the extra items)
 static int item_count(void)
 {
-    return ITEM_DIAMOND_SWORD;                // ids 1..ITEM_DIAMOND_SWORD
+    return ITEM_DIAMOND_SWORD;
 }
 
-// rows that don't fit on screen at once = how far the list can scroll
 static int max_scroll_rows(void)
 {
     int rows = (item_count() + INV_COLS - 1) / INV_COLS;
@@ -366,14 +336,12 @@ static int first_row(void)
     return (int)(scroll_pos * (float)max_scroll_rows() + 0.5f);
 }
 
-// item shown in grid slot `index` (0 = empty slot), taking the scroll into account
 static int grid_item(int index)
 {
-    int id = 1 + first_row() * INV_COLS + index;     // skip BLOCK_AIR
+    int id = 1 + first_row() * INV_COLS + index;
     return id <= ITEM_DIAMOND_SWORD ? id : 0;
 }
 
-// whole number gui scale (same one the HUD uses) and top left of the panel
 static int panel_rect(int* s_out, float* x_out, float* y_out)
 {
     if (!inv_tex)
@@ -387,7 +355,6 @@ static int panel_rect(int* s_out, float* x_out, float* y_out)
     return 1;
 }
 
-// top left of a slot on screen; row -1 = the hotbar row
 static void slot_pos(int s, float px, float py, int col, int row, float* x, float* y)
 {
     *x = px + (float)((INV_GRID_X + col * INV_PITCH) * s);
@@ -410,7 +377,6 @@ static void cursor_px(float* mx, float* my)
     *my = (float)cy * (float)fb_h / (float)wh;
 }
 
-// what is under the cursor: 1 = grid slot, 2 = hotbar slot, 0 = nothing
 static int pick_slot(int* index)
 {
     int s; float px, py;
@@ -441,8 +407,6 @@ static int pick_slot(int* index)
     return 0;
 }
 
-// scrollbar
-
 static int over_scroll_track(int s, float px, float py)
 {
     float mx, my;
@@ -454,7 +418,6 @@ static int over_scroll_track(int s, float px, float py)
     return mx >= x && mx < x + SCROLL_W * s && my >= y && my < y + SCROLL_H * s;
 }
 
-// puts the middle of the thumb under the cursor
 static void scroll_from_cursor(int s, float py)
 {
     if (max_scroll_rows() <= 0) {
@@ -472,7 +435,6 @@ static void scroll_from_cursor(int s, float py)
     scroll_pos = f < 0.0f ? 0.0f : f > 1.0f ? 1.0f : f;
 }
 
-// mouse wheel while the inventory is open: one row per notch
 void menus_scroll(double yoffset)
 {
     int m = max_scroll_rows();
@@ -487,9 +449,6 @@ void menus_scroll(double yoffset)
     scroll_pos = (float)row / (float)m;
 }
 
-// pause menu buttons
-
-// gui scale and top left of the two buttons: 0 = Back to Game, 1 = Quit Game
 static void pause_buttons(int* s_out, float* x_out, float* y_out)
 {
     int s = ui_gui_scale();
@@ -499,7 +458,7 @@ static void pause_buttons(int* s_out, float* x_out, float* y_out)
     *s_out = s;
     *x_out = x;
     y_out[0] = y;
-    y_out[1] = y + (float)(24 * s);          // 20 tall + 4 gap
+    y_out[1] = y + (float)(24 * s);
 }
 
 static int pick_button(void)
@@ -520,11 +479,6 @@ static int pick_button(void)
     return -1;
 }
 
-// clicks:
-//  pause menu : the two buttons
-//  inventory  : click a block to pick it up, click a hotbar slot to put it there
-//               (swaps with whatever the slot held), click anywhere else to drop it,
-//               click / drag the scrollbar to scroll
 void menus_mouse(int button, int action)
 {
     if (button != GLFW_MOUSE_BUTTON_LEFT)
@@ -584,9 +538,6 @@ void menus_mouse(int button, int action)
     }
 }
 
-// drawing
-
-// one textured quad in framebuffer pixels. v0 is the top edge of the image.
 static void draw_quad(GLuint tex, float x, float y, float w, float h,
     float u0, float v0, float u1, float v1,
     float r, float g, float b, float a)
@@ -608,7 +559,6 @@ static void draw_quad(GLuint tex, float x, float y, float w, float h,
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-// the pixel rect (sx, sy, sw, sh) of a sheet (from its top left), drawn at x, y with size w, h
 static void draw_sheet(GLuint tex, int tw, int th, int sx, int sy, int sw, int sh,
     float x, float y, float w, float h,
     float r, float g, float b, float a)
@@ -619,7 +569,6 @@ static void draw_sheet(GLuint tex, int tw, int th, int sx, int sy, int sw, int s
         r, g, b, a);
 }
 
-// framebuffer pixels -> the 640x480 canvas text.c works in
 static void to_canvas(float px, float py, float* cx, float* cy)
 {
     float k = (float)fb_h / 480.0f;
@@ -640,7 +589,7 @@ static void draw_button_label(UiText* t, float bx, float by, int s, int hover)
     float y = cy - text_height(t) * 0.5f;
     (void)k;
 
-    if (hover) text_draw(t, x, y, 1.0f, 1.0f, 0.63f, 1.0f, 1);   // yellow, like vanilla
+    if (hover) text_draw(t, x, y, 1.0f, 1.0f, 0.63f, 1.0f, 1);
     else       text_draw(t, x, y, 0.88f, 0.88f, 0.88f, 1.0f, 1);
 }
 
@@ -649,7 +598,7 @@ void menus_draw(void)
     if (state == MENU_NONE || !prog)
         return;
 
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);   // F4 wireframe must not touch the menu
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glEnable(GL_BLEND);
@@ -661,8 +610,7 @@ void menus_draw(void)
     glUniform1i(tex_loc, 0);
     glBindVertexArray(vao);
 
-    // dark background, shared by every menu
-    if (state == MENU_DEATH)   // red tint, like the vanilla game over screen
+    if (state == MENU_DEATH)
         draw_quad(white_tex, 0.0f, 0.0f, (float)fb_w, (float)fb_h,
             0.0f, 0.0f, 1.0f, 1.0f,
             0.31f, 0.0f, 0.0f, 0.63f);
@@ -688,7 +636,6 @@ void menus_draw(void)
         int s; float x, y;
         panel_rect(&s, &x, &y);
 
-        // dragging the thumb: follow the cursor while the button is held
         if (dragging) {
             if (win && glfwGetMouseButton(win, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
                 scroll_from_cursor(s, y);
@@ -700,7 +647,6 @@ void menus_draw(void)
             x, y, (float)(INV_PANEL_W * s), (float)(INV_PANEL_H * s),
             1.0f, 1.0f, 1.0f, 1.0f);
 
-        // scrollbar thumb (dimmed when there is nothing to scroll)
         {
             float t = max_scroll_rows() > 0 ? scroll_pos : 0.0f;
             float tx = x + (float)(SCROLL_X * s);
@@ -712,7 +658,6 @@ void menus_draw(void)
                 dim, dim, dim, 1.0f);
         }
 
-        // hover highlight
         int hover_i = 0;
         int hover_kind = pick_slot(&hover_i);
         if (hover_kind) {
@@ -723,9 +668,8 @@ void menus_draw(void)
                 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.45f);
         }
 
-        // item icons: the visible part of the list (grid), the real hotbar (bottom row), the carried item
         if (item_info) {
-            float icon = (float)(INV_SLOT * s);   // fills the slot interior exactly
+            float icon = (float)(INV_SLOT * s);
             float half = (float)(INV_SLOT * s) * 0.5f;
             UiItem it;
 
@@ -769,7 +713,6 @@ void menus_draw(void)
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
 
-    // pause text goes through text.c (640x480 canvas coordinates)
     if (state == MENU_PAUSE || state == MENU_DEATH) {
         int s; float bx, by[2];
         pause_buttons(&s, &bx, by);
@@ -788,7 +731,6 @@ void menus_draw(void)
         }
     }
 
-    // panel title, top left like Release 1.0
     if (state == MENU_INVENTORY && inv_tex) {
         int s; float px, py, cx, cy;
         panel_rect(&s, &px, &py);
@@ -796,7 +738,6 @@ void menus_draw(void)
         text_draw(&inv_title, cx, cy, 0.25f, 0.25f, 0.25f, 1.0f, 0);
     }
 
-    // item name next to the cursor
     if (state == MENU_INVENTORY && !carried) {
         int i = 0;
         int where = pick_slot(&i);
@@ -808,12 +749,11 @@ void menus_draw(void)
 
             float mx, my;
             cursor_px(&mx, &my);
-            float k = (float)fb_h / 480.0f;                       // pixels -> 640x480 canvas
+            float k = (float)fb_h / 480.0f;
             float ox = ((float)fb_w - 640.0f * k) * 0.5f;
             float tx = (mx - ox) / k + 8.0f;
             float ty = my / k - 16.0f;
 
-            // black semi transparent box behind the text
             float pad = 3.0f * k;
             glDisable(GL_DEPTH_TEST);
             glDisable(GL_CULL_FACE);

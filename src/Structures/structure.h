@@ -6,18 +6,11 @@
 
 typedef struct Structure {
     int id;
-    const char* name;
+    const char* name;  // TODO: block list, size, height settings go here
 
-	// 3d array of blocks that make up the structure
-    // specify which blocks will be used
-	// specify the size of the structure in x, y, z dimensions
-    // customizable settings for height manipulation for every structure
-    // 
 } Structure;
 
-static const Structure STRUCTURES[] = {
+static const Structure STRUCTURES[] = {  // only the tree so far, and it's empty
     {
-        // this will be the basic minecraft tree
-		// BLOCK_LEAVES and BLOCK_LOG will be used
     }
 };

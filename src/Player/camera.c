@@ -5,14 +5,13 @@
 #define PI 3.14159265358979323846f
 #endif
 
-// from main.c
 int world_block(int x, int y, int z);
 
 float cam_pos[3] = { 32.0f, 12.5f, 42.0f };
 
 float yaw = -90.0f;
 float pitch = -20.0f;
-int   view_mode = 0;     // 0 first person, 1 behind, 2 in front
+int   view_mode = 0;
 
 float proj[16];
 
@@ -20,15 +19,7 @@ static float fov_deg = FOV_BASE;
 static int   vp_w = 1280;
 static int   vp_h = 720;
 
-// matrix math
-
-void mat_perspective(
-    float* m,
-    float fovy,
-    float aspect,
-    float near_plane,
-    float far_plane)
-{
+void mat_perspective(float* m, float fovy, float aspect, float near_plane, float far_plane) {
     float t = 1.0f / tanf(fovy * 0.5f);
 
     memset(m, 0, 16 * sizeof(float));
@@ -42,27 +33,18 @@ void mat_perspective(
         (near_plane - far_plane);
 }
 
-void mat_look(
-    float* m,
-    const float* eye,
-    const float* dir)
-{
-    // normalize forward
+void mat_look(float* m, const float* eye, const float* dir) {
 
-    float fl = sqrtf(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);
+    float fl = sqrtf(dir[0] * dir[0] + dir[1] * dir[1] + dir[2] * dir[2]);  // ???? fl is 0 if dir is all zeros
 
     float f[3] = { dir[0] / fl, dir[1] / fl, dir[2] / fl };
 
-    // right = forward cross world-up
-
     float s[3] = { -f[2], 0, f[0] };
 
-    float sl = sqrtf(s[0] * s[0] + s[2] * s[2]);
+    float sl = sqrtf(s[0] * s[0] + s[2] * s[2]);  // ???? sl is 0 when looking straight up/down, divide by zero next
 
     s[0] /= sl;
     s[2] /= sl;
-
-    // up = right cross forward
 
     float u[3] = {
         s[1] * f[2] - s[2] * f[1],
@@ -88,16 +70,12 @@ void mat_look(
 
     m[13] = -(u[0] * eye[0] + u[1] * eye[1] + u[2] * eye[2]);
 
-    m[14] = f[0] * eye[0] + f[1] * eye[1] + f[2] * eye[2];
+    m[14] = f[0] * eye[0] + f[1] * eye[1] + f[2] * eye[2]; // eyesore
 
     m[15] = 1.0f;
 }
 
-void mat_mul(
-    float* out,
-    const float* a,
-    const float* b)
-{
+void mat_mul(float* out, const float* a, const float* b) {
     float result[16];
 
     for (int c = 0; c < 4; c++) {
@@ -112,8 +90,6 @@ void mat_mul(
     }
     memcpy(out, result, sizeof result);
 }
-
-// projection
 
 static void update_proj(void)
 {
@@ -138,15 +114,13 @@ void camera_set_fov_modifier(double fov_mod)
     update_proj();
 }
 
-// mouse look
-
 void camera_on_mouse(GLFWwindow* window, double x, double y) {
 
     (void)window;
 
     static double last_x = 0.0;
     static double last_y = 0.0;
-    static int first = 1;
+    static int first = 1;  // skip the first event or the camera jumps
 
     if (first) { last_x = x; last_y = y; first = 0; return; }
 
@@ -158,11 +132,9 @@ void camera_on_mouse(GLFWwindow* window, double x, double y) {
     last_x = x;
     last_y = y;
 
-    if (pitch > 89.0f)  pitch = 89.0f;
+    if (pitch > 89.0f)  pitch = 89.0f;  // so you can't flip upside down
     if (pitch < -89.0f) pitch = -89.0f;
 }
-
-// view
 
 void camera_direction(float* dir)
 {
@@ -187,7 +159,7 @@ void camera_resolve_view(const float* eye, const float* dir, float* cpos, float*
     float sgn = (view_mode == 1) ? -1.0f : 1.0f;
     float dist = 0.0f;
 
-    while (dist < 4.0f) {
+    while (dist < 4.0f) {  // back off 0.1 at a time until we hit a wall
         float s = dist + 0.1f;
         int b = world_block((int)floorf(eye[0] + dir[0] * sgn * s),
             (int)floorf(eye[1] + dir[1] * sgn * s),

@@ -3,18 +3,15 @@
 #include "Chunk Generation/chunkGenerator.h"
 #include "Chunk Generation/chunkManager.h"
 
-#define FALL_DELAY_TICKS   2        /* Minecraft: sand tickRate = 2 */
-#define GRAVITY            0.04     /* blocks / tick^2 */
+#define FALL_DELAY_TICKS   2
+#define GRAVITY            0.04  // same as minecraft lawl
 #define DRAG               0.98
 #define MAX_FALLING        512
 #define MAX_SCHEDULED      8192
-#define MAX_LIFE_TICKS     600      /* safety net, Minecraft also kills after 600 */
-
-/* ---------------------------------------------------------------- rules */
+#define MAX_LIFE_TICKS     600
 
 static int is_gravity_block(int t) { return t == BLOCK_SAND; }
 
-/* what a falling block may fall through / land inside */
 static int is_replaceable(int t) { return t == BLOCK_AIR || t == BLOCK_WATER || t == BLOCK_LAVA; }
 
 static int can_fall(int x, int y, int z)
@@ -23,12 +20,10 @@ static int can_fall(int x, int y, int z)
     return is_replaceable(world_get_block(x, y - 1, z));
 }
 
-/* ------------------------------------------------------- falling blocks */
-
 typedef struct {
     int    alive;
     int    type;
-    double x, y, z;      /* x,z = centre, y = bottom */
+    double x, y, z;
     double prev_y;
     double vy;
     int    age;
@@ -36,8 +31,6 @@ typedef struct {
 
 static Falling falling[MAX_FALLING];
 static int     falling_n;
-
-/* ------------------------------------------------------ scheduled ticks */
 
 typedef struct { int x, y, z, delay; } Sched;
 
@@ -49,16 +42,15 @@ static void schedule(int x, int y, int z, int delay)
 {
     for (int i = 0; i < sched_n; i++)
         if (sched[i].x == x && sched[i].y == y && sched[i].z == z)
-            return;                       /* already pending */
-    if (sched_n >= MAX_SCHEDULED) return;
+            return;
+    if (sched_n >= MAX_SCHEDULED) return;  // ???? silently drops the tick if the list is full
     sched[sched_n++] = (Sched){ x, y, z, delay };
 }
 
 void physics_block_changed(int x, int y, int z)
 {
-    fluid_block_changed(x, y, z);    /* fluids re-evaluate around any block change */
+    fluid_block_changed(x, y, z);
 
-    /* the block itself (just placed) and the one above (lost its support) */
     if (world_in_bounds(x, y, z) && is_gravity_block(world_get_block(x, y, z)))
         schedule(x, y, z, FALL_DELAY_TICKS);
     if (world_in_bounds(x, y + 1, z) && is_gravity_block(world_get_block(x, y + 1, z)))
@@ -73,7 +65,7 @@ static void spawn_falling(int x, int y, int z, int type)
         falling_n++;
 
         world_set_block(x, y, z, BLOCK_AIR);
-        physics_block_changed(x, y, z);   /* whatever sat on top falls too */
+        physics_block_changed(x, y, z);
         return;
     }
 }
@@ -95,7 +87,6 @@ static void land(Falling* f, int cy)
     f->alive = 0;
     falling_n--;
 
-    /* the cell was filled in the meantime: the block is lost (Minecraft drops an item) */
     if (!world_in_bounds(cx, cy, cz) || !is_replaceable(world_get_block(cx, cy, cz)))
         return;
 
@@ -103,7 +94,6 @@ static void land(Falling* f, int cy)
     audio_play_3d(snd_pick(snd_place[f->type], snd_place_n[f->type]),
         cx + 0.5, cy + 0.5, cz + 0.5, 0.6f);
 
-    /* keeps stacks / sand next to a fresh hole consistent */
     physics_block_changed(cx, cy, cz);
 }
 
@@ -118,14 +108,13 @@ static void tick_falling(Falling* f)
     const int cx = (int)floor(f->x);
     const int cz = (int)floor(f->z);
 
-    /* sweep the cells the bottom face crosses this tick */
     const int from = (int)floor(f->y) - 1;
     const int to = (int)floor(ny);
 
-    for (int c = from; c >= to; c--) {
+    for (int c = from; c >= to; c--) {  // check every cell we pass through this tick
         int solid;
         if (c < 0 || !world_in_bounds(cx, c, cz))
-            solid = (c < 0);              /* below the world floor counts as ground */
+            solid = (c < 0);
         else
             solid = !is_replaceable(world_get_block(cx, c, cz));
 
@@ -139,15 +128,11 @@ static void tick_falling(Falling* f)
     f->y = ny;
     f->vy *= DRAG;
 
-    if (f->y < -64.0 || f->age > MAX_LIFE_TICKS) {
+    if (f->y < -64.0 || f->age > MAX_LIFE_TICKS) {  // fell out of the world or lived too long, kill it
         f->alive = 0;
         falling_n--;
     }
 }
-
-/* ---------------------------------------------------------- dropped items */
-/* Minecraft EntityItem: 0.25 box, gravity 0.04, drag 0.98, ground friction 0.6*0.98,
-   bounce x -0.5, 5 minute lifetime, spins and bobs when drawn. */
 
 #define MAX_ITEMS        512
 #define ITEM_SIZE        0.25
@@ -155,8 +140,8 @@ static void tick_falling(Falling* f)
 
 typedef struct {
     int    alive, type, count, age, delay;
-    double x, y, z;          /* x,z centre, y bottom */
-    double px, py, pz;       /* previous tick, for interpolation */
+    double x, y, z;
+    double px, py, pz;
     double vx, vy, vz;
     int    on_ground;
     float  phase;
@@ -193,7 +178,7 @@ void physics_spawn_item(int type, int count, double x, double y, double z,
     for (int i = 0; i < MAX_ITEMS; i++) {
         if (items[i].alive) continue;
         items[i] = (Item){ 1, type, count, 0, pickup_delay, x, y, z, x, y, z, vx, vy, vz, 0,
-                           (float)(rand() % 628) / 100.0f };
+                           (float)(rand() % 628) / 100.0f };  // random 0..6.28 so items don't spin in sync
         item_n++;
         return;
     }
@@ -208,7 +193,6 @@ static void tick_item(Item* it)
 
     it->vy -= GRAVITY;
 
-    /* move one axis at a time so the item slides along walls */
     double nx = it->x + it->vx;
     if (box_hits(nx, it->y, it->z)) it->vx = 0.0; else it->x = nx;
 
@@ -219,7 +203,7 @@ static void tick_item(Item* it)
     it->on_ground = 0;
     if (box_hits(it->x, ny, it->z)) {
         if (it->vy < 0.0) {
-            it->y = floor(ny) + 1.0;          /* rest on top of the block below */
+            it->y = floor(ny) + 1.0;
             it->on_ground = 1;
         }
         it->vy = 0.0;
@@ -229,7 +213,7 @@ static void tick_item(Item* it)
     }
 
     double fr = 0.98;
-    if (it->on_ground) fr = 0.6 * 0.98;       /* ground friction 0.588 */
+    if (it->on_ground) fr = 0.6 * 0.98;
     it->vx *= fr;
     it->vz *= fr;
     it->vy *= 0.98;
@@ -262,13 +246,10 @@ int physics_item_count(void) { return item_n; }
 
 void physics_tick(void)
 {
-    /* 1. falling entities */
     for (int i = 0; i < MAX_FALLING; i++)
         if (falling[i].alive)
             tick_falling(&falling[i]);
 
-    /* 2. scheduled block updates: count down, collect the due ones, then run them
-          (running may schedule new ticks, so never do it while iterating) */
     int nd = 0, keep = 0;
     for (int i = 0; i < sched_n; i++) {
         if (--sched[i].delay <= 0) due[nd++] = sched[i];
@@ -279,13 +260,10 @@ void physics_tick(void)
     for (int i = 0; i < nd; i++)
         run_scheduled(due[i].x, due[i].y, due[i].z);
 
-    /* 3. dropped items */
     tick_items();
 }
 
 int physics_falling_count(void) { return falling_n; }
-
-/* ------------------------------------------------------------ rendering */
 
 static GLuint prog, vao, vbo;
 static GLint  u_vp, u_pos, u_scale, u_yaw;
@@ -320,7 +298,7 @@ static GLuint compile(GLenum type, const char* src)
     if (!ok) {
         char log[512];
         glGetShaderInfoLog(s, sizeof log, NULL, log);
-        fprintf(stderr, "physics shader: %s\n", log);
+        fprintf(stderr, "physics shader: %s\n", log);  // ???? keeps going even if the shader failed to compile
     }
     return s;
 }
@@ -357,8 +335,6 @@ void physics_init(int face_tex[][BLOCK_FACE_COUNT])
     glUniform1i(glGetUniformLocation(prog, "tex"), 0);
     glUseProgram((GLuint)prev);
 
-    /* unit cube centred on x/z, bottom at y = 0; 4 corners per face, CCW from outside.
-       order: +Z -Z -X +X +Y -Y (BlockFace) */
     static const float corner[6][4][3] = {
         { {0,0,1},{1,0,1},{1,1,1},{0,1,1} },
         { {1,0,0},{0,0,0},{0,1,0},{1,1,0} },
@@ -370,7 +346,7 @@ void physics_init(int face_tex[][BLOCK_FACE_COUNT])
     static const float shade[6] = { 0.8f, 0.8f, 0.6f, 0.6f, 1.0f, 0.5f };
     static const int   idx[6] = { 0, 1, 2, 0, 2, 3 };
 
-    float data[6 * 6 * 6];
+    float data[6 * 6 * 6];  // 6 faces * 6 verts * 6 floats
     int n = 0;
     for (int f = 0; f < 6; f++) {
         for (int k = 0; k < 6; k++) {
@@ -378,8 +354,6 @@ void physics_init(int face_tex[][BLOCK_FACE_COUNT])
             data[n++] = corner[f][c][0] - 0.5f;
             data[n++] = corner[f][c][1];
             data[n++] = corner[f][c][2] - 0.5f;
-            /* same U/V axes as the chunk mesher: +-Z faces u=x v=y, +-X faces u=z v=y,
-               +-Y faces u=x v=z (textures are loaded flipped, so v=0 is the bottom) */
             const float cx = corner[f][c][0], cy = corner[f][c][1], cz = corner[f][c][2];
             data[n++] = (f >= 2 && f <= 3) ? cz : cx;
             data[n++] = (f >= 4) ? cz : cy;
@@ -440,7 +414,6 @@ void physics_draw(const float* vp, double alpha, const GLuint* tex_ids)
         }
     }
 
-    /* dropped items: small spinning, bobbing cubes */
     for (int i = 0; i < MAX_ITEMS; i++) {
         const Item* it = &items[i];
         if (!it->alive) continue;

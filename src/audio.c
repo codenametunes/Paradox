@@ -3,17 +3,12 @@
 #include "dr_mp3.h"
 int stb_vorbis_decode_memory(const unsigned char* mem, int len,
     int* channels, int* sample_rate, short** output);
-// Windows: every .wav is read into memory once and played with PlaySound
-// (winmm, nothing extra to download). A new sound cuts off the previous one.
-// Other platforms: no sound yet, everything below is a no-op.
-
-
 
 typedef struct {
     char           path[260];
     float          gain;
-    unsigned char* data;
-    const short* pcm;          // the samples inside data
+    unsigned char* data;  // 2 nibbles per byte, sky low / block high
+    const short* pcm;
     int            frames, channels, rate;
 } Sound;
 
@@ -31,17 +26,16 @@ static uint16_t rd16(const unsigned char* p)
     return (uint16_t)(p[0] | (p[1] << 8));
 }
 
-
 #define MIX_RATE    44100
-#define MIX_FRAMES  512        // frames per buffer (~12 ms), 4 buffers = ~46 ms delay
+#define MIX_FRAMES  512  // ~12ms per buffer
 #define MIX_BUFFERS 4
 #define MAX_VOICES  32
-#define HEAR_RANGE  16.0f      // blocks, same as Minecraft
+#define HEAR_RANGE  16.0f  // same as minecraft
 
 typedef struct {
     const Sound* snd;
-    double pos;                // position in source frames
-    float  gl, gr;             // left / right volume
+    double pos;
+    float  gl, gr;
     int    active;
 } Voice;
 
@@ -58,7 +52,6 @@ static volatile float   master_volume = 1.0f;
 static double           listener_pos[3];
 static float            listener_fx = 1.0f, listener_fz = 0.0f;
 
-// finds the format and the sample data of a 16 bit PCM .wav (mono or stereo)
 static int wav_info(const unsigned char* d, long long size, Sound* s)
 {
     long long pos = 12;
@@ -94,7 +87,6 @@ static int wav_info(const unsigned char* d, long long size, Sound* s)
     return 0;
 }
 
-// mixes all voices into one buffer of MIX_FRAMES stereo frames
 static void mix_block(short* out)
 {
     float acc[MIX_FRAMES * 2];
@@ -136,13 +128,11 @@ static void mix_block(short* out)
 
     for (int k = 0; k < MIX_FRAMES * 2; k++) {
         float x = acc[k] * master_volume;
-        x = 32767.0f * tanhf(x / 32767.0f);      // soft limit, no harsh clipping
+        x = 32767.0f * tanhf(x / 32767.0f);  // soft limit so loud stuff doesn't crackle
         out[k] = (short)x;
     }
 }
 
-// refills every buffer the sound card has finished with. woken by the
-// driver through mix_event, so there is no Sleep() granularity problem
 static DWORD WINAPI mixer_thread(LPVOID arg)
 {
     int next = 0;
@@ -151,7 +141,7 @@ static DWORD WINAPI mixer_thread(LPVOID arg)
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_HIGHEST);
 
     while (mixing) {
-        WaitForSingleObject(mix_event, 20);
+        WaitForSingleObject(mix_event, 20);  // wakes when the driver is done, 20ms is just a fallback
 
         while (mixing && (((volatile WAVEHDR*)&hdr[next])->dwFlags & WHDR_DONE)) {
             mix_block(mixbuf[next]);
@@ -162,8 +152,6 @@ static DWORD WINAPI mixer_thread(LPVOID arg)
     return 0;
 }
 
-// walks the RIFF chunks: checks the file is a WAVE and, for 16 bit PCM,
-// scales the samples by gain. returns 0 if it isn't a usable .wav
 static int prepare_wav(unsigned char* d, long long size, float gain, const char* path)
 {
     if (size < 44 || memcmp(d, "RIFF", 4) != 0 || memcmp(d + 8, "WAVE", 4) != 0) {
@@ -225,9 +213,9 @@ int audio_init(void)
     sound_count = 0;
     memset(voices, 0, sizeof voices);
     if (!lock_ready) { InitializeCriticalSection(&voice_lock); lock_ready = 1; }
-    if (wave) return 1;                           // already running
+    if (wave) return 1;
 
-    mix_event = CreateEvent(NULL, FALSE, FALSE, NULL);
+    mix_event = CreateEvent(NULL, FALSE, FALSE, NULL);  // ???? never checked
 
     WAVEFORMATEX fmt;
     memset(&fmt, 0, sizeof fmt);
@@ -248,7 +236,7 @@ int audio_init(void)
 
     memset(mixbuf, 0, sizeof mixbuf);
     memset(hdr, 0, sizeof hdr);
-    for (int i = 0; i < MIX_BUFFERS; i++) {       // start with silent buffers
+    for (int i = 0; i < MIX_BUFFERS; i++) {
         hdr[i].lpData = (LPSTR)mixbuf[i];
         hdr[i].dwBufferLength = sizeof mixbuf[i];
         waveOutPrepareHeader(wave, &hdr[i], sizeof hdr[i]);
@@ -256,11 +244,9 @@ int audio_init(void)
     }
 
     mixing = 1;
-    mix_thread = CreateThread(NULL, 0, mixer_thread, NULL, 0, NULL);
+    mix_thread = CreateThread(NULL, 0, mixer_thread, NULL, 0, NULL);  // ???? never checked, no thread = silence forever
     return 1;
 }
-// finds the real file for a sound path: tries .ogg, then .wav.
-// the path may have no extension, or a .wav / .ogg one (it gets swapped)
 static int sound_resolve(const char* path, char* out, size_t n)
 {
     char base[260];
@@ -308,7 +294,6 @@ int audio_load(const char* path, float gain)
 
     path = real;
 
-    // same file and volume was already loaded (stone and bedrock share sounds)
     for (int i = 0; i < sound_count; i++)
         if (strcmp(sounds[i].path, path) == 0 && sounds[i].gain == gain)
             return i;
@@ -320,7 +305,7 @@ int audio_load(const char* path, float gain)
 
     size_t asize = 0;
     unsigned char* data = asset_read(path, &asize);
-    long size = (long)asize;
+    long size = (long)asize;  // ???? breaks above 2GB, fine for sounds
 
     if (!data) {
         fprintf(stderr, "Failed to open sound '%s'\n", path);
@@ -425,7 +410,7 @@ static void start_voice(int id, float gl, float gr)
     for (int i = 0; i < MAX_VOICES; i++) {
         if (!voices[i].active) { slot = i; break; }
         double progress = voices[i].pos / (double)voices[i].snd->frames;
-        if (progress > oldest) { oldest = progress; slot = i; }   // all busy: replace the oldest
+        if (progress > oldest) { oldest = progress; slot = i; }
     }
 
     Voice* v = &voices[slot];
@@ -452,7 +437,7 @@ void audio_play(int id)
 void audio_set_listener(double x, double y, double z, float yaw_deg)
 {
     listener_pos[0] = x; listener_pos[1] = y; listener_pos[2] = z;
-    listener_fx = cosf(yaw_deg * PI / 180.0f);      // same yaw as the camera
+    listener_fx = cosf(yaw_deg * PI / 180.0f);
     listener_fz = sinf(yaw_deg * PI / 180.0f);
 }
 
@@ -466,20 +451,19 @@ void audio_play_3d(int id, double x, double y, double z, float volume)
     if (dist >= HEAR_RANGE)
         return;
 
-    float vol = volume * (1.0f - (float)(dist / HEAR_RANGE));   // linear fade
+    float vol = volume * (1.0f - (float)(dist / HEAR_RANGE));
     if (vol <= 0.0f)
         return;
 
-    // -1 = fully left, +1 = fully right (right vector = (-fz, fx))
     float pan = 0.0f;
     double h = sqrt(dx * dx + dz * dz);
     if (h > 0.01) {
         pan = (float)((dx * -listener_fz + dz * listener_fx) / h);
-        if (h < 2.0) pan *= (float)(h / 2.0);        // very close sounds stay near the centre
+        if (h < 2.0) pan *= (float)(h / 2.0);
     }
 
     float gl = vol, gr = vol;
-    if (pan > 0.0f) gl *= 1.0f - 0.8f * pan;         // source on the right: left ear quieter
+    if (pan > 0.0f) gl *= 1.0f - 0.8f * pan;
     else            gr *= 1.0f + 0.8f * pan;
 
     start_voice(id, gl, gr);

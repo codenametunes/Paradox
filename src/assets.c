@@ -8,7 +8,7 @@ extern const int         asset_count;
 static int find_id(const char* path)
 {
     for (int i = 0; i < asset_count; i++)
-        if (_stricmp(asset_paths[i], path) == 0)
+        if (_stricmp(asset_paths[i], path) == 0)  // windows only
             return asset_ids[i];
     return 0;
 }
@@ -30,7 +30,7 @@ unsigned char* asset_read(const char* path, size_t* out_size)
             buf = (unsigned char*)malloc((size_t)n + 1);
             if (buf) {
                 memcpy(buf, p, n);
-                buf[n] = 0;
+                buf[n] = 0;  // extra zero so shader text is a valid string
                 size = n;
             }
         }
@@ -40,17 +40,17 @@ unsigned char* asset_read(const char* path, size_t* out_size)
 #ifdef _MSC_VER
         fopen_s(&f, path, "rb");
 #else
-        f = fopen(path, "rb");
+        f = fopen(path, "rb");  // ???? what if the file isn't there
 #endif
         if (f) {
-            fseek(f, 0, SEEK_END);
+            fseek(f, 0, SEEK_END);  // lazy way to get the file size
             long n = ftell(f);
             fseek(f, 0, SEEK_SET);
 
             if (n >= 0) {
                 buf = (unsigned char*)malloc((size_t)n + 1);
                 if (buf && fread(buf, 1, (size_t)n, f) == (size_t)n) {
-                    buf[n] = 0;
+                    buf[n] = 0;  // extra zero so shader text is a valid string
                     size = (size_t)n;
                 }
                 else {
@@ -78,7 +78,7 @@ int asset_exists(const char* path)
 #ifdef _MSC_VER
     fopen_s(&f, path, "rb");
 #else
-    f = fopen(path, "rb");
+    f = fopen(path, "rb");  // ???? what if the file isn't there
 #endif
     if (f) { fclose(f); return 1; }
     return 0;

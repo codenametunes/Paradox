@@ -8,35 +8,24 @@
 #include <stddef.h>
 #include "Third Party/stb_image.h"
 
-/*
- * See sky.h for the overview. Every formula below is a direct port of the Mojang-mapped
- * 1.20.x client code; the original method is named next to each piece.
- */
-
 #define SKY_PI 3.14159265358979323846f
 
 static float clampf(float v, float lo, float hi) { return v < lo ? lo : (v > hi ? hi : v); }
-static float lerpf(float a, float b, float t) { return a + (b - a) * t; }   /* Mth.lerp */
+static float lerpf(float a, float b, float t) { return a + (b - a) * t; }
 
-/* ------------------------------------------------------------------ */
-/* state                                                               */
-/* ------------------------------------------------------------------ */
-
-static double time_ticks = 0.0;       /* total world time (Level day time) */
+static double time_ticks = 0.0;
 static int    day_cycle = 1;
-static double cloud_ticks = 0.0;      /* LevelRenderer.ticks (client ticks, runs even when time is frozen) */
+static double cloud_ticks = 0.0;
 
 static float  rain_level = 0.0f, thunder_level = 0.0f;
 static int    render_dist_chunks = 12;
 static int    clouds_on = 1;
 
-/* biome colours, default = plains */
-static float  biome_sky[3] = { 120.0f / 255.0f, 167.0f / 255.0f, 1.0f };            /* 0x78A7FF */
-static float  biome_fog[3] = { 192.0f / 255.0f, 216.0f / 255.0f, 1.0f };            /* 0xC0D8FF */
+static float  biome_sky[3] = { 120.0f / 255.0f, 167.0f / 255.0f, 1.0f };
+static float  biome_fog[3] = { 192.0f / 255.0f, 216.0f / 255.0f, 1.0f };
 
-/* derived by recompute() */
-static float  tod = 0.0f;             /* getTimeOfDay: 0 = noon */
-static float  sun_angle = 0.0f;       /* getSunAngle  */
+static float  tod = 0.0f;
+static float  sun_angle = 0.0f;
 static float  brightness = 1.0f;
 static float  darken = 0.0f;
 static float  star_bright = 0.0f;
@@ -44,13 +33,8 @@ static int    moon_phase = 0;
 static float  sky_rgb[3] = { 0, 0, 0 };
 static float  fog_rgb_cache[3] = { 0, 0, 0 };
 static int    have_sunrise = 0;
-static float  sunrise[4];             /* r g b a, see sunrise_color() */
+static float  sunrise[4];
 
-/* ------------------------------------------------------------------ */
-/* vanilla maths                                                       */
-/* ------------------------------------------------------------------ */
-
-/* DimensionSpecialEffects.OverworldEffects.getSunriseColor */
 static int sunrise_color(float time_of_day, float out[4])
 {
     const float g = cosf(time_of_day * (SKY_PI * 2.0f)) - 0.0f;
@@ -71,7 +55,6 @@ static void recompute(void)
 {
     const double t = SKY_SMOOTH_TIME ? time_ticks : floor(time_ticks);
 
-    /* DimensionType.timeOfDay */
     double d = t / (double)SKY_TICKS_PER_DAY - 0.25;
     d -= floor(d);
     const double e = 0.5 - cos(d * (double)SKY_PI) / 2.0;
@@ -80,10 +63,8 @@ static void recompute(void)
 
     const float c = cosf(sun_angle);
 
-    /* ClientLevel.getSkyColor: brightness factor of the dome */
     brightness = clampf(c * 2.0f + 0.5f, 0.0f, 1.0f);
 
-    /* Level.updateSkyBrightness (without the (int) cast) */
     {
         const float d1 = 1.0f - rain_level * 5.0f / 16.0f;
         const float e1 = 1.0f - thunder_level * 5.0f / 16.0f;
@@ -91,20 +72,17 @@ static void recompute(void)
         darken = (1.0f - f1 * d1 * e1) * 11.0f;
     }
 
-    /* Level.getStarBrightness */
     {
         float g = 1.0f - (c * 2.0f + 0.25f);
         g = clampf(g, 0.0f, 1.0f);
         star_bright = g * g * 0.5f;
     }
 
-    /* Level.getMoonPhase: (int)(time / 24000 % 8 + 8) % 8 */
     {
         long day = (long)floor(t / (double)SKY_TICKS_PER_DAY);
         moon_phase = (int)(((day % 8) + 8) % 8);
     }
 
-    /* ClientLevel.getSkyColor (biome blend is the identity for a single biome) */
     {
         float h = biome_sky[0] * brightness;
         float i = biome_sky[1] * brightness;
@@ -129,7 +107,6 @@ static void recompute(void)
     have_sunrise = sunrise_color(tod, sunrise);
 }
 
-/* ClientLevel.getCloudColor (vanilla cloud base colour is white) */
 static void cloud_color(float out[3])
 {
     const float g = brightness;
@@ -154,10 +131,8 @@ static void cloud_color(float out[3])
     out[0] = h; out[1] = i; out[2] = j;
 }
 
-/* FogRenderer.setupColor */
 void sky_get_fog_color(const float* look, float out_rgb[3])
 {
-    /* FogRenderer: brightness-dependent fog colour of the overworld effects */
     const float k = clampf(cosf(tod * (SKY_PI * 2.0f)) * 2.0f + 0.5f, 0.0f, 1.0f);
     float fr = biome_fog[0] * (k * 0.94f + 0.06f);
     float fg = biome_fog[1] * (k * 0.94f + 0.06f);
@@ -165,7 +140,7 @@ void sky_get_fog_color(const float* look, float out_rgb[3])
 
     if (render_dist_chunks >= 4 && look) {
         const float l = sinf(sun_angle) > 0.0f ? -1.0f : 1.0f;
-        float m = look[0] * l;                          /* look . (l, 0, 0) */
+        float m = look[0] * l;
         if (m < 0.0f) m = 0.0f;
         if (m > 0.0f && have_sunrise) {
             m *= sunrise[3];
@@ -199,10 +174,6 @@ void sky_get_sky_color(float out_rgb[3])
     out_rgb[0] = sky_rgb[0]; out_rgb[1] = sky_rgb[1]; out_rgb[2] = sky_rgb[2];
 }
 
-/* ------------------------------------------------------------------ */
-/* time / environment API                                              */
-/* ------------------------------------------------------------------ */
-
 void   sky_set_time(double ticks) { time_ticks = ticks; recompute(); }
 double sky_get_time(void) { return time_ticks; }
 double sky_get_day_time(void)
@@ -234,15 +205,11 @@ float sky_get_brightness(void) { return brightness; }
 float sky_get_time_of_day(void) { return tod; }
 float sky_get_sun_angle(void) { return sun_angle; }
 
-/* ------------------------------------------------------------------ */
-/* matrices (column-major, same rotation sense as Axis.XP/YP/ZP)       */
-/* ------------------------------------------------------------------ */
-
 typedef struct { float m[16]; } Mat4;
 
 static Mat4 m_ident(void) { Mat4 r; memset(&r, 0, sizeof r); r.m[0] = r.m[5] = r.m[10] = r.m[15] = 1.0f; return r; }
 
-static Mat4 m_mul(const Mat4* a, const Mat4* b)      /* a * b */
+static Mat4 m_mul(const Mat4* a, const Mat4* b)
 {
     Mat4 r;
     for (int c = 0; c < 4; c++)
@@ -259,11 +226,7 @@ static Mat4 m_ry(float deg) { Mat4 r = m_ident(); float a = deg * SKY_PI / 180.0
 static Mat4 m_rz(float deg) { Mat4 r = m_ident(); float a = deg * SKY_PI / 180.0f, c = cosf(a), s = sinf(a); r.m[0] = c; r.m[1] = s; r.m[4] = -s; r.m[5] = c; return r; }
 static Mat4 m_translate(float x, float y, float z) { Mat4 r = m_ident(); r.m[12] = x; r.m[13] = y; r.m[14] = z; return r; }
 
-/* ------------------------------------------------------------------ */
-/* GL objects                                                          */
-/* ------------------------------------------------------------------ */
-
-typedef struct { float p[3]; float uv[2]; float c[4]; } Vert;   /* 9 floats */
+typedef struct { float p[3]; float uv[2]; float c[4]; } Vert;
 
 typedef struct { GLuint vao, vbo; int count; } Mesh;
 
@@ -273,7 +236,7 @@ u_modulator, u_fog_color, u_fog_start, u_fog_end, u_fog_on, u_alpha_test;
 
 static Mesh   mesh_sky_disc, mesh_dark_disc, mesh_stars, mesh_quad_sun, mesh_quad_moon,
 mesh_glow, mesh_clouds;
-static GLuint tex_sun, tex_clouds, tex_moon;     /* tex_moon is a 2D array, layer = phase */
+static GLuint tex_sun, tex_clouds, tex_moon;
 static int    cloud_cells_built = 0;
 static int    prev_cx = 0x7FFFFFFF, prev_cy = 0x7FFFFFFF, prev_cz = 0x7FFFFFFF;
 
@@ -289,18 +252,18 @@ static const char* VS =
 "uniform int fog_shape; uniform int far_z;\n"
 "out vec2 v_uv; out vec4 v_col; out float v_dist;\n"
 "void main(){\n"
-"  vec3 p = (model * vec4(a_pos, 1.0)).xyz;\n"                     /* camera-relative position */
-"  v_dist = (fog_shape == 1) ? max(length(p.xz), abs(p.y)) : length(p);\n"   /* fog_distance(): cylinder / sphere */
+"  vec3 p = (model * vec4(a_pos, 1.0)).xyz;\n"
+"  v_dist = (fog_shape == 1) ? max(length(p.xz), abs(p.y)) : length(p);\n"
 "  v_uv = a_uv; v_col = a_col;\n"
 "  vec4 clip = vp * vec4(cam + p, 1.0);\n"
-"  if (far_z != 0) clip.z = clip.w * 0.99999;\n"                 /* sky never hits the far plane */
+"  if (far_z != 0) clip.z = clip.w * 0.99999;\n"
 "  gl_Position = clip;\n"
 "}\n";
 
 static const char* FS =
 "#version 330 core\n"
 "in vec2 v_uv; in vec4 v_col; in float v_dist;\n"
-"uniform int tex_mode;\n"                                         /* 0 none, 1 sampler2D, 2 sampler2DArray */
+"uniform int tex_mode;\n"
 "uniform sampler2D tex0; uniform sampler2DArray tex_arr; uniform float layer;\n"
 "uniform vec4 modulator; uniform vec3 fog_color; uniform float fog_start, fog_end;\n"
 "uniform int fog_on; uniform int alpha_test;\n"
@@ -309,8 +272,8 @@ static const char* FS =
 "  vec4 c = v_col * modulator;\n"
 "  if (tex_mode == 1) c *= texture(tex0, v_uv);\n"
 "  else if (tex_mode == 2) c *= texture(tex_arr, vec3(v_uv, layer));\n"
-"  if (alpha_test != 0 && c.a < 0.1) discard;\n"                  /* cloud shader */
-"  if (fog_on != 0 && v_dist > fog_start) {\n"                     /* linear_fog() */
+"  if (alpha_test != 0 && c.a < 0.1) discard;\n"
+"  if (fog_on != 0 && v_dist > fog_start) {\n"
 "    float f = v_dist < fog_end ? smoothstep(fog_start, fog_end, v_dist) : 1.0;\n"
 "    c.rgb = mix(c.rgb, fog_color, f);\n"
 "  }\n"
@@ -325,7 +288,7 @@ static GLuint compile(GLenum type, const char* src)
     GLint ok = 0;
     glGetShaderiv(s, GL_COMPILE_STATUS, &ok);
     if (!ok) {
-        char log[1024];
+        char log[1024];  // hope the log fits
         glGetShaderInfoLog(s, sizeof log, NULL, log);
         fprintf(stderr, "sky shader error:\n%s\n", log);
         glDeleteShader(s);
@@ -363,11 +326,6 @@ static Vert mk(float x, float y, float z, float u, float v, float r, float g, fl
     return o;
 }
 
-/* ------------------------------------------------------------------ */
-/* geometry                                                            */
-/* ------------------------------------------------------------------ */
-
-/* LevelRenderer.buildSkyDisc: fan, 9 rim vertices at radius 512 */
 static void build_disc(Mesh* m, float y)
 {
     Vert v[10];
@@ -381,7 +339,6 @@ static void build_disc(Mesh* m, float y)
     mesh_create(m, v, n, GL_STATIC_DRAW, n);
 }
 
-/* Java's java.util.Random / LegacyRandomSource, seed 10842 */
 static unsigned long long rnd_seed;
 static void rnd_init(long long seed) { rnd_seed = ((unsigned long long)seed ^ 0x5DEECE66DULL) & ((1ULL << 48) - 1); }
 static int  rnd_next(int bits)
@@ -392,7 +349,6 @@ static int  rnd_next(int bits)
 static float  rnd_float(void) { return (float)rnd_next(24) * 5.9604645E-8f; }
 static double rnd_double(void) { return (double)(((long long)rnd_next(26) << 27) + rnd_next(27)) * 1.1102230246251565E-16; }
 
-/* LevelRenderer.drawStars: 1500 candidates, random quads on a sphere of radius 100 */
 static void build_stars(Mesh* m)
 {
     Vert* v = (Vert*)malloc(1500 * 6 * sizeof(Vert));
@@ -446,7 +402,7 @@ static void build_body_quad(Mesh* m, float k, float y, int moon)
         q[2] = mk(k, y, k, 1, 1, 1, 1, 1, 1);
         q[3] = mk(-k, y, k, 0, 1, 1, 1, 1, 1);
     }
-    else {   /* u / v already mirrored the way the vanilla atlas lookup does */
+    else {
         q[0] = mk(-k, y, k, 1, 1, 1, 1, 1, 1);
         q[1] = mk(k, y, k, 0, 1, 1, 1, 1, 1);
         q[2] = mk(k, y, -k, 0, 0, 1, 1, 1, 1);
@@ -456,11 +412,9 @@ static void build_body_quad(Mesh* m, float k, float y, int moon)
     mesh_create(m, v, 6, GL_STATIC_DRAW, 6);
 }
 
-/* ---- clouds: LevelRenderer.buildClouds (FANCY) ---- */
-
 #define CLOUD_VERTS (64 * 204)
 
-static Vert* cw;     /* write cursor */
+static Vert* cw;
 static void push_quad(Vert a, Vert b, Vert c, Vert d)
 {
     *cw++ = a; *cw++ = b; *cw++ = c;
@@ -469,13 +423,12 @@ static void push_quad(Vert a, Vert b, Vert c, Vert d)
 
 static void build_clouds(double x, double y, double z)
 {
-    const float S = 0.00390625f;                 /* 1 / 256 */
+    const float S = 0.00390625f;
     const float EPS = 9.765625E-4f;
     const float k = (float)floor(x) * S;
     const float l = (float)floor(z) * S;
     const float y1 = (float)floor(y / 4.0) * 4.0f;
 
-    /* vertex colour = face shade (cloud colour is applied as a uniform), alpha 0.8 */
     const float TOP = 1.0f, BOT = 0.7f, XF = 0.9f, ZF = 0.8f, A = 0.8f;
 
     Vert* buf = (Vert*)malloc(CLOUD_VERTS * sizeof(Vert));
@@ -487,20 +440,20 @@ static void build_clouds(double x, double y, double z)
             const float b = (float)(xi * 8);
             const float c = (float)(zi * 8);
 
-            if (y1 > -5.0f) {   /* underside */
+            if (y1 > -5.0f) {
                 push_quad(mk(b + 0, y1, c + 8, (b + 0) * S + k, (c + 8) * S + l, BOT, BOT, BOT, A),
                     mk(b + 8, y1, c + 8, (b + 8) * S + k, (c + 8) * S + l, BOT, BOT, BOT, A),
                     mk(b + 8, y1, c + 0, (b + 8) * S + k, (c + 0) * S + l, BOT, BOT, BOT, A),
                     mk(b + 0, y1, c + 0, (b + 0) * S + k, (c + 0) * S + l, BOT, BOT, BOT, A));
             }
-            if (y1 <= 5.0f) {   /* top */
+            if (y1 <= 5.0f) {
                 const float yt = y1 + 4.0f - EPS;
                 push_quad(mk(b + 0, yt, c + 8, (b + 0) * S + k, (c + 8) * S + l, TOP, TOP, TOP, A),
                     mk(b + 8, yt, c + 8, (b + 8) * S + k, (c + 8) * S + l, TOP, TOP, TOP, A),
                     mk(b + 8, yt, c + 0, (b + 8) * S + k, (c + 0) * S + l, TOP, TOP, TOP, A),
                     mk(b + 0, yt, c + 0, (b + 0) * S + k, (c + 0) * S + l, TOP, TOP, TOP, A));
             }
-            if (xi > -1) {      /* west faces, one strip per texel column */
+            if (xi > -1) {
                 for (int ab = 0; ab < 8; ab++) {
                     const float x0 = b + (float)ab + 0.0f;
                     const float u = (b + (float)ab + 0.5f) * S + k;
@@ -510,7 +463,7 @@ static void build_clouds(double x, double y, double z)
                         mk(x0, y1 + 0, c + 0, u, (c + 0) * S + l, XF, XF, XF, A));
                 }
             }
-            if (xi <= 1) {      /* east faces */
+            if (xi <= 1) {
                 for (int ab = 0; ab < 8; ab++) {
                     const float x0 = b + (float)ab + 1.0f - EPS;
                     const float u = (b + (float)ab + 0.5f) * S + k;
@@ -520,7 +473,7 @@ static void build_clouds(double x, double y, double z)
                         mk(x0, y1 + 0, c + 0, u, (c + 0) * S + l, XF, XF, XF, A));
                 }
             }
-            if (zi > -1) {      /* north faces */
+            if (zi > -1) {
                 for (int ab = 0; ab < 8; ab++) {
                     const float z0 = c + (float)ab + 0.0f;
                     const float v = (c + (float)ab + 0.5f) * S + l;
@@ -530,7 +483,7 @@ static void build_clouds(double x, double y, double z)
                         mk(b + 0, y1 + 0, z0, (b + 0) * S + k, v, ZF, ZF, ZF, A));
                 }
             }
-            if (zi <= 1) {      /* south faces */
+            if (zi <= 1) {
                 for (int ab = 0; ab < 8; ab++) {
                     const float z0 = c + (float)ab + 1.0f - EPS;
                     const float v = (c + (float)ab + 0.5f) * S + l;
@@ -551,11 +504,6 @@ static void build_clouds(double x, double y, double z)
     free(buf);
 }
 
-/* ------------------------------------------------------------------ */
-/* textures                                                            */
-/* ------------------------------------------------------------------ */
-
-/* from your asset system (main.h): decodes an embedded asset to RGBA8 */
 extern unsigned char* asset_image(const char* path, int* w, int* h, int* channels);
 
 static unsigned char* load_png(const char* dir, const char* name, int* w, int* h)
@@ -563,9 +511,9 @@ static unsigned char* load_png(const char* dir, const char* name, int* w, int* h
     char path[1024];
     snprintf(path, sizeof path, "%s/%s", dir, name);
     int comp = 0;
-    stbi_set_flip_vertically_on_load(0);          /* uv (0,0) = top-left, like Minecraft */
+    stbi_set_flip_vertically_on_load(0);
     unsigned char* px = asset_image(path, w, h, &comp);
-    stbi_set_flip_vertically_on_load(1);          /* restore what load_texture() expects */
+    stbi_set_flip_vertically_on_load(1);
     if (!px) fprintf(stderr, "sky: cannot load %s\n", path);
     return px;
 }
@@ -580,9 +528,9 @@ static GLuint load_tex2d(const char* dir, const char* name, GLint wrap)
     glGenTextures(1, &t);
     glActiveTexture(GL_TEXTURE0 + TEXUNIT_2D);
     glBindTexture(GL_TEXTURE_2D, t);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // 1 byte rows aren't 4 aligned, text comes out skewed without this
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, px);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);   /* vanilla: blur = false */
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap);
@@ -593,7 +541,6 @@ static GLuint load_tex2d(const char* dir, const char* name, GLint wrap)
 
 static GLuint load_moon_array(const char* dir)
 {
-    /* order = vanilla moon_phases.png cell order (row 0 then row 1) = getMoonPhase() */
     static const char* names[8] = {
         "full_moon.png", "waning_gibbous.png", "third_quarter.png", "waning_crescent.png",
         "new_moon.png", "waxing_crescent.png", "first_quarter.png", "waxing_gibbous.png"
@@ -614,7 +561,7 @@ static GLuint load_moon_array(const char* dir)
         glGenTextures(1, &t);
         glActiveTexture(GL_TEXTURE0 + TEXUNIT_ARRAY);
         glBindTexture(GL_TEXTURE_2D_ARRAY, t);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // 1 byte rows aren't 4 aligned, text comes out skewed without this
         glTexImage3D(GL_TEXTURE_2D_ARRAY, 0, GL_RGBA8, w, h, 8, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
         for (int i = 0; i < 8; i++)
             glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, w, h, 1, GL_RGBA, GL_UNSIGNED_BYTE, px[i]);
@@ -627,10 +574,6 @@ static GLuint load_moon_array(const char* dir)
     for (int i = 0; i < 8; i++) if (px[i]) stbi_image_free(px[i]);
     return t;
 }
-
-/* ------------------------------------------------------------------ */
-/* init / shutdown / update                                            */
-/* ------------------------------------------------------------------ */
 
 int sky_init(const char* dir)
 {
@@ -671,8 +614,8 @@ int sky_init(const char* dir)
     build_disc(&mesh_sky_disc, 16.0f);
     build_disc(&mesh_dark_disc, -16.0f);
     build_stars(&mesh_stars);
-    build_body_quad(&mesh_quad_sun, 30.0f, 100.0f, 0);      /* sun: 60x60 at distance 100 */
-    build_body_quad(&mesh_quad_moon, 20.0f, -100.0f, 1);    /* moon: 40x40 */
+    build_body_quad(&mesh_quad_sun, 30.0f, 100.0f, 0);
+    build_body_quad(&mesh_quad_moon, 20.0f, -100.0f, 1);
     mesh_create(&mesh_glow, NULL, 0, GL_DYNAMIC_DRAW, 18);
     mesh_create(&mesh_clouds, NULL, 0, GL_DYNAMIC_DRAW, CLOUD_VERTS);
 
@@ -709,10 +652,6 @@ void sky_update(double dt)
     cloud_ticks += ticks;
     recompute();
 }
-
-/* ------------------------------------------------------------------ */
-/* drawing                                                             */
-/* ------------------------------------------------------------------ */
 
 static void set_model(const Mat4* m) { glUniformMatrix4fv(u_model, 1, GL_FALSE, m->m); }
 
@@ -758,12 +697,10 @@ void sky_draw(const float* vp, const float* cam, const float* look)
     const Mat4 I = m_ident();
     set_model(&I);
 
-    /* 1. sky dome: flat disc 16 blocks up, sky colour, SKY fog (sphere, 0 .. render distance) */
     glUniform4f(u_modulator, sky_rgb[0], sky_rgb[1], sky_rgb[2], 1.0f);
     set_fog(1, 0, 0.0f, rd);
     draw_mesh(&mesh_sky_disc, GL_TRIANGLE_FAN);
 
-    /* 2. sunrise / sunset glow */
     glEnable(GL_BLEND);
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
     if (have_sunrise) {
@@ -792,7 +729,6 @@ void sky_draw(const float* vp, const float* cam, const float* look)
         draw_mesh(&mesh_glow, GL_TRIANGLE_FAN);
     }
 
-    /* 3. sun, moon, stars: additive, rotated with the time of day */
     glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE, GL_ONE, GL_ZERO);
     {
         Mat4 ry = m_ry(-90.0f), rx = m_rx(tod * 360.0f);
@@ -828,7 +764,6 @@ void sky_draw(const float* vp, const float* cam, const float* look)
         }
     }
 
-    /* 4. void disc under the horizon: black, SKY fog, 4 blocks below the eye */
     glDisable(GL_BLEND);
     if ((double)cam[1] - (double)SKY_HORIZON_HEIGHT < 0.0) {
         Mat4 t = m_translate(0.0f, 12.0f, 0.0f);
@@ -848,7 +783,6 @@ void sky_draw(const float* vp, const float* cam, const float* look)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-/* LevelRenderer.renderClouds (FANCY): two passes, depth only then colour, so inner walls vanish */
 void sky_draw_clouds(const float* vp, const float* cam)
 {
     if (!prog || !clouds_on || !tex_clouds) return;
@@ -901,7 +835,6 @@ void sky_draw_clouds(const float* vp, const float* cam)
     glUniform1i(u_tex_mode, 1);
     glUniform4f(u_modulator, cc[0], cc[1], cc[2], 1.0f);
 
-    /* terrain fog (cylinder): FogRenderer.setupFog(FOG_TERRAIN, max(renderDistance, 32)) */
     {
         float fe = (float)render_dist_chunks * 16.0f;
         if (fe < 32.0f) fe = 32.0f;
@@ -912,7 +845,6 @@ void sky_draw_clouds(const float* vp, const float* cam)
     glBindTexture(GL_TEXTURE_2D, tex_clouds);
     glActiveTexture(GL_TEXTURE0);
 
-    /* poseStack.scale(12, 1, 12); poseStack.translate(-l, m, -n) */
     Mat4 model = m_ident();
     model.m[0] = 12.0f; model.m[10] = 12.0f;
     model.m[12] = -l * 12.0f; model.m[13] = m; model.m[14] = -n * 12.0f;

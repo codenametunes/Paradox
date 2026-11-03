@@ -4,7 +4,7 @@ GLuint shader_load(const char* vert_path, const char* frag_path);
 
 static char* read_file(const char* path) {
     size_t size = 0;
-    char* buf = (char*)asset_read(path, &size);   // already ends with a 0 byte
+    char* buf = (char*)asset_read(path, &size);
     if (!buf) fprintf(stderr, "Could not open file: %s\n", path);
     return buf;
 }
@@ -14,14 +14,14 @@ static GLuint compile(GLenum type, const char* path) {
     if (!src) return 0;
 
     GLuint s = glCreateShader(type);
-    glShaderSource(s, 1, (const GLchar* const*)&src, NULL);
+    glShaderSource(s, 1, (const GLchar* const*)&src, NULL);  // scary cast but it works
     glCompileShader(s);
     free(src);
 
     GLint ok = 0;
     glGetShaderiv(s, GL_COMPILE_STATUS, &ok);
     if (!ok) {
-        char log[1024];
+        char log[1024]; 
         glGetShaderInfoLog(s, sizeof log, NULL, log);
         fprintf(stderr, "Shader compile error in %s:\n%s\n", path, log);
         glDeleteShader(s);
@@ -44,14 +44,13 @@ GLuint shader_load(const char* vert_path, const char* frag_path) {
     glAttachShader(prog, fs);
     glLinkProgram(prog);
 
-    // shaders are copied into the program, so the objects can go
     glDeleteShader(vs);
     glDeleteShader(fs);
 
     GLint ok = 0;
     glGetProgramiv(prog, GL_LINK_STATUS, &ok);
     if (!ok) {
-        char log[1024];
+        char log[1024]; 
         glGetProgramInfoLog(prog, sizeof log, NULL, log);
         fprintf(stderr, "Shader link error:\n%s\n", log);
         glDeleteProgram(prog);

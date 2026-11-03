@@ -13,13 +13,16 @@
   },
   "ExpandedNodes": [
     "",
-    "\\assets",
-    "\\assets\\textures\\ui",
-    "\\src\\Fluid",
-    "\\src\\Mesher",
-    "\\src\\Physics",
-    "\\src\\Player"
+    "\\out",
+    "\\src",
+    "\\src\\Chunk Generation",
+    "\\src\\Fog",
+    "\\src\\Lighting",
+    "\\src\\Mobs",
+    "\\src\\Player",
+    "\\src\\Sky",
+    "\\src\\UI"
   ],
-  "SelectedNode": "\\src",
+  "SelectedNode": "\\src\\Chunk Generation\\biomes.h",
   "PreviewInSolutionExplorer": false
 }

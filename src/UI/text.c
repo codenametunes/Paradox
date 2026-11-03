@@ -3,9 +3,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#define TEXT_CANVAS_W 640     // keep in sync with UI_CANVAS_W in ui.c
-#define TEXT_CANVAS_H 480     // keep in sync with UI_CANVAS_H in ui.c
-#define TEXT_PAD      2       // transparent border so glyphs never get clipped
+#define TEXT_CANVAS_W 640
+#define TEXT_CANVAS_H 480
+#define TEXT_PAD      2
 #define TEXT_MAX_W    4096
 
 static const char* text_vert =
@@ -33,8 +33,8 @@ static const char* text_frag =
 
 static FT_Library ft_lib = NULL;
 static FT_Face    ft_face = NULL;
-static unsigned char* font_data = NULL;   // FreeType needs this to stay alive while the font is used
-static int        base_px = 16;      // font size in canvas pixels
+static unsigned char* font_data = NULL;
+static int        base_px = 16;
 
 static GLuint prog = 0, vao = 0, vbo = 0;
 static GLint  screen_loc = -1, tex_loc = -1, color_loc = -1;
@@ -45,8 +45,6 @@ static float ui_scale(void)
 {
     return (float)fb_h / (float)TEXT_CANVAS_H;
 }
-
-// shader
 
 static GLuint compile_program(const char* vs, const char* fs)
 {
@@ -62,7 +60,7 @@ static GLuint compile_program(const char* vs, const char* fs)
         GLint ok;
         glGetShaderiv(sh[i], GL_COMPILE_STATUS, &ok);
         if (!ok) {
-            char log[1024];
+            char log[1024];  // hope the log fits
             glGetShaderInfoLog(sh[i], sizeof log, NULL, log);
             fprintf(stderr, "Text shader compilation failed:\n%s\n", log);
             glDeleteShader(sh[i]);
@@ -81,7 +79,7 @@ static GLuint compile_program(const char* vs, const char* fs)
     GLint ok;
     glGetProgramiv(p, GL_LINK_STATUS, &ok);
     if (!ok) {
-        char log[1024];
+        char log[1024];  // hope the log fits
         glGetProgramInfoLog(p, sizeof log, NULL, log);
         fprintf(stderr, "Text shader linking failed:\n%s\n", log);
         glDeleteProgram(p);
@@ -89,8 +87,6 @@ static GLuint compile_program(const char* vs, const char* fs)
     }
     return p;
 }
-
-// init / shutdown
 
 int text_init(const char* ttf_path, int size_px)
 {
@@ -102,7 +98,7 @@ int text_init(const char* ttf_path, int size_px)
     }
 
     size_t font_size = 0;
-    font_data = asset_read(ttf_path, &font_size);
+    font_data = asset_read(ttf_path, &font_size);  // freetype keeps pointing at this, don't free it early
 
     if (!font_data || FT_New_Memory_Face(ft_lib, font_data, (FT_Long)font_size, 0, &ft_face)) {
         free(font_data);
@@ -162,9 +158,6 @@ void text_resize(int w, int h)
     fb_h = h > 0 ? h : 1;
 }
 
-// UTF-8
-
-// reads one code point and advances *s. *s must not point at the terminator.
 static unsigned next_cp(const char** s)
 {
     const unsigned char* p = (const unsigned char*)*s;
@@ -191,10 +184,6 @@ static unsigned next_cp(const char** s)
     return cp;
 }
 
-// rasterizing
-
-// layout shared by the measuring pass and the drawing pass.
-// when pixels is NULL it only measures.
 static void layout(const char* str, unsigned char* pixels, int tex_w, int tex_h,
     int asc, int line_h, int* out_w)
 {
@@ -240,7 +229,7 @@ static void layout(const char* str, unsigned char* pixels, int tex_w, int tex_h,
 
                     unsigned char v = g->bitmap.buffer[row * g->bitmap.pitch + col];
                     unsigned char* d = &pixels[dy * tex_w + dx];
-                    if (v > *d) *d = v;   // overlapping glyphs: keep the brighter one
+                    if (v > *d) *d = v;  // overlapping glyphs: keep the brighter one
                 }
             }
         }
@@ -278,7 +267,7 @@ static int raster(UiText* t)
 
     int w = text_w + TEXT_PAD * 2;
     int h = (lines - 1) * line_h + asc + desc + TEXT_PAD * 2;
-    if (w > TEXT_MAX_W) w = TEXT_MAX_W;
+    if (w > TEXT_MAX_W) w = TEXT_MAX_W;  // ???? really long strings just get cut off
     if (w < 1) w = 1;
     if (h < 1) h = 1;
 
@@ -297,7 +286,7 @@ static int raster(UiText* t)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);   // rows of 1 byte pixels aren't 4 byte aligned
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // 1 byte rows aren't 4 aligned, text comes out skewed without this
     glTexImage2D(GL_TEXTURE_2D, 0, GL_R8, w, h, 0, GL_RED, GL_UNSIGNED_BYTE, pixels);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 
@@ -310,8 +299,6 @@ static int raster(UiText* t)
     return 1;
 }
 
-// public API
-
 void text_set(UiText* t, const char* str)
 {
     if (!ft_face || !t)
@@ -320,7 +307,7 @@ void text_set(UiText* t, const char* str)
     if (!str) str = "";
 
     if (t->str && strcmp(t->str, str) == 0)
-        return;                                   // nothing changed
+        return;
 
     size_t n = strlen(str) + 1;
     char* copy = (char*)malloc(n);
@@ -341,7 +328,6 @@ void text_set(UiText* t, const char* str)
     raster(t);
 }
 
-// size in canvas pixels (what you pass to text_draw), without the padding
 float text_width(const UiText* t)
 {
     return (t && t->tex && t->scale > 0) ? (float)(t->w - TEXT_PAD * 2) / t->scale : 0.0f;
@@ -369,10 +355,9 @@ static void draw_quad(GLuint tex, float x, float y, float w, float h,
 
     glBindTexture(GL_TEXTURE_2D, tex);
     glUniform4f(color_loc, r, g, b, a);
-    glDrawArrays(GL_TRIANGLES, 0, 6);        // the whole string: 2 triangles
+    glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
-// x, y = top left of the text in 640x480 canvas pixels
 void text_draw(UiText* t, float x, float y, float r, float g, float b, float a, int shadow)
 {
     if (!prog || !t || !t->str || !t->str[0])
@@ -380,13 +365,12 @@ void text_draw(UiText* t, float x, float y, float r, float g, float b, float a, 
 
     float scale = ui_scale();
 
-    if (t->scale != scale)                    // window was resized: re-rasterize crisp
+    if (t->scale != scale)
         raster(t);
 
     if (!t->tex)
         return;
 
-    // same centering as ui.c, snapped to whole pixels so glyphs stay sharp
     float origin_x = ((float)fb_w - TEXT_CANVAS_W * scale) * 0.5f;
     float sx = floorf(origin_x + x * scale + 0.5f) - TEXT_PAD;
     float sy = floorf(y * scale + 0.5f) - TEXT_PAD;
@@ -403,7 +387,7 @@ void text_draw(UiText* t, float x, float y, float r, float g, float b, float a, 
     glBindVertexArray(vao);
 
     if (shadow) {
-        float off = floorf(scale + 0.5f);     // 1 canvas pixel
+        float off = floorf(scale + 0.5f);
         if (off < 1.0f) off = 1.0f;
         draw_quad(t->tex, sx + off, sy + off, (float)t->w, (float)t->h,
             r * 0.25f, g * 0.25f, b * 0.25f, a);
@@ -427,15 +411,12 @@ void text_free(UiText* t)
     *t = (UiText){ 0 };
 }
 
-// typing buffer
-
 void textbuf_clear(TextBuf* b)
 {
     b->len = 0;
     b->buf[0] = '\0';
 }
 
-// appends one Unicode code point (from the GLFW char callback) as UTF-8
 void textbuf_add(TextBuf* b, unsigned cp)
 {
     if (cp < 32 || cp == 127)
@@ -469,7 +450,6 @@ void textbuf_add(TextBuf* b, unsigned cp)
     b->buf[b->len] = '\0';
 }
 
-// removes the last character (a whole UTF-8 sequence, not just one byte)
 void textbuf_backspace(TextBuf* b)
 {
     if (b->len <= 0)

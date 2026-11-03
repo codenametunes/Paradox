@@ -12,8 +12,7 @@
 #include "Physics/physics.h"
 #include "Fluid/fluid.h"
 
-#define MAX_BLOCK_TEXTURES MESH_MAX_TEXTURES   // was 64
-
+#define MAX_BLOCK_TEXTURES MESH_MAX_TEXTURES
 
 int snd_break[BLOCK_TYPES][BLOCK_SOUND_VARIANTS];
 int snd_place[BLOCK_TYPES][BLOCK_SOUND_VARIANTS];
@@ -21,7 +20,7 @@ int snd_walk[BLOCK_TYPES][BLOCK_SOUND_VARIANTS];
 int snd_break_n[BLOCK_TYPES];
 int snd_place_n[BLOCK_TYPES];
 int snd_walk_n[BLOCK_TYPES];
-#define TICK_ONLY_MOVEMENT 0   // 1 = old Minecraft stepping, 0 = smooth
+#define TICK_ONLY_MOVEMENT 0
 #define STB_IMAGE_IMPLEMENTATION
 #include "Third Party/stb_image.h"
 static int fb_w = 1280;
@@ -34,22 +33,17 @@ static UiText item_text;
 #define ITEM_NAME_FADE_OUT 0.5f
 #define ITEM_NAME_FADE_IN  0.1f
 
-#define ITEM_NAME_TIME     2.0f   // total seconds the name stays up
-#define ITEM_NAME_FADE_OUT 0.5f   // vanilla: last 10 ticks
-#define ITEM_NAME_FADE_IN  0.1f   // 0 = pops in instantly like vanilla
+#define ITEM_NAME_TIME     2.0f
+#define ITEM_NAME_FADE_OUT 0.5f
+#define ITEM_NAME_FADE_IN  0.1f
 
 #pragma comment(linker, "/SUBSYSTEM:WINDOWS")
 #pragma comment(linker, "/ENTRY:mainCRTStartup")
 
-
-
-
-// shader compiling
-
 static char* load_shader_source(const char* path)
 {
     size_t size = 0;
-    char* source = (char*)asset_read(path, &size);   // already ends with a 0 byte
+    char* source = (char*)asset_read(path, &size);
 
     if (!source)
         fprintf(stderr, "Failed to open shader: %s\n", path);
@@ -91,7 +85,7 @@ static GLuint make_program(
         glGetShaderiv(shaders[i], GL_COMPILE_STATUS, &ok);
 
         if (!ok) {
-            char log[1024];
+            char log[1024]; 
 
             glGetShaderInfoLog(
                 shaders[i], sizeof log, NULL, log
@@ -105,7 +99,7 @@ static GLuint make_program(
 
             glDeleteShader(shaders[i]);
             shaders[i] = 0;
-            goto cleanup;
+            goto cleanup;  // yes a goto, sorry
         }
     }
 
@@ -142,13 +136,6 @@ cleanup:
     return program;
 }
 
-// matrix math
-
-// TEXTURE LOADING
-// Loads a PNG into a GL texture. Nearest filtering keeps the
-// pixels sharp. If the file is missing a 1x1 white texture is
-// used instead so the game still runs.
-
 static GLuint load_texture(const char* path)
 {
     int w, h, channels;
@@ -171,7 +158,6 @@ static GLuint load_texture(const char* path)
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // pixels stay sharp up close (NEAREST), mipmaps stop far away blocks shimmering
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
@@ -186,20 +172,12 @@ static GLuint load_texture(const char* path)
     return tex;
 }
 
-// BLOCK TEXTURES
-//
-// Built from BLOCK_DEFINITIONS (blocks.h). Every distinct file is loaded once
-// no matter how many blocks/faces use it, and each one gets its own mesh per
-// chunk, so textures of any size can be mixed and new blocks need no changes
-// here.
-
 #define MAX_BLOCK_TEXTURES 64
 
 static const char* tex_path[MAX_BLOCK_TEXTURES];
 static GLuint      tex_id[MAX_BLOCK_TEXTURES];
 static int         tex_count = 0;
 
-// [type][face] -> index into tex_id, -1 = no texture
 static int block_face_tex[BLOCK_TYPES][BLOCK_FACE_COUNT];
 
 static int texture_index(const char* path)
@@ -223,7 +201,6 @@ static int texture_index(const char* path)
     return tex_count++;
 }
 
-// path is relative to the working directory
 static void load_block_textures(void)
 {
     for (int type = 0; type < BLOCK_TYPES; type++)
@@ -231,7 +208,6 @@ static void load_block_textures(void)
             block_face_tex[type][face] = texture_index(BLOCK_DEFINITIONS[type].texture[face]);
 }
 
-// GL texture of one face of a block (0 = none)
 static GLuint block_texture(int type, int face)
 {
     if (type < 0 || type >= BLOCK_TYPES || face < 0 || face >= BLOCK_FACE_COUNT)
@@ -244,7 +220,7 @@ static GLuint block_texture(int type, int face)
 
 static void make_block_outline(int x, int y, int z, float* out)
 {
-    const float e = 0.003f; // tiny expansion prevents z-fighting
+    const float e = 0.003f;
     const float x0 = (float)x - e, x1 = (float)x + 1.0f + e;
     const float y0 = (float)y - e, y1 = (float)y + 1.0f + e;
     const float z0 = (float)z - e, z1 = (float)z + 1.0f + e;
@@ -265,36 +241,21 @@ static void make_block_outline(int x, int y, int z, float* out)
     }
 }
 
-// does the block (x,y,z) overlap the box? touching doesn't count
-
-// BLOCK BREAKING PARTICLES
-//
-// Same behaviour as Minecraft Java's digging particles:
-//   - 4 x 4 x 4 = 64 particles per block, on a grid inside the block
-//   - each one flies outward from the block centre with random jitter,
-//     speed normalised to 0.06 .. 0.18 blocks/tick plus 0.1 upward
-//   - lives 4 / (0.1 .. 1.0) ticks (0.2 s up to 2 s), never shrinks
-//   - 0.2 x 0.2 x 0.2 hitbox, drawn 0.1 .. 0.2 blocks wide
-//   - each shows a random 4x4 pixel patch of the block texture, tinted 0.6
-//   - physics at 20 ticks per second:
-//       vy -= 0.04, move (y, x, z), v *= 0.98, on ground vx,vz *= 0.7
-//     (no bouncing, particles just land)
-
 #define MAX_PARTICLES          2048
-#define PARTICLE_HALF_BOX      0.1       // hitbox half width (0.2 wide)
+#define PARTICLE_HALF_BOX      0.1
 #define PARTICLE_GRAVITY       0.04
 #define PARTICLE_DRAG          0.98
 #define PARTICLE_GROUND_DRAG   0.7
 #define PARTICLE_TINT          0.6f
 
 typedef struct {
-    double x, y, z;          // centre of the particle
-    double px, py, pz;       // position one tick ago, for interpolation
-    double vx, vy, vz;       // blocks per tick
-    int    age, life;        // in ticks
+    double x, y, z;
+    double px, py, pz;
+    double vx, vy, vz;
+    int    age, life;
     int    on_ground;
     int    alive;
-    float  scale;            // 0.5 .. 1.0, half size on screen = 0.1 * scale
+    float  scale;
     float  u0, v0, u1, v1;
     GLuint texture;
 } BlockParticle;
@@ -305,7 +266,6 @@ static int particle_cursor = 0;
 static GLuint particle_vao = 0;
 static GLuint particle_vbo = 0;
 
-// large buffers belong outside the stack
 static float  particle_vertices[MAX_PARTICLES * 6 * 6];
 static GLuint particle_tex[MAX_PARTICLES];
 
@@ -315,7 +275,6 @@ static float random_float(float min, float max)
         ((float)rand() / (float)RAND_MAX);
 }
 
-// brightness 0..1 at a point: world light (sky + blocks) or the L light, whichever is brighter
 static float entity_light_at(double x, double y, double z)
 {
     float l = lighting_brightness_at(x, y, z);
@@ -353,7 +312,6 @@ static void spawn_block_particles(int bx, int by, int bz, int type)
                 p->py = p->y;
                 p->pz = p->z;
 
-                // outward from the block centre, plus random jitter
                 double mx = (ox - 0.5) + random_float(-1.0f, 1.0f) * 0.4;
                 double my = (oy - 0.5) + random_float(-1.0f, 1.0f) * 0.4;
                 double mz = (oz - 0.5) + random_float(-1.0f, 1.0f) * 0.4;
@@ -373,7 +331,6 @@ static void spawn_block_particles(int bx, int by, int bz, int type)
                 p->life = (int)(4.0f / (random_float(0.0f, 1.0f) * 0.9f + 0.1f));
                 p->scale = random_float(0.0f, 1.0f) * 0.5f + 0.5f;
 
-                // a random 4x4 pixel patch (1/4 of the texture) of the block
                 p->u0 = random_float(0.0f, 3.0f) / 4.0f;
                 p->v0 = random_float(0.0f, 3.0f) / 4.0f;
                 p->u1 = p->u0 + 0.25f;
@@ -385,8 +342,6 @@ static void spawn_block_particles(int bx, int by, int bz, int type)
         }
     }
 }
-
-// moves the particle and stops it at solid blocks (y first, then x, then z)
 
 static void particle_move(BlockParticle* p, double dx, double dy, double dz)
 {
@@ -416,8 +371,6 @@ static void particle_move(BlockParticle* p, double dx, double dy, double dz)
     if (ody != dy) p->vy = 0.0;
     if (odz != dz) p->vz = 0.0;
 }
-
-// one 20 Hz tick
 
 static void tick_block_particles(void)
 {
@@ -451,8 +404,6 @@ static void tick_block_particles(void)
     }
 }
 
-
-
 static void init_block_particles(void)
 {
     glGenVertexArrays(1, &particle_vao);
@@ -461,7 +412,6 @@ static void init_block_particles(void)
     glBindVertexArray(particle_vao);
     glBindBuffer(GL_ARRAY_BUFFER, particle_vbo);
 
-    // six vertices per particle, each: position(3), uv(2), shade(1)
     glBufferData(
         GL_ARRAY_BUFFER,
         MAX_PARTICLES * 6 * 6 * sizeof(float),
@@ -482,8 +432,6 @@ static void init_block_particles(void)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-// camera facing billboards, alpha (0..1) interpolates between the last two ticks
-
 static void draw_block_particles(
     const float* vp,
     const float* dir,
@@ -501,7 +449,6 @@ static void draw_block_particles(
     right[0] /= len;
     right[2] /= len;
 
-    // up = right cross forward
     float up[3] = {
         -dir[1] * right[2],
         -dir[2] * right[0] + dir[0] * right[2],
@@ -522,7 +469,7 @@ static void draw_block_particles(
         float cy = (float)(p->py + (p->y - p->py) * alpha);
         float cz = (float)(p->pz + (p->z - p->pz) * alpha);
 
-        float s = 0.1f * p->scale;      // half size, particles don't shrink
+        float s = 0.1f * p->scale;
         float shade = PARTICLE_TINT * entity_light_at(cx, cy, cz);
 
         float rx = right[0] * s, ry = right[1] * s, rz = right[2] * s;
@@ -574,7 +521,6 @@ static void draw_block_particles(
         particle_vertices
     );
 
-    // one draw call per run of particles that share a texture
     int start = 0;
 
     for (int j = 1; j <= count; j++) {
@@ -589,24 +535,13 @@ static void draw_block_particles(
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-// SOUNDS
-//
-// every block type has its own break / place / walk sound (see blocks.h).
-// footsteps follow Minecraft: a step every ~1.67 blocks walked (distance * 0.6
-// passes the next whole number), none while sneaking or flying, and they are
-// much quieter than breaking.
-
-#define STEP_GAIN   0.2f    // Minecraft: steps are 0.15 volume, breaking 1.0
-
+#define STEP_GAIN   0.2f
 
 static int file_exists(const char* path)
 {
     return audio_exists(path);
 }
 
-// loads `path`; if the block has none or the file doesn't exist, stone's
-// sound is used instead so a new block is never silent
-// loads every variant that exists; if none do, uses the fallback set (stone)
 static int load_variants(int* out, const char* const* paths,
     const char* const* fallback, float gain)
 {
@@ -658,55 +593,38 @@ static void load_block_sounds(void)
     }
 }
 
-// window, camera and input state
-
-// creative mode reach
 #define REACH 5.0f
 
-// holding a mouse button repeats the action (creative: break 5 ticks, place 4)
 #define BREAK_REPEAT_TICKS 5
 #define PLACE_REPEAT_TICKS 4
 
-// 1 = vsync on (Minecraft default), 0 = uncapped framerate
 #define VSYNC 0
 
-static int break_requested = 0;     // a fresh click this frame
+static int break_requested = 0;
 static int place_requested = 0;
 
-static int wireframe_mode = 0; // F4 toggles the whole scene between filled and wireframe
-static int entity_debug = 0;   // F6
+static int wireframe_mode = 0;
+static int entity_debug = 0;
 
-static int break_cooldown = 0;      // ticks until holding repeats
+static int break_cooldown = 0;
 static int place_cooldown = 0;
-
-// HOTBAR
-//
-// Each slot holds the block it places. BLOCK_AIR is an empty slot: the bare
-// arm is shown and right click does nothing. The held block and the hotbar
-// icons are both read from this table + hotbar_sel.
 
 #define HOTBAR_SLOTS UI_HOTBAR_SLOTS
 
-// 1 = the item name pops up above the hotbar when you switch slots
 #define SHOW_ITEM_NAME 0
 
-// Slots can also hold non-block items (ITEM_* ids, main.h). Those are only
-// shown for now: they can't be placed.
 static int hotbar_blocks[HOTBAR_SLOTS] = {
     BLOCK_STONE, BLOCK_GRASS, BLOCK_SAND, BLOCK_DIRT, BLOCK_PLANKS,
     BLOCK_LOG, BLOCK_LEAVES, BLOCK_GLASS, ITEM_DIAMOND_SWORD
 };
 
-// sprite of the diamond sword, used by the hotbar icon and the held model
 static GLuint sword_tex = 0;
 
-// flat sprite for non-block items (0 = none)
 static GLuint item_sprite(int id)
 {
     return id == ITEM_DIAMOND_SWORD ? sword_tex : 0;
 }
 
-// how the inventory menu draws an item id
 static void menu_item_info(int id, UiItem* out)
 {
     out->top = block_texture(id, BLOCK_FACE_TOP);
@@ -721,22 +639,14 @@ static int held_block(void)
     return hotbar_blocks[hotbar_sel];
 }
 
-// selects a slot and tells the hand (the old item lowers, the new one rises)
 static void select_slot(int slot)
 {
     if (slot < 0 || slot >= HOTBAR_SLOTS)
         return;
 
     hotbar_sel = slot;
-    hand_select(held_block());   // hand item 0 = empty arm, otherwise a block id
+    hand_select(held_block());
 }
-
-// GAME MODES / SURVIVAL
-//
-// Survival keeps its own hotbar with stack sizes (surv_id / surv_cnt). hotbar_blocks
-// (the array the hand, the hotbar icons and the creative inventory read) is just a
-// view of it: an empty slot shows as BLOCK_AIR. Creative keeps its own hotbar and the
-// two are swapped by F10. Survival has no 36 slot inventory / crafting yet.
 
 #define STACK_MAX 64
 
@@ -745,12 +655,11 @@ static int surv_cnt[HOTBAR_SLOTS];
 static int creative_hotbar[HOTBAR_SLOTS];
 static int mode_inited = 0;
 
-// mining state (survival)
 static int   mine_active = 0;
 static int   mine_pos[3];
 static int   mine_type = 0;
 static int   mine_held = -1;
-static float mine_progress = 0.0f;       // 0..1, the crack stage is (int)(progress * 10)
+static float mine_progress = 0.0f;
 static float mine_sound_ticks = 0.0f;
 
 static void sync_survival_hotbar(void)
@@ -759,7 +668,6 @@ static void sync_survival_hotbar(void)
         hotbar_blocks[i] = surv_cnt[i] > 0 ? surv_id[i] : BLOCK_AIR;
 }
 
-// the pickup callback for dropped items: returns how many were taken
 static int survival_take(int id, int count)
 {
     if (id <= BLOCK_AIR || count <= 0)
@@ -804,7 +712,6 @@ static void survival_consume_held(void)
     select_slot(hotbar_sel);
 }
 
-// everything in the hotbar falls out when you die (pickup delay 40 ticks)
 static void survival_drop_all(void)
 {
     for (int i = 0; i < HOTBAR_SLOTS; i++) {
@@ -821,13 +728,11 @@ static void survival_drop_all(void)
     select_slot(hotbar_sel);
 }
 
-// Release 1.0: 4 blocks in survival, 5 in creative
 static float cur_reach(void)
 {
     return game_mode == MODE_CREATIVE ? 5.0f : 4.0f;
 }
 
-// block hardness (Block.setHardness), -1 = can't be mined
 static float block_hardness(int id)
 {
     switch (id) {
@@ -841,20 +746,15 @@ static float block_hardness(int id)
     case BLOCK_GLASS:   return 0.3f;
     case BLOCK_BRICK:   return 2.0f;
     case BLOCK_SNOW:    return 0.2f;
-    default:            return -1.0f;     // air, bedrock, water
+    default:            return -1.0f;
     }
 }
 
-// blocks that need the right tool: mining them without it is 100 / 30 times slower
-// (rock, bricks, snow). There are no pickaxes / shovels yet, so everything is "without".
 static int block_needs_tool(int id)
 {
     return id == BLOCK_STONE || id == BLOCK_BRICK || id == BLOCK_SNOW;
 }
 
-// what a broken block drops. Vanilla: grass gives dirt, glass and leaves give nothing.
-// (Stone would give cobblestone and needs a pickaxe, but neither exists here, so it
-// drops itself.)
 static int block_drop(int id)
 {
     switch (id) {
@@ -871,7 +771,7 @@ static void set_game_mode(GameMode m)
         return;
 
     if (!mode_inited)
-        memcpy(creative_hotbar, hotbar_blocks, sizeof creative_hotbar);   // the default creative bar
+        memcpy(creative_hotbar, hotbar_blocks, sizeof creative_hotbar);
     else if (game_mode == MODE_CREATIVE)
         memcpy(creative_hotbar, hotbar_blocks, sizeof creative_hotbar);
 
@@ -898,13 +798,6 @@ static void set_game_mode(GameMode m)
     menus_set_inventory_enabled(m == MODE_CREATIVE);
     select_slot(hotbar_sel);
 }
-
-// BLOCK BREAKING OVERLAY
-//
-// Breaking.png is a strip of 10 frames (160 x 16). The frame is drawn over the block
-// with the vanilla 1.0 blend (src * dst * 2), so the dark pixels darken and the light
-// ones brighten the block, and the near transparent background (alpha 1/255) is
-// discarded.
 
 static GLuint crack_tex = 0, crack_prog = 0, crack_vao = 0, crack_vbo = 0;
 static GLint  crack_vp_loc = -1;
@@ -958,7 +851,7 @@ static void crack_init(void)
     crack_vp_loc = glGetUniformLocation(crack_prog, "vp");
 
     crack_tex = load_texture("assets/textures/Breaking.png");
-    glBindTexture(GL_TEXTURE_2D, crack_tex);       // no mipmaps: they would mix the frames
+    glBindTexture(GL_TEXTURE_2D, crack_tex);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -995,18 +888,18 @@ static void crack_draw(const float* vp, const int* pos, int stage)
     if (stage < 0) stage = 0;
     if (stage > 9) stage = 9;
 
-    const float e = 0.003f;            // just outside the block, no z-fighting
+    const float e = 0.003f;
     const float x0 = pos[0] - e, x1 = pos[0] + 1.0f + e;
     const float y0 = pos[1] - e, y1 = pos[1] + 1.0f + e;
     const float z0 = pos[2] - e, z1 = pos[2] + 1.0f + e;
 
     const float c[6][4][3] = {
-        { {x0,y0,z1},{x1,y0,z1},{x1,y1,z1},{x0,y1,z1} },   // +Z
-        { {x1,y0,z0},{x0,y0,z0},{x0,y1,z0},{x1,y1,z0} },   // -Z
-        { {x0,y0,z0},{x0,y0,z1},{x0,y1,z1},{x0,y1,z0} },   // -X
-        { {x1,y0,z1},{x1,y0,z0},{x1,y1,z0},{x1,y1,z1} },   // +X
-        { {x0,y1,z1},{x1,y1,z1},{x1,y1,z0},{x0,y1,z0} },   // +Y
-        { {x0,y0,z0},{x1,y0,z0},{x1,y0,z1},{x0,y0,z1} },   // -Y
+        { {x0,y0,z1},{x1,y0,z1},{x1,y1,z1},{x0,y1,z1} },
+        { {x1,y0,z0},{x0,y0,z0},{x0,y1,z0},{x1,y1,z0} },
+        { {x0,y0,z0},{x0,y0,z1},{x0,y1,z1},{x0,y1,z0} },
+        { {x1,y0,z1},{x1,y0,z0},{x1,y1,z0},{x1,y1,z1} },
+        { {x0,y1,z1},{x1,y1,z1},{x1,y1,z0},{x0,y1,z0} },
+        { {x0,y0,z0},{x1,y0,z0},{x1,y0,z1},{x0,y0,z1} },
     };
 
     const float u0 = stage / 10.0f, u1 = (stage + 1) / 10.0f;
@@ -1070,7 +963,7 @@ static void on_click(GLFWwindow* window, int button, int action, int mods)
     (void)window;
     (void)mods;
 
-    menus_mouse(button, action);   // creative inventory clicks
+    menus_mouse(button, action);
 
     if (menus_open())
         return;
@@ -1082,15 +975,13 @@ static void on_click(GLFWwindow* window, int button, int action, int mods)
         place_requested = 1;
 }
 
-// mouse wheel changes the selected slot (scroll up = left, like Minecraft)
-
 static void on_scroll(GLFWwindow* window, double xoffset, double yoffset)
 {
     (void)window;
     (void)xoffset;
 
     if (menus_open()) {
-        menus_scroll(yoffset);   // inventory: scroll the item list
+        menus_scroll(yoffset);
         return;
     }
 
@@ -1100,10 +991,6 @@ static void on_scroll(GLFWwindow* window, double xoffset, double yoffset)
         select_slot((hotbar_sel + 1) % HOTBAR_SLOTS);
 }
 
-// The camera turns on every mouse event. While a menu is open the cursor is
-// free, so we still feed the event to the camera (it keeps its last mouse
-// position up to date, no jump when the menu closes) and then put the view
-// back to where it was when the menu opened.
 static void on_mouse(GLFWwindow* window, double x, double y)
 {
     static float held_yaw = 0.0f, held_pitch = 0.0f;
@@ -1130,15 +1017,10 @@ static void on_key(GLFWwindow* window, int key, int scancode, int action, int mo
     (void)scancode;
     (void)mods;
 
-    // Esc = pause, E = inventory (menus.c)
     menus_key(key, action);
-
-    // F11 works everywhere, even inside a menu
-    // (handled at the bottom)
 
     int in_menu = menus_open();
 
-    // number keys 1-9 pick a slot
     if (!in_menu && action == GLFW_PRESS && key >= GLFW_KEY_1 && key < GLFW_KEY_1 + HOTBAR_SLOTS)
         select_slot(key - GLFW_KEY_1);
 
@@ -1160,7 +1042,7 @@ static void on_key(GLFWwindow* window, int key, int scancode, int action, int mo
     }
 
     if (!in_menu && key == GLFW_KEY_L && action == GLFW_PRESS)
-        lighting_toggle_player_light();   // you become a light source (radius LIGHT_PLAYER_RADIUS)
+        lighting_toggle_player_light();
 
     if (!in_menu && key == GLFW_KEY_G && action == GLFW_PRESS) {
         float r = yaw * PI / 180.0f;
@@ -1192,17 +1074,15 @@ static void on_key(GLFWwindow* window, int key, int scancode, int action, int mo
     }
 }
 
-// main
 static void APIENTRY gl_dbg(GLenum s, GLenum t, GLuint id, GLenum sev, GLsizei l, const GLchar* m, const void* u)
 {
     fprintf(stderr, "GL: %s\n", m);
     if (t == GL_DEBUG_TYPE_ERROR) __debugbreak();
 }
-static BodyTurn player_body;   // third person body yaw (head turns first, body follows)
+static BodyTurn player_body;
 
 int main(void)
 {
-    //FreeConsole();
     if (!glfwInit()) {
         fprintf(stderr, "Failed to initialize GLFW\n");
         return 1;
@@ -1244,7 +1124,6 @@ int main(void)
     glViewport(0, 0, fb_w, fb_h);
     camera_set_viewport(fb_w, fb_h);
 
-    // render state
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
     glDepthMask(GL_TRUE);
@@ -1255,7 +1134,6 @@ int main(void)
 
     glClearColor(0.47f, 0.65f, 1.0f, 1.0f);
 
-    // shaders
     GLuint cube_prog = make_program("cube", "assets/shaders/cube.vert", "assets/shaders/cube.frag");
     GLuint chunk_prog = make_program("chunk", "assets/shaders/chunk.vert", "assets/shaders/chunk.frag");
     if (!cube_prog) {
@@ -1291,26 +1169,21 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     GLint outline_vp_loc = glGetUniformLocation(outline_prog, "vp");
 
-    // ui (hotbar + reticle)
     if (!ui_init("assets/textures/Reticle.png"))
         fprintf(stderr, "UI disabled (shader failed)\n");
     ui_resize(fb_w, fb_h);
 
-    // text (FPS / triangle counter)
     if (!text_init("assets/fonts/Font1.ttf", 16))
         MessageBoxA(NULL, "text_init failed (FreeType or font)", "Paradox", MB_OK);
     text_resize(fb_w, fb_h);
     text_set(&fps_text, "FPS");
 
-    // pause menu (Esc) + creative inventory (E)
     if (!menus_init(window, "assets/textures/ui/allitems.png"))
         fprintf(stderr, "Menus: overlay disabled (shader failed)\n");
     menus_set_hotbar(hotbar_blocks, HOTBAR_SLOTS, menu_item_info);
 
-    // first person hand (Steve skin)
     hand_init("assets/textures/Steve.png");
 
-    // textures, from the block definitions
     if (!blocks_validate())
         fprintf(stderr, "blocks.h has a bad entry, see above\n");
 
@@ -1323,37 +1196,34 @@ int main(void)
         MessageBoxA(NULL, "sky_init failed (shader)", "Sky", MB_OK);
     sky_set_render_distance(RENDER_DISTANCE);
     fog_set_render_distance(RENDER_DISTANCE);
-    // diamond sword
     sword_tex = load_texture("assets/textures/diamond_sword.png");
     hand_load_sword("assets/textures/diamond_sword.png");
     crack_init();
 
     select_slot(hotbar_sel);
 
-    // sound
     audio_init();
     audio_set_master(1.0f);
     load_block_sounds();
 
     MOB_STEVE.init();
 
-    chunk_generator_set_seed((uint32_t)time(NULL));   // or a fixed number for a repeatable world
+    chunk_generator_set_seed((uint32_t)time(NULL));
     world_init();
     player_reset(&player);
-    world_load_around(player.x, player.z);   // loads the player's own chunk first
+    world_load_around(player.x, player.z);
     player.y = player.py = (double)world_spawn_height((int)floor(player.x), (int)floor(player.z));
     player.vy = 0.0;
 
-    set_game_mode(MODE_SURVIVAL);   // default mode
+    set_game_mode(MODE_SURVIVAL);
     glfwSetWindowTitle(window, "Paradox - Survival Mode");
 
-    // main loop
     double last_time = glfwGetTime();
     double fps_timer = last_time;
     double tick_acc = 0.0;
 
     int frame_count = 0;
-    int   last_sel = hotbar_sel;   // so nothing shows at startup
+    int   last_sel = hotbar_sel;
     float item_timer = 0.0f;
     int fps_shown = 0;
     int death_handled = 0;
@@ -1364,7 +1234,6 @@ int main(void)
         float dt = (float)(now - last_time);
         last_time = now;
 
-        // fps counter
         frame_count++;
 
         if (now - fps_timer >= 1) {
@@ -1376,8 +1245,6 @@ int main(void)
         if (dt > 0.1f)
             dt = 0.1f;
 
-        // only the pause menu freezes the world (no ticks, no animation time).
-        // The inventory leaves it running, it only takes over mouse and clicks.
         int   paused = menus_paused();
         float gdt = paused ? 0.0f : dt;
 
@@ -1415,7 +1282,6 @@ int main(void)
         if (tick_acc >= TICK_TIME)
             tick_acc = 0.0;
 
-        // death: drop the hotbar, show the "You died!" screen
         if (player.dead && !death_handled) {
             death_handled = 1;
             mine_active = 0;
@@ -1424,7 +1290,6 @@ int main(void)
             menus_show_death();
         }
 
-        // Respawn button
         if (menus_take_respawn()) {
             player_reset(&player);
             world_load_around(player.x, player.z);
@@ -1441,7 +1306,6 @@ int main(void)
 
         camera_set_fov_modifier(player_fov_modifier(&player, alpha));
 
-        // cam matrices
         float dir[3];
         camera_direction(dir);
 
@@ -1461,11 +1325,10 @@ int main(void)
         mat_mul(bobbed, bobm, view);
         mat_mul(vp, proj, bobbed);
 
-        // block breaking / placing
         int left_held = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS;
         int right_held = glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS;
 
-        if (menus_open()) {   // clicks belong to the menu, not the world
+        if (menus_open()) {
             left_held = right_held = 0;
             break_requested = place_requested = 0;
         }
@@ -1478,15 +1341,14 @@ int main(void)
 
         if (break_requested && npc_attack(cam_pos, dir, 6.0f, player.x, player.z, 1.0f)) {
             do_break = 0;
-            break_cooldown = BREAK_REPEAT_TICKS;   // holding the button must not break the block behind him
+            break_cooldown = BREAK_REPEAT_TICKS;
         }
-        if (do_break && npc_aimed(cam_pos, dir, 6.0f)) do_break = 0;   // never break blocks through a mob
+        if (do_break && npc_aimed(cam_pos, dir, 6.0f)) do_break = 0;
         if (break_requested) hand_swing();
 
         break_requested = 0;
         place_requested = 0;
 
-        // SURVIVAL: hold the button, the block cracks (frames 0..9) until it breaks
         if (game_mode == MODE_SURVIVAL && !player.dead) {
             int hit[3];
             int prev[3];
@@ -1501,7 +1363,6 @@ int main(void)
                 if (block_definition(t)->breakable && hard >= 0.0f) {
                     mining = 1;
 
-                    // a different block / item restarts the progress
                     if (!mine_active || t != mine_type || mine_held != held_block() ||
                         hit[0] != mine_pos[0] || hit[1] != mine_pos[1] || hit[2] != mine_pos[2]) {
                         mine_active = 1;
@@ -1515,9 +1376,6 @@ int main(void)
                     if (break_cooldown == 0) {
                         float ticks = gdt * 20.0f;
 
-                        // EntityPlayer.getCurrentPlayerStrVsBlock: sword 1.5, bare hand 1,
-                        // 5 times slower in the air. Block.blockStrength: str / hardness / 30
-                        // (100 when the right tool is missing)
                         float str = (mine_held == ITEM_DIAMOND_SWORD) ? 1.5f : 1.0f;
                         if (!player.on_ground) str /= 5.0f;
 
@@ -1526,7 +1384,6 @@ int main(void)
 
                         mine_progress += rate * ticks;
 
-                        // hit sound every 4 ticks while mining
                         mine_sound_ticks -= ticks;
                         if (mine_sound_ticks <= 0.0f) {
                             audio_play_3d(snd_pick(snd_walk[t], snd_walk_n[t]),
@@ -1541,7 +1398,6 @@ int main(void)
                             audio_play_3d(snd_pick(snd_break[t], snd_break_n[t]),
                                 hit[0] + 0.5, hit[1] + 0.5, hit[2] + 0.5, 1.0f);
 
-                            // the drop pops out of the block (EntityItem: 0.2 up, small sideways kick)
                             int drop = block_drop(t);
                             if (drop != BLOCK_AIR)
                                 physics_spawn_item(drop, 1,
@@ -1552,7 +1408,7 @@ int main(void)
                                     random_float(-1.0f, 1.0f) * 0.1, 10);
 
                             player_add_exhaustion(0.025f);
-                            break_cooldown = BREAK_REPEAT_TICKS;   // 5 tick delay before the next block
+                            break_cooldown = BREAK_REPEAT_TICKS;
                             player_quiet_steps(4);
 
                             mine_active = 0;
@@ -1615,9 +1471,6 @@ int main(void)
                     survival_consume_held();
             }
 
-            // nothing could be placed (inside the player, out of reach, out of the
-            // world): the item dips down and rises again, and the click still
-            // costs the 4 tick right click delay so holding it doesn't spam
             if (!placed) {
                 hand_reject();
                 place_cooldown = PLACE_REPEAT_TICKS;
@@ -1632,10 +1485,9 @@ int main(void)
 
         if (left_held && has_target) hand_swing();
 
-        // draw
         {
             float fog_rgb[3];
-            sky_get_fog_color(vdir, fog_rgb);   // vanilla clears to the fog colour
+            sky_get_fog_color(vdir, fog_rgb);
             fog_set_color(fog_rgb);
             glClearColor(fog_rgb[0], fog_rgb[1], fog_rgb[2], 1.0f);
         }
@@ -1643,13 +1495,13 @@ int main(void)
 
         glPolygonMode(GL_FRONT_AND_BACK, wireframe_mode ? GL_LINE : GL_FILL);
 
-        sky_draw(vp, cpos, vdir);  // sun, moon, stars
+        sky_draw(vp, cpos, vdir);
 
         fog_apply(chunk_prog);
         long tri_count = world_draw(vp, cpos, chunk_prog, tex_id, tex_count);
         physics_draw(vp, alpha, tex_id);
         fluid_draw(vp, cpos);
-        fog_apply(cube_prog);   // also does glUseProgram(cube_prog)
+        fog_apply(cube_prog);
         glUniformMatrix4fv(vp_loc, 1, GL_FALSE, vp);
         glUniform1i(tex_loc, 0);
         draw_block_particles(vp, dir, cube_prog, vp_loc, alpha);
@@ -1657,7 +1509,6 @@ int main(void)
         sky_draw_clouds(vp, cpos);
         glUseProgram(cube_prog);
 
-        // thin black wireframe around the targeted block
         if (has_target) {
             float outline_vertices[24 * 3];
             make_block_outline(target_hit[0], target_hit[1], target_hit[2], outline_vertices);
@@ -1676,7 +1527,6 @@ int main(void)
             glUseProgram(cube_prog);
         }
 
-        // the cracks on the block being mined
         if (game_mode == MODE_SURVIVAL && mine_active && mine_progress > 0.0f) {
             crack_draw(vp, mine_pos, (int)(mine_progress * 10.0f));
             glUseProgram(cube_prog);
@@ -1706,9 +1556,7 @@ int main(void)
                 player_walk_pos((float)alpha), player_walk_speed((float)alpha),
                 player.sneaking
             };
-            // body lags behind the head, the head turns on its own (see bodyturn_tick)
             bodyturn_get(&player_body, yaw, (float)alpha, &ms.yaw, &ms.head_turn);
-            // the item the hand is showing (same swap timing as the first person hand)
             hand_fill_held(&ms, held_tex);
             MOB_STEVE.draw(&ms, vp);
         }
@@ -1728,17 +1576,14 @@ int main(void)
             hand_draw(alpha, yaw, pitch, view, fb_w, fb_h, held_tex);
         }
 
-        // the inventory edited the hotbar: refresh the held item
         if (menus_hotbar_dirty())
             select_slot(hotbar_sel);
 
-        // inside water / lava: tinted overlay over the world, under the HUD
         if (view_mode == 0) {
             if (player.head_water)     fluid_draw_overlay(0, yaw, pitch, fb_w, fb_h);
             else if (player.head_lava) fluid_draw_overlay(1, yaw, pitch, fb_w, fb_h);
         }
 
-        // hotbar
         UiItem hotbar_items[HOTBAR_SLOTS];
 
         for (int i = 0; i < HOTBAR_SLOTS; i++) {
@@ -1748,7 +1593,6 @@ int main(void)
         }
 
         if (game_mode == MODE_SURVIVAL) {
-            // bubbles: Minecraft shows ceil((air - 2) * 10 / 300) of them while under water
             int bubbles = (int)ceilf((float)(player.air - 2) * 10.0f / (float)PLAYER_MAX_AIR);
             if (bubbles < 0) bubbles = 0;
             if (bubbles > 10) bubbles = 10;
@@ -1761,7 +1605,6 @@ int main(void)
 
         ui_draw(hotbar_items, HOTBAR_SLOTS, hotbar_sel);
 
-        // FPS + triangle counter, top left of the window
         char hud[64];
         snprintf(hud, sizeof hud, "%d FPS  %ld tris", fps_shown, tri_count);
         text_set(&fps_text, hud);
@@ -1769,7 +1612,6 @@ int main(void)
         float ui_s = (float)fb_h / 480.0f;
         float left = -((float)fb_w - 640.0f * ui_s) * 0.5f / ui_s;
         text_draw(&fps_text, left + 4.0f, 4.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1);
-        // item name above the hotbar
         if (hotbar_sel != last_sel) {
             last_sel = hotbar_sel;
 
@@ -1786,10 +1628,10 @@ int main(void)
         if (item_timer > 0.0f) {
             item_timer -= gdt;
 
-            float a = item_timer / ITEM_NAME_FADE_OUT;            // fade out
+            float a = item_timer / ITEM_NAME_FADE_OUT;
             if (ITEM_NAME_FADE_IN > 0.0f) {
                 float fi = (ITEM_NAME_TIME - item_timer) / ITEM_NAME_FADE_IN;
-                if (fi < a) a = fi;                               // fade in
+                if (fi < a) a = fi;
             }
             if (a > 1.0f) a = 1.0f;
             if (a < 0.0f) a = 0.0f;
@@ -1799,13 +1641,12 @@ int main(void)
             text_draw(&item_text, x, y, 1.0f, 1.0f, 1.0f, a, 1);
         }
 
-        menus_draw();   // dark overlay + pause text / inventory, on top of everything
+        menus_draw();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // cleanup
     world_shutdown();
     lighting_shutdown();
     sky_shutdown();

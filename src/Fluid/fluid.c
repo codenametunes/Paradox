@@ -2,13 +2,11 @@
 #include "Chunk Generation/chunkGenerator.h"
 #include "Chunk Generation/chunkManager.h"
 
-/* ------------------------------------------------------------ tuning */
-
 enum { K_WATER = 0, K_LAVA = 1 };
 
 static const int KIND_BLOCK[2] = { BLOCK_WATER, BLOCK_LAVA };
-static const int KIND_DELAY[2] = { 5, 30 };     /* game ticks between updates */
-static const int KIND_DECAY[2] = { 1, 2 };      /* level lost per block: water 7 blocks, lava 3 */
+static const int KIND_DELAY[2] = { 5, 30 };
+static const int KIND_DECAY[2] = { 1, 2 };
 static const float KIND_ALPHA[2] = { 0.70f, 1.0f };
 
 #define MAP_BITS            19
@@ -16,17 +14,13 @@ static const float KIND_ALPHA[2] = { 0.70f, 1.0f };
 #define MAP_MASK            (MAP_SIZE - 1)
 #define QUEUE_CAP           (1 << 16)
 #define MAX_EVENTS_PER_TICK 4096
-#define DRAW_RADIUS         96            /* blocks around the camera that get meshed */
-#define MAX_VERTS           (1 << 18)     /* per fluid kind */
+#define DRAW_RADIUS         96
+#define MAX_VERTS           (1 << 18)
 
-/* Fluids.png is 48x64 (16x16 tiles). Rects are in UV space, textures are loaded flipped.
-   water tile = column 1 / row 0, lava tile = column 1 / row 2. Change here if you want other tiles. */
 static const float TILE_MIN[2][2] = { { 16.0f / 48.0f, 1.0f - 16.0f / 64.0f },
                                        { 16.0f / 48.0f, 1.0f - 48.0f / 64.0f } };
 static const float TILE_SIZE[2][2] = { { 16.0f / 48.0f, 16.0f / 64.0f },
                                        { 16.0f / 48.0f, 16.0f / 64.0f } };
-
-/* ------------------------------------------------------------ cell table */
 
 typedef struct { int x, y, z; unsigned char used, kind, meta, pending; } Cell;
 
@@ -65,13 +59,12 @@ static Cell* insert(int x, int y, int z, int kind, int meta)
     return c;
 }
 
-/* linear probing with backward shift: pointers into the table are invalid afterwards */
 static void erase(Cell* c)
 {
     unsigned i = (unsigned)(c - map), j = i;
     map[i].used = 0;
     cell_count--;
-    for (;;) {
+    for (;;) {  // runs until the break, ???? the fuck bro
         j = (j + 1) & MAP_MASK;
         if (!map[j].used) break;
         unsigned k = hash3(map[j].x, map[j].y, map[j].z);
@@ -84,12 +77,10 @@ static void erase(Cell* c)
 
 int fluid_count(void) { return cell_count; }
 
-/* ------------------------------------------------------- scheduled ticks */
-
 typedef struct { int x, y, z; unsigned due; } Ev;
 typedef struct { Ev* a; unsigned head, tail; } Queue;
 
-static Queue    queues[2];      /* constant delay per kind => FIFO is already sorted by due time */
+static Queue    queues[2];
 static unsigned now_tick;
 
 static void schedule(int x, int y, int z)
@@ -110,8 +101,6 @@ static void notify_neighbours(int x, int y, int z)
     schedule(x, y + 1, z); schedule(x, y - 1, z);
 }
 
-/* ------------------------------------------------------------ world helpers */
-
 static int blk(int x, int y, int z)
 {
     return world_in_bounds(x, y, z) ? world_get_block(x, y, z) : -1;
@@ -119,7 +108,6 @@ static int blk(int x, int y, int z)
 
 static int kind_of(int id) { return id == BLOCK_WATER ? K_WATER : id == BLOCK_LAVA ? K_LAVA : -1; }
 
-/* meta of the same-kind fluid at x,y,z or -1; unknown fluid blocks (world gen) are adopted as sources */
 static int meta_at(int x, int y, int z, int kind)
 {
     if (blk(x, y, z) != KIND_BLOCK[kind]) return -1;
@@ -128,7 +116,6 @@ static int meta_at(int x, int y, int z, int kind)
     return c ? c->meta : 0;
 }
 
-/* same, but never touches the table (used while meshing) */
 static int meta_peek(int x, int y, int z, int kind)
 {
     if (blk(x, y, z) != KIND_BLOCK[kind]) return -1;
@@ -136,13 +123,12 @@ static int meta_peek(int x, int y, int z, int kind)
     return c ? c->meta : 0;
 }
 
-/* does block b stop this kind of fluid? (Minecraft isBlocked) */
 static int blocked_for(int kind, int b)
 {
     if (b == BLOCK_AIR) return 0;
     if (b < 0) return 1;
     if (b == KIND_BLOCK[kind]) return 0;
-    if (b == BLOCK_WATER || b == BLOCK_LAVA) return kind == K_WATER;   /* lava may displace water, not the reverse */
+    if (b == BLOCK_WATER || b == BLOCK_LAVA) return kind == K_WATER;
     return 1;
 }
 
@@ -176,10 +162,8 @@ static void flow_into(int x, int y, int z, int kind, int meta)
     if (b == BLOCK_AIR)
         set_fluid(x, y, z, kind, meta);
     else if (kind == K_LAVA && b == BLOCK_WATER)
-        clear_cell(x, y, z, BLOCK_STONE);          /* no obsidian/cobble block in the game: stone */
+        clear_cell(x, y, z, BLOCK_STONE);
 }
-
-/* ------------------------------------------------------------ flow rules */
 
 static const int DX[4] = { 1, -1, 0, 0 };
 static const int DZ[4] = { 0, 0, 1, -1 };
@@ -189,7 +173,7 @@ static int passable(int kind, int x, int y, int z)
 {
     int b = blk(x, y, z);
     if (blocked_for(kind, b)) return 0;
-    if (b == KIND_BLOCK[kind] && meta_at(x, y, z, kind) == 0) return 0;   /* sources are not walked through */
+    if (b == KIND_BLOCK[kind] && meta_at(x, y, z, kind) == 0) return 0;
     return 1;
 }
 
@@ -224,7 +208,7 @@ static void cell_tick(int x, int y, int z)
 
     const int kind = c->kind;
 
-    if (blk(x, y, z) != KIND_BLOCK[kind]) {        /* replaced behind our back */
+    if (blk(x, y, z) != KIND_BLOCK[kind]) {
         erase(c);
         dirty = 1;
         return;
@@ -239,7 +223,6 @@ static void cell_tick(int x, int y, int z)
     int i = c->meta;
 
     if (i > 0) {
-        /* work out what level this cell should have from its neighbours */
         int best = -100, sources = 0;
         for (int d = 0; d < 4; d++) {
             int m = meta_at(x + DX[d], y, z + DZ[d], kind);
@@ -253,16 +236,16 @@ static void cell_tick(int x, int y, int z)
         if (j >= 8 || best < 0) j = -1;
 
         int above = meta_at(x, y + 1, z, kind);
-        if (above >= 0) j = above >= 8 ? above : above + 8;       /* stream coming from above */
+        if (above >= 0) j = above >= 8 ? above : above + 8;
 
-        if (sources >= 2 && kind == K_WATER) {                    /* infinite water */
+        if (sources >= 2 && kind == K_WATER) {
             int below = blk(x, y - 1, z);
             if (below > BLOCK_AIR && !fluid_is_fluid(below)) j = 0;
             else if (meta_at(x, y - 1, z, K_WATER) == 0) j = 0;
         }
 
         if (j != i) {
-            if (j < 0) {                                          /* dried up */
+            if (j < 0) {
                 clear_cell(x, y, z, BLOCK_AIR);
                 return;
             }
@@ -276,7 +259,6 @@ static void cell_tick(int x, int y, int z)
         }
     }
 
-    /* spread: down first, sideways only when standing on something */
     const int below = blk(x, y - 1, z);
 
     if (can_flow_into(kind, below)) {
@@ -308,7 +290,7 @@ void fluid_block_changed(int x, int y, int z)
     int k = kind_of(b);
     Cell* c = find(x, y, z);
 
-    if (k >= 0) { if (!c || c->kind != k) insert(x, y, z, k, 0); }   /* placed by hand = source */
+    if (k >= 0) { if (!c || c->kind != k) insert(x, y, z, k, 0); }
     else if (c) erase(c);
 
     schedule(x, y, z);
@@ -334,14 +316,11 @@ void fluid_tick(void)
     }
 }
 
-/* ------------------------------------------------------------ meshing */
-
-typedef struct { float* v; int n; } Buf;     /* n = vertices, 6 floats each: pos3 uv2 shade */
+typedef struct { float* v; int n; } Buf;
 
 static Buf  bufs[2];
 static float last_cam[3];
 
-/* uvtype: 0 = u:x v:z (top/bottom)   1 = u:x v:y (+-Z faces)   2 = u:z v:y (+-X faces) */
 static void emit(Buf* b, const float P[4][3], float shade, int uvtype)
 {
     static const int I[6] = { 0, 1, 2, 0, 2, 3 };
@@ -357,8 +336,6 @@ static void emit(Buf* b, const float P[4][3], float shade, int uvtype)
     }
 }
 
-/* Minecraft style: the surface height at a block corner is the weighted average of the 4 cells touching it,
-   so neighbouring cells always agree and the surface has no gaps. */
 static float corner_height(int x, int y, int z, int dx, int dz, int kind)
 {
     float sum = 0.0f;
@@ -370,12 +347,12 @@ static float corner_height(int x, int y, int z, int dx, int dz, int kind)
             int m = meta_peek(cx, y, cz, kind);
             if (m >= 0) {
                 const float empty = ((m >= 8 ? 0 : m) + 1) / 9.0f;
-                if (m == 0 || m >= 8) { sum += empty * 10.0f; w += 10; }   /* sources / streams weigh 11x */
+                if (m == 0 || m >= 8) { sum += empty * 10.0f; w += 10; }
                 sum += empty;
                 w++;
             }
             else if (!blocked_for(kind, blk(cx, y, cz))) {
-                sum += 1.0f;           /* open air counts as completely empty: pulls the edge down */
+                sum += 1.0f;
                 w++;
             }
         }
@@ -438,8 +415,6 @@ static void build_cell(const Cell* c)
     }
 }
 
-/* ------------------------------------------------------------ rendering */
-
 static GLuint prog, vao, vbo, fluid_tex;
 static GLint  u_vp, u_rmin, u_rsize, u_alpha, u_time, u_scroll, u_dual;
 
@@ -452,7 +427,6 @@ static const char* VS =
 "out vec2 v_uv; out float v_shade;\n"
 "void main(){ v_uv = uv; v_shade = shade; gl_Position = vp * vec4(p, 1.0); }\n";
 
-/* uv is in world units: fract() tiles one 16x16 tile of Fluids.png over every block face */
 static const char* FS =
 "#version 330 core\n"
 "in vec2 v_uv; in float v_shade;\n"
@@ -493,13 +467,13 @@ static void overlay_init(void);
 void fluid_init(GLuint tex)
 {
     fluid_tex = tex;
-    map = (Cell*)calloc(MAP_SIZE, sizeof(Cell));
+    map = (Cell*)calloc(MAP_SIZE, sizeof(Cell));  // ???? no NULL check, crash if this fails
     cell_count = 0;
     now_tick = 0;
     for (int k = 0; k < 2; k++) {
-        queues[k].a = (Ev*)malloc(QUEUE_CAP * sizeof(Ev));
+        queues[k].a = (Ev*)malloc(QUEUE_CAP * sizeof(Ev));  // ???? no NULL check, crash if this fails
         queues[k].head = queues[k].tail = 0;
-        bufs[k].v = (float*)malloc((size_t)MAX_VERTS * 6 * sizeof(float));
+        bufs[k].v = (float*)malloc((size_t)MAX_VERTS * 6 * sizeof(float));  // ???? no NULL check, crash if this fails
         bufs[k].n = 0;
     }
 
@@ -569,7 +543,6 @@ static void rebuild(const float* cam)
     const size_t lava_bytes = (size_t)bufs[K_LAVA].n * 6 * sizeof(float);
     const size_t water_bytes = (size_t)bufs[K_WATER].n * 6 * sizeof(float);
 
-    /* buffer layout: lava (opaque) first, then water (blended) */
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, (GLsizeiptr)(lava_bytes + water_bytes), NULL, GL_DYNAMIC_DRAW);
     if (lava_bytes)  glBufferSubData(GL_ARRAY_BUFFER, 0, (GLsizeiptr)lava_bytes, bufs[K_LAVA].v);
@@ -608,7 +581,7 @@ void fluid_draw(const float* vp, const float* cam)
         glUniform2fv(u_rmin, 1, TILE_MIN[K_LAVA]);
         glUniform2fv(u_rsize, 1, TILE_SIZE[K_LAVA]);
         glUniform1f(u_alpha, KIND_ALPHA[K_LAVA]);
-        glUniform2f(u_scroll, 0.0f, 0.02f);     /* lava creeps slowly */
+        glUniform2f(u_scroll, 0.0f, 0.02f);
         glUniform1f(u_dual, 0.0f);
         glDrawArrays(GL_TRIANGLES, 0, n_lava);
     }
@@ -619,7 +592,7 @@ void fluid_draw(const float* vp, const float* cam)
         glUniform2fv(u_rmin, 1, TILE_MIN[K_WATER]);
         glUniform2fv(u_rsize, 1, TILE_SIZE[K_WATER]);
         glUniform1f(u_alpha, KIND_ALPHA[K_WATER]);
-        glUniform2f(u_scroll, 0.04f, 0.06f);    /* two layers drifting past each other */
+        glUniform2f(u_scroll, 0.04f, 0.06f);
         glUniform1f(u_dual, 1.0f);
         glDrawArrays(GL_TRIANGLES, n_lava, n_water);
         glDepthMask(GL_TRUE);
@@ -631,13 +604,11 @@ void fluid_draw(const float* vp, const float* cam)
     glUseProgram((GLuint)prev_prog);
 }
 
-/* ------------------------------------------------------------ queries */
-
 float fluid_height(int x, int y, int z)
 {
     int k = kind_of(blk(x, y, z));
     if (k < 0) return -1.0f;
-    if (meta_peek(x, y + 1, z, k) >= 0) return 1.0f;       /* fluid on top: full cell */
+    if (meta_peek(x, y + 1, z, k) >= 0) return 1.0f;
     int m = meta_peek(x, y, z, k);
     return 1.0f - ((m >= 8 ? 0 : m) + 1) / 9.0f;
 }
@@ -648,7 +619,6 @@ static int ray_solid(int x, int y, int z)
     return b > BLOCK_AIR && !fluid_is_fluid(b);
 }
 
-/* voxel walk (Amanatides & Woo) that ignores air and fluids */
 int fluid_raycast(const float* o, const float* d, float reach, int* hit, int* prev)
 {
     int cell[3] = { (int)floorf(o[0]), (int)floorf(o[1]), (int)floorf(o[2]) };
@@ -662,7 +632,7 @@ int fluid_raycast(const float* o, const float* d, float reach, int* hit, int* pr
         else { step[i] = 0;  tdelta[i] = 1e30;         tmax[i] = 1e30; }
     }
 
-    for (;;) {
+    for (;;) {  // runs until the break, ???? hope it breaks
         if (ray_solid(cell[0], cell[1], cell[2])) {
             hit[0] = cell[0]; hit[1] = cell[1]; hit[2] = cell[2];
             prev[0] = last[0]; prev[1] = last[1]; prev[2] = last[2];
@@ -677,9 +647,6 @@ int fluid_raycast(const float* o, const float* d, float reach, int* hit, int* pr
         tmax[a] += tdelta[a];
     }
 }
-
-/* ------------------------------------------------------------ screen overlay */
-
 
 static const char* OV_VS =
 "#version 330 core\n"
@@ -735,9 +702,8 @@ void fluid_draw_overlay(int kind, float yaw_deg, float pitch_deg, int fb_w, int 
 {
     if (!map || !ov_prog || fb_h <= 0) return;
 
-    /* the texture is tiled 4x over the screen height and slides with the head, like Minecraft's overlay */
     const float aspect = (float)fb_w / (float)fb_h;
-    const float tiles = 2.0f;                      /* ndc -1..1 spans 2 * tiles = 4 tiles */
+    const float tiles = 2.0f;
     const float ox = yaw_deg / 64.0f, oy = -pitch_deg / 64.0f;
     const float x0 = -aspect * tiles + ox, x1 = aspect * tiles + ox;
     const float y0 = -tiles + oy, y1 = tiles + oy;

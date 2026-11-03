@@ -1,19 +1,5 @@
 #include "Mesher/mesher.h"
 
-/*
- * QUAD FORMAT (2 x uint32, read by chunk.vert)
- *   a: x [0..5]  z [6..11]  y [12..31]          chunk local position of the quad's min corner
- *   b: width-1 [0..5]  height-1 [6..15]         along the face's U / V axes
- *      ao [16..23]  (4 corners x 2 bits: (0,0) (1,0) (0,1) (1,1) in U/V)
- *      face [24..26]  order: +Z -Z -X +X +Y -Y
- *
- * Merge key = texture only. AO is not computed; the ao field is always 0xFF
- * (level 3 on all corners = unshaded), so every same-texture run merges.
- *
- * Buffer layout: sorted by bucket = texture * 6 + face, so one chunk is ONE
- * buffer and per-face-direction ranges can be skipped at draw time.
- */
-
 #define PS   (CHUNK_SIZE + 2)
 #define PS2  (PS * PS)
 
@@ -25,18 +11,17 @@
 
 typedef struct { uint32_t a, b; } Quad;
 
-static const int AXIS[6] = { 2, 2, 0, 0, 1, 1 };   /* axis the face is perpendicular to */
+static const int AXIS[6] = { 2, 2, 0, 0, 1, 1 };
 static const int UAX[6] = { 0, 0, 2, 2, 0, 0 };
 static const int VAX[6] = { 1, 1, 1, 1, 2, 2 };
 static const int SIGN[6] = { 1, -1, -1, 1, 1, -1 };
 
 static unsigned char opaque[BLOCK_TYPES];
-static unsigned char hide_tab[BLOCK_TYPES][BLOCK_TYPES];   /* [this block][neighbour] */
+static unsigned char hide_tab[BLOCK_TYPES][BLOCK_TYPES];
 static int           ftex[BLOCK_TYPES][6];
 
-/* chunk + 1 block border on every side (so no neighbour lookups while meshing) */
-static unsigned char pad[(CHUNK_HEIGHT + 2) * PS2];
-static uint16_t      mask[CHUNK_SIZE * CHUNK_HEIGHT];      /* always all-zero between slices */
+static unsigned char pad[(CHUNK_HEIGHT + 2) * PS2];  // padded copy so we never look up neighbours while meshing
+static uint16_t      mask[CHUNK_SIZE * CHUNK_HEIGHT];  // must be all zero between slices or quads get duplicated
 
 static Quad* tmpq;
 static Quad* sortq;
@@ -54,7 +39,6 @@ void mesher_init(GLuint program, int face_tex[][BLOCK_FACE_COUNT])
             ftex[t][f] = face_tex[t][f];
     }
 
-    /* water / lava are drawn by fluid.c (sloped surface, blending) */
     for (int f = 0; f < 6; f++)
         ftex[BLOCK_WATER][f] = ftex[BLOCK_LAVA][f] = -1;
 
@@ -70,11 +54,10 @@ void mesher_init(GLuint program, int face_tex[][BLOCK_FACE_COUNT])
         }
     }
 
-    /* worst case: 3D checkerboard */
-    size_t cap = (size_t)CHUNK_SIZE * CHUNK_SIZE * CHUNK_HEIGHT * 3 + CHUNK_SIZE * CHUNK_HEIGHT * 4;
-    tmpq = (Quad*)malloc(cap * sizeof(Quad));
-    sortq = (Quad*)malloc(cap * sizeof(Quad));
-    tmpb = (uint16_t*)malloc(cap * sizeof(uint16_t));
+    size_t cap = (size_t)CHUNK_SIZE * CHUNK_SIZE * CHUNK_HEIGHT * 3 + CHUNK_SIZE * CHUNK_HEIGHT * 4;  // worst case: 3D checkerboard
+    tmpq = (Quad*)malloc(cap * sizeof(Quad));  // ???? no NULL check, crash if this fails
+    sortq = (Quad*)malloc(cap * sizeof(Quad));  // ???? no NULL check, crash if this fails
+    tmpb = (uint16_t*)malloc(cap * sizeof(uint16_t));  // ???? no NULL check, crash if this fails
 
     glGenVertexArrays(1, &empty_vao);
 
@@ -114,7 +97,6 @@ void mesh_destroy(ChunkMesh* m)
     memset(m, 0, sizeof * m);
 }
 
-/* copy the 3x3 chunk neighbourhood into the padded block array */
 static void fill_pad(const MeshInput* in, int top)
 {
 
@@ -122,7 +104,7 @@ static void fill_pad(const MeshInput* in, int top)
 
     for (int dz = -1; dz <= 1; dz++) {
         for (int dx = -1; dx <= 1; dx++) {
-            if (dx && dz) continue;
+            if (dx && dz) continue;  // skip the corner chunks, we only need the 4 sides (no AO)
             MeshBlocks src = in->blocks[dz + 1][dx + 1];
             if (!src) continue;
 
@@ -153,7 +135,7 @@ void mesh_build(ChunkMesh* m, const MeshInput* in)
 
     const int dim[3] = { CHUNK_SIZE, max_y + 1, CHUNK_SIZE };
     const int stride[3] = { 1, PS2, PS };
-    const unsigned char* const origin = pad + PS2 + PS + 1;   /* local (0,0,0) */
+    const unsigned char* const origin = pad + PS2 + PS + 1;
 
     memset(bucket_count, 0, sizeof bucket_count);
     int nq = 0;
@@ -168,7 +150,6 @@ void mesh_build(ChunkMesh* m, const MeshInput* in)
         for (int s = 0; s < slices; s++) {
             int any = 0;
             const unsigned char* slice = origin + s * sa;
-            /* 1. build the mask: texture only per visible face */
             for (int v = 0; v < vlen; v++) {
                 const unsigned char* p = slice + v * sv;
                 uint16_t* mrow = &mask[v * CHUNK_SIZE];
@@ -180,16 +161,15 @@ void mesh_build(ChunkMesh* m, const MeshInput* in)
                     const int t = ftex[type][face];
                     if (t < 0) continue;
 
-                    if (hide_tab[type][p[nd]]) continue;   /* neighbour hides this face */
+                    if (hide_tab[type][p[nd]]) continue;
 
-                    mrow[u] = (uint16_t)(t + 1);           /* key = texture + 1 (0 means empty) */
+                    mrow[u] = (uint16_t)(t + 1);
                     any = 1;
                 }
             }
 
             if (!any) continue;
 
-            /* 2. greedy merge: grow width, then height, clear what was used */
             for (int v = 0; v < vlen; v++) {
                 for (int u = 0; u < CHUNK_SIZE; u++) {
                     const uint16_t key = mask[v * CHUNK_SIZE + u];
@@ -214,12 +194,12 @@ void mesh_build(ChunkMesh* m, const MeshInput* in)
                     loc[ua] = u;
                     loc[va] = v;
 
-                    const int tex = (int)key - 1;        /* undo the +1 from the mask */
+                    const int tex = (int)key - 1;
                     const int bucket = tex * 6 + face;
 
                     tmpq[nq].a = (uint32_t)loc[0] | ((uint32_t)loc[2] << 6) | ((uint32_t)loc[1] << 12);
                     tmpq[nq].b = (uint32_t)(w - 1) | ((uint32_t)(h - 1) << 6) |
-                        (0xFFu << 16) | ((uint32_t)face << 24);   /* AO = 3 on all 4 corners (unshaded) */
+                        (0xFFu << 16) | ((uint32_t)face << 24);
                     tmpb[nq] = (uint16_t)bucket;
                     bucket_count[bucket]++;
                     nq++;
@@ -228,7 +208,6 @@ void mesh_build(ChunkMesh* m, const MeshInput* in)
         }
     }
 
-    /* 3. counting sort by bucket (texture, face) */
     int sum = 0;
     for (int b = 0; b < MESH_BUCKETS; b++) {
         m->first[b] = sum;
@@ -254,7 +233,7 @@ void mesh_build(ChunkMesh* m, const MeshInput* in)
             if (capacity < 4096)
                 capacity = 4096;
 
-            while (capacity < required)
+            while (capacity < required)  // grow 1.5x until it fits
                 capacity += capacity / 2;
 
             glBufferData(GL_TEXTURE_BUFFER, capacity, NULL, GL_DYNAMIC_DRAW);
@@ -264,8 +243,6 @@ void mesh_build(ChunkMesh* m, const MeshInput* in)
         glBindBuffer(GL_TEXTURE_BUFFER, 0);
     }
 }
-
-/* RENDERING */
 
 static float planes[6][4];
 
@@ -294,7 +271,6 @@ int mesher_aabb_visible(float x0, float y0, float z0, float x1, float y1, float 
     return 1;
 }
 
-/* bit per face (+Z -Z -X +X +Y -Y): can any face of that direction in this chunk face the camera? */
 unsigned mesher_face_mask(float cx, float cy, float cz, float x0, float z0, int max_y)
 {
     unsigned m = 0;
@@ -341,7 +317,7 @@ int mesh_draw(const ChunkMesh* m, unsigned face_mask, float x0, float z0,
             if (a == b) continue;
 
             if (n && firsts[n - 1] + counts[n - 1] == a * 6)
-                counts[n - 1] += (b - a) * 6;          /* touching range: merge */
+                counts[n - 1] += (b - a) * 6;
             else {
                 firsts[n] = a * 6;
                 counts[n] = (b - a) * 6;

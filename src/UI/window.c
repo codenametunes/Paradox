@@ -22,7 +22,7 @@ bool window_create(Window* w, int width, int height, const char* title) {
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
 #endif
-    glfwWindowHint(GLFW_SAMPLES, 0);
+    glfwWindowHint(GLFW_SAMPLES, 0);  // no MSAA
 
     w->handle = glfwCreateWindow(width, height, title, NULL, NULL);
     if (!w->handle) { glfwTerminate(); return false; }
@@ -72,13 +72,13 @@ void window_toggle_fullscreen(Window* w) {
         glfwGetWindowPos(w->handle, &w->saved_x, &w->saved_y);
         glfwGetWindowSize(w->handle, &w->saved_w, &w->saved_h);
         GLFWmonitor* m = glfwGetPrimaryMonitor();
-        const GLFWvidmode* vm = glfwGetVideoMode(m);
-        glfwSetWindowMonitor(w->handle, m, 0, 0, vm->width, vm->height, vm->refreshRate);
+        const GLFWvidmode* vm = glfwGetVideoMode(m);  // ???? NULL if the monitor goes away
+        glfwSetWindowMonitor(w->handle, m, 0, 0, vm->width, vm->height, vm->refreshRate);  // ???? m could be NULL too
     }
     else {
         glfwSetWindowMonitor(w->handle, NULL, w->saved_x, w->saved_y,
             w->saved_w, w->saved_h, 0);
     }
     w->fullscreen = !w->fullscreen;
-    window_set_vsync(w, w->vsync); // swap interval can reset after mode change
+    window_set_vsync(w, w->vsync);  // vsync can reset after a mode change
 }

@@ -1,3 +1,0 @@
-C:/Projects/ParadoxC/out/build/x64-release/_deps/glfw-subbuild/CMakeFiles/glfw-populate.dir
-C:/Projects/ParadoxC/out/build/x64-release/_deps/glfw-subbuild/CMakeFiles/edit_cache.dir
-C:/Projects/ParadoxC/out/build/x64-release/_deps/glfw-subbuild/CMakeFiles/rebuild_cache.dir

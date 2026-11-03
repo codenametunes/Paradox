@@ -1,0 +1,21 @@
+# ninja log v6
+3	46	8154508123060066	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-mkdir	82233aafc3ea0e3c
+3	46	8154508123060066	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-mkdir	82233aafc3ea0e3c
+46	5114	8154508173753099	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-download	8c7c354689305d30
+46	5114	8154508173753099	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-download	8c7c354689305d30
+5115	5210	8154508173791805	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-update	8f5741a1f085e110
+5115	5210	8154508173791805	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-update	8f5741a1f085e110
+5210	5249	8154508175102729	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-patch	3c29b170ae2d7f
+5210	5249	8154508175102729	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-patch	3c29b170ae2d7f
+5249	5288	8154508175494403	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-configure	7e802816a5ecb88f
+5249	5288	8154508175494403	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-configure	7e802816a5ecb88f
+5288	5327	8154508175879624	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-build	80cfb8b275f27fff
+5288	5327	8154508175879624	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-build	80cfb8b275f27fff
+5327	5366	8154508176260431	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-install	4f863ece8fb92134
+5327	5366	8154508176260431	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-install	4f863ece8fb92134
+5366	5405	8154508176664426	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-test	db24d8f49d624025
+5366	5405	8154508176664426	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-test	db24d8f49d624025
+5405	5457	8154508177175400	CMakeFiles/freetype-populate-complete	6b67cfd036522ef5
+5405	5457	8154508177175400	freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-done	6b67cfd036522ef5
+5405	5457	8154508177175400	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/CMakeFiles/freetype-populate-complete	6b67cfd036522ef5
+5405	5457	8154508177175400	C:/Paradox/out/build/x86-release/_deps/freetype-subbuild/freetype-populate-prefix/src/freetype-populate-stamp/freetype-populate-done	6b67cfd036522ef5
