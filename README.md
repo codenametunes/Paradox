@@ -71,6 +71,7 @@ These issues are known and may be addressed in future updates.
 - GLFW
 - GLAD
 - CMake
+- FreeType
 
 ## License
 
